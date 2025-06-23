@@ -59,7 +59,7 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event]) -> None:
                 elif id in GAME_BUTTONS:
 
                     if id == PASS_BUTTON:
-                        library.set_question_pass(is_pass=True)
+                        if not globals.get_lives() == 0 : library.set_question_pass(is_pass=True)
                         
 
 def update_question(question : dict):
