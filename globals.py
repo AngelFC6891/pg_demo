@@ -9,6 +9,7 @@ simpsons_on = False
 starwars_on = False
 game_on = False
 gameover_on = False
+questover_on = False
 username_on = False
 reset_on = False
 click_on = False
@@ -64,6 +65,11 @@ def set_game_on(value : bool) -> None:
 def set_gameover_on(value : bool) -> None:
     global gameover_on
     gameover_on = value
+
+
+def set_questover_on(value : bool) -> None:
+    global questover_on
+    questover_on = value
 
 
 def set_username_on(value : bool) -> None:
@@ -148,6 +154,10 @@ def get_gameover_on() -> bool:
     return gameover_on
 
 
+def get_questover_on() -> bool:
+    return questover_on
+
+
 def get_username_on() -> bool:
     return username_on
 
@@ -207,4 +217,5 @@ def disable_instances():
     set_stages_on(False)
     set_game_on(False)
     set_gameover_on(False)
+    set_questover_on(False)
     set_reset_on(False)

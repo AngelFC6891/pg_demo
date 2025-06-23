@@ -7,7 +7,7 @@ def update_background():
     pass
 
 
-def update_buttons(buttons : list[dict], events : list[pg.event.Event]) -> None:
+def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_index : int=0) -> None:
     for button in buttons:
         id = button.get(ID)
         image = button.get(IMAGE)
@@ -59,7 +59,7 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event]) -> None:
                 elif id in GAME_BUTTONS:
 
                     if id == PASS_BUTTON:
-                        if not globals.get_lives() == 0 : library.set_question_pass(is_pass=True)
+                        if not globals.get_lives() == 0 : library.set_question_pass(True, max_index)
                         
 
 def update_question(question : dict):
@@ -103,35 +103,37 @@ def update_labels(labels : list[dict]):
 
 
 def update_game(questions : list[dict], labels : list[dict], events : list[pg.event.Event]):
-    answer = questions[globals.get_current_question()].get(ANSWER)
-    time = globals.get_play_time()
     is_lost = False
     is_win = False
 
-    if time == INT_0:
-        is_lost = True
-    else:
-        for e in events:
-            if e.type == EVENT_1000MS:
-                time -= 1
-                globals.set_play_time(time)
+    if not globals.get_questover_on():
+        answer = questions[globals.get_current_question()].get(ANSWER)
+        time = globals.get_play_time()
 
-            if e.type == pg.KEYDOWN:
-        
-                if library.is_integer(e.unicode) and int(e.unicode) in OPTIONS:
+        if time == INT_0:
+            is_lost = True
+        else:
+            for e in events:
+                if e.type == EVENT_1000MS:
+                    time -= 1
+                    globals.set_play_time(time)
 
-                    if not int(e.unicode) == answer:
-                        is_lost = True
-                    else:
-                        is_win = True
+                if e.type == pg.KEYDOWN:
+            
+                    if library.is_integer(e.unicode) and int(e.unicode) in OPTIONS:
+
+                        if not int(e.unicode) == answer:
+                            is_lost = True
+                        else:
+                            is_win = True
     
-    library.set_question_lost(is_lost)
-    library.set_question_win(is_win)
+    library.set_question_lost(is_lost, len(questions))
+    library.set_question_win(is_win, len(questions))
     question = questions[globals.get_current_question()]
     update_question(question)
     update_options(question)
     update_labels(labels)
-    library.check_gameover(len(questions), events)
+    library.check_gameover(events)
 
 
 def update_gameover(events : list[pg.event.Event]):

@@ -110,17 +110,15 @@ def get_font_color() -> None | tuple:
     return font_color
 
 
-def set_question_win(is_win : bool):
+def set_question_win(is_win : bool, max_index : int):
     if is_win:
         score = globals.get_score()
         score += REWARD
-        next_question = globals.get_current_question() + INT_1
         globals.set_score(score)
-        globals.set_current_question(next_question)
-        globals.set_play_time(PLAY_TIME)
+        set_question_pass(True, max_index)
 
 
-def set_question_lost(is_lost : bool):
+def set_question_lost(is_lost : bool, max_index : int):
     lives = globals.get_lives()
     score = globals.get_score()
 
@@ -129,25 +127,25 @@ def set_question_lost(is_lost : bool):
         score -= PENALTY
         globals.set_lives(lives)
         globals.set_score(score)
-        
-        if not lives == INT_0:
-            next_question = globals.get_current_question() + INT_1
-            globals.set_current_question(next_question)
-            globals.set_play_time(PLAY_TIME)
+        if not lives == INT_0 : set_question_pass(True, max_index)
 
 
-def set_question_pass(is_pass : bool):
+def set_question_pass(is_pass : bool, max_index : int):
     if is_pass:
         next_question = globals.get_current_question() + INT_1
-        globals.set_current_question(next_question)
-        globals.set_play_time(PLAY_TIME)
+
+        if not next_question == max_index:
+            globals.set_current_question(next_question)
+            globals.set_play_time(PLAY_TIME)
+        else:
+            globals.set_questover_on(True)
 
 
-def check_gameover(max_index : int, events : list[pg.event.Event]):
+def check_gameover(events : list[pg.event.Event]):
     lives = globals.get_lives()
     time = globals.get_gameover_delay()
 
-    if lives == INT_0 or globals.get_current_question == max_index:
+    if lives == INT_0 or globals.get_questover_on():
         for e in events:
             if e.type == EVENT_1000MS:
                 time -= 1

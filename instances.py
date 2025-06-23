@@ -60,7 +60,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
             current_questions = starwars_questions
         
         methods.update_background()
-        methods.update_buttons(game_buttons, events)
+        methods.update_buttons(game_buttons, events, len(current_questions))
         methods.update_game(current_questions, labels, events)
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, game_buttons)
