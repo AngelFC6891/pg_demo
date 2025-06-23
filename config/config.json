@@ -1,0 +1,23 @@
+{
+"data":
+    {
+    "buttons":
+        [
+        {"id": "play_button", "file": "play.png", "x": 206, "y": 280},
+        {"id": "settings_button", "file": "settings.png", "x": 206, "y": 383},
+        {"id": "scores_button", "file": "scores.png", "x": 206, "y": 486},
+        {"id": "home_button", "file": "home.png", "x": 8, "y": 8},
+        {"id": "avengers_button", "file": "avengers.png", "x": 60, "y": 248},
+        {"id": "simpsons_button", "file": "simpsons.png", "x": 322, "y": 248},
+        {"id": "starwars_button", "file": "starwars.png", "x": 190, "y": 410},
+        {"id": "pass_button", "file": "pass.png", "x": 456, "y": 505}
+        ],
+    "labels":
+        [
+        {"id": "lives", "x": 150, "y": 516},
+        {"id": "time", "x": 258, "y": 516},
+        {"id": "score", "x": 386, "y": 516}
+        ]
+
+    }
+}
