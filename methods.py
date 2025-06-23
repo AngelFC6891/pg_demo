@@ -1,3 +1,4 @@
+from copy import deepcopy
 from constants import *
 import library
 import globals
@@ -66,7 +67,7 @@ def update_question(question : dict):
     question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX)
     question_render = []
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_QUEST, BOLD)
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_QUEST, BOLD_ENABLE)
 
     for block in question_blocks:
         question_render.append(font_sys.render(block, True, font_color))
@@ -77,7 +78,7 @@ def update_question(question : dict):
 def update_options(question : dict):
     options = []
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_OPT, BOLD)
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_OPT, BOLD_ENABLE)
 
     for key in question.keys():
         if type(key) == int:
@@ -89,7 +90,7 @@ def update_options(question : dict):
 
 def update_labels(labels : list[dict]):
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD)
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD_ENABLE)
 
     for label in labels:
         if label.get(ID) == LIVES:
@@ -149,6 +150,13 @@ def update_gameover(events : list[pg.event.Event]):
         globals.set_reset_on(True)
         # globals.set_username_on(True)
 
+
+def update_scores(scores : list[dict], top : int=1):
+    library.sort_scores(scores, ascending=False)
+    font_color = WHITE
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD_ENABLE)
+
+
 # ------------------------------------------------------------------------------------------- #
 
 def draw_background(screen : pg.surface.Surface, backg : pg.surface.Surface):
@@ -195,6 +203,27 @@ def draw_labels(screen : pg.surface.Surface, labels : list[dict]):
         rect.x = label.get(X)
         rect.y = label.get(Y)
         screen.blit(label_render, rect)
+
+
+def draw_scores(screen : pg.surface.Surface, scores : list[dict]):
+    for score in scores:
+        score_render = score.get(f'{SCORE}{HYPHEN_STR}{RENDER}')
+        rect = score_render.get_rect()
+        rect.x = score.get(X)
+        rect.y = score.get(Y)
+        screen.blit(score_render, rect)
+
+
+def draw_scores_themself(score : dict):
+    pass
+
+
+def draw_scores_names(score : dict):
+    pass
+
+
+def draw_scores_dates(score : dict):
+    pass
 
 
 def draw_game(screen : pg.surface.Surface, questions : list[dict], labels : list[dict]):

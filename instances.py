@@ -1,3 +1,4 @@
+import copy
 from constants import *
 import library
 import methods
@@ -9,6 +10,8 @@ buttons = library.get_buttons(config)
 labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
+scores = library.load_scores(SCORES_CSV)
+scores_copy = copy.deepcopy(scores)
 library.shuffle_questions(questions)
 avengers_questions = questions.get(AVENGERS_QUESTIONS)
 simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
@@ -16,9 +19,12 @@ starwars_questions = questions.get(STARWARS_QUESTIONS)
 home_background = backgrounds.get(HOME)
 stages_background = backgrounds.get(STAGES)
 gameover_background = backgrounds.get(GAMEOVER)
+scores_background = backgrounds.get(SCORES)
 home_buttons = [button for button in buttons if button.get(ID) in HOME_BUTTONS]
 stages_buttons = [button for button in buttons if button.get(ID) in STAGES_BUTTONS]
 game_buttons = [button for button in buttons if button.get(ID) in GAME_BUTTONS]
+scores_buttons = [button for button in buttons if button.get(ID) in SCORES_BUTTONS]
+
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
@@ -34,10 +40,15 @@ def run_settings(screen : pg.surface.Surface):
         pass
 
 
-def run_scores(screen : pg.surface.Surface):
+def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
-        pass
-
+        methods.update_background()
+        methods.update_buttons(scores_buttons, events)
+        methods.update_scores(scores_copy, top=INT_10)
+        methods.draw_background(screen, scores_background)
+        methods.draw_scores(screen, scores_copy)
+        methods.draw_buttons(screen, scores_buttons)
+        
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_stages_on():

@@ -8,6 +8,7 @@ CAPTION = 'Funny Quest'
 # DATA CONFIG
 DATA = 'data'
 CONFIG = 'config/config.json'
+SCORES_CSV = 'scores.csv'
 
 # INSTANCES
 IMAGES = 'images'
@@ -23,6 +24,8 @@ STARWARS = 'starwars'
 GAMEOVER = 'gameover'
 
 # GENERIC KEYS
+NAME = 'name'
+DATE = 'date'
 FILE = 'file'
 ID = 'id'
 X = 'x'
@@ -36,7 +39,12 @@ RENDER = 'render'
 
 # FILES
 R = 'r'
+A = 'a'
 UTF = 'utf-8'
+
+# DATES
+STANDAR_FORMAT = f'%Y-%m-%d'
+FORMAT = f'%d-%m-%y'
 
 # QUESTIONS
 AVENGERS_QUESTIONS = 'avengers_questions'
@@ -50,6 +58,7 @@ INT_2 = 2
 INT_3 = 3
 INT_4 = 4
 INT_5 = 5
+INT_10 = 10
 INT_45 = 45
 INT_48 = 48
 INT_57 = 57
@@ -92,6 +101,7 @@ SIMPSONS_BUTTON = 'simpsons_button'
 STARWARS_BUTTON = 'starwars_button'
 STAGES_BUTTONS = [HOME_BUTTON, AVENGERS_BUTTON, SIMPSONS_BUTTON, STARWARS_BUTTON]
 GAME_BUTTONS = [PASS_BUTTON]
+SCORES_BUTTONS = [HOME_BUTTON]
 
 # LABELS
 LIVES = 'lives'
@@ -103,10 +113,13 @@ SCORE_RENDER = 'score_render'
 
 # TEXT
 FONT = 'Courier New'
+FONT_SCORES = 'Segoe Print'
 FONT_SIZE_QUEST = 28
 FONT_SIZE_OPT = 24
 FONT_SIZE_LAB = 20
-BOLD = True
+FONT_SIZE_SCORES = 25
+BOLD_ENABLE = True
+BOLD_DISABLE = False
 OPTION = 'option'
 OPTIONS = [1,2,3,4]
 QUESTION_RENDER = 'question_render'
@@ -116,3 +129,4 @@ OPTIONS_RENDER = 'options_render'
 YELLOW = (230,233,0)
 BLUE = (10,0,204)
 WHITE = (255,255,255)
+AQUA = (0,190,200)

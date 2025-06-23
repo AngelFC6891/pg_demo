@@ -1,8 +1,11 @@
 import os
 import json
 import random
+from datetime import date, datetime
+import csv
 from constants import *
 import globals
+
 
 
 def load_config(path : str, key : str) -> dict:
@@ -15,9 +18,43 @@ def load_config(path : str, key : str) -> dict:
     return config
 
 
+def load_scores(path : str) -> list[dict]:
+    with open(f'{SCORES}\{path}', R, encoding=UTF) as file:
+        scores = []
+
+        for line in file:
+            data = line.split()
+            user = {}
+            user[NAME] = data[INT_0]
+            user[SCORE] = data[INT_1]
+            user[DATE] = format_date(data[INT_2])
+            scores.append(user)
+
+    return scores
+
+
+def add_user_data(path : str, data : list):
+    with open(f'{SCORES}\{path}', A, newline=VOID_STR, encoding=UTF) as file:
+        writer = csv.writer(file)
+        writer.writerow(data)
+
+
+def format_date(date : str) -> str:
+    date_obj = datetime.strptime(date, STANDAR_FORMAT)
+    return date_obj.strftime(FORMAT)
+
+
 def shuffle_questions(questions : dict[str, list]):
     for list in questions.values():
         random.shuffle(list)
+
+
+def get_user_data():
+    return [globals.get_username(), str(globals.get_score()), get_date()]
+
+
+def get_date() -> str:
+    return str(date.today())
 
 
 def get_images(path : str) -> dict[str, pg.surface.Surface]:
@@ -154,6 +191,24 @@ def check_gameover(events : list[pg.event.Event]):
         if time == INT_0:
             globals.disable_instances()
             globals.set_gameover_on(True)
+
+
+def sort_arrays(arrays : list[list], ascending : bool=True):
+    array_ref = arrays[0]
+
+    for i in range(len(array_ref)-1):
+        for j in range(i+1, len(array_ref)):
+            if (ascending and array_ref[i] > array_ref[j]) or (not ascending and array_ref[i] < array_ref[j]):
+                array_ref[i], array_ref[j] = array_ref[j], array_ref[i]
+
+                if len(arrays) > 1:
+                    for k in range(1, len(arrays)):
+                        arrays[k][i], arrays[k][j] = arrays[k][j], arrays[k][i]
+
+
+def sort_scores(scores : list[dict], ascending : bool):
+    scores_list = [int(user.get(SCORE)) for user in scores]
+    sort_arrays([scores_list, scores], ascending)
 
 
 def is_integer(string : str) -> bool:

@@ -17,6 +17,7 @@ is_click = False
 current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
+username = VOID_STR
 play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
@@ -107,6 +108,11 @@ def set_score(value : int) -> None:
     score = value
 
 
+def set_username(value : str) -> None:
+    global username
+    username = value
+
+
 def set_gameover_time(value : int) -> None:
     global gameover_time
     gameover_time = value
@@ -184,6 +190,10 @@ def get_play_time() -> int:
 
 def get_score() -> int:
     return score
+
+
+def get_username() -> str:
+    return username
 
 
 def get_gameover_time() -> int:
