@@ -63,30 +63,28 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event]) -> None:
                         
 
 def update_question(question : dict):
-    if not globals.get_is_gameover():
-        question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX)
-        question_render = []
-        font_color = library.get_font_color()
-        font_sys = pg.font.SysFont(FONT, FONT_SIZE_QUEST, BOLD)
+    question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX)
+    question_render = []
+    font_color = library.get_font_color()
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_QUEST, BOLD)
 
-        for block in question_blocks:
-            question_render.append(font_sys.render(block, True, font_color))
+    for block in question_blocks:
+        question_render.append(font_sys.render(block, True, font_color))
 
-        question[QUESTION_RENDER] = question_render
+    question[QUESTION_RENDER] = question_render
 
 
 def update_options(question : dict):
-    if not globals.get_is_gameover():
-        options = []
-        font_color = library.get_font_color()
-        font_sys = pg.font.SysFont(FONT, FONT_SIZE_OPT, BOLD)
+    options = []
+    font_color = library.get_font_color()
+    font_sys = pg.font.SysFont(FONT, FONT_SIZE_OPT, BOLD)
 
-        for key in question.keys():
-            if type(key) == int:
-                option = f'{key}.{question.get(key)}'
-                options.append(font_sys.render(option, True, font_color))
+    for key in question.keys():
+        if type(key) == int:
+            option = f'{key}.{question.get(key)}'
+            options.append(font_sys.render(option, True, font_color))
 
-        question[OPTIONS_RENDER] = options
+    question[OPTIONS_RENDER] = options
 
 
 def update_labels(labels : list[dict]):
@@ -98,14 +96,13 @@ def update_labels(labels : list[dict]):
             label[LIVES_RENDER] = font_sys.render(str(globals.get_lives()), True, font_color)
         
         elif label.get(ID) == TIME:
-            if not globals.get_is_gameover():
-                label[TIME_RENDER] = font_sys.render(str(globals.get_play_time()), True, font_color)
+            label[TIME_RENDER] = font_sys.render(str(globals.get_play_time()), True, font_color)
         
         elif label.get(ID) == SCORE:
             label[SCORE_RENDER] = font_sys.render(str(globals.get_score()), True, font_color)
 
 
-def update_game(questions : list[dict], labels : list[dict], events : list[pg.event.Event], dt : int):
+def update_game(questions : list[dict], labels : list[dict], events : list[pg.event.Event]):
     answer = questions[globals.get_current_question()].get(ANSWER)
     time = globals.get_play_time()
     is_lost = False
@@ -134,7 +131,7 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
     update_question(question)
     update_options(question)
     update_labels(labels)
-    library.check_gameover(len(questions), dt)
+    library.check_gameover(len(questions), events)
 
 
 def update_gameover(events : list[pg.event.Event]):
@@ -166,29 +163,27 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
 
 
 def draw_question(screen : pg.surface.Surface, question : dict):
-    if not globals.get_is_gameover():
-        question_render = question.get(QUESTION_RENDER)
-        y = Y_INIT_QUEST
+    question_render = question.get(QUESTION_RENDER)
+    y = Y_INIT_QUEST
 
-        for block in question_render:
-            rect = block.get_rect()
-            rect.x = (screen.get_width() - block.get_width()) / 2
-            rect.y = y
-            screen.blit(block, rect)
-            y += Y_VAR
+    for block in question_render:
+        rect = block.get_rect()
+        rect.x = (screen.get_width() - block.get_width()) / 2
+        rect.y = y
+        screen.blit(block, rect)
+        y += Y_VAR
 
 
 def draw_options(screen : pg.surface.Surface, question : dict):
-    if not globals.get_is_gameover():
-        options_render = question.get(OPTIONS_RENDER)
-        y = Y_INIT_OPT
+    options_render = question.get(OPTIONS_RENDER)
+    y = Y_INIT_OPT
 
-        for option in options_render:
-            rect = option.get_rect()
-            rect.x = X_INIT_OPT
-            rect.y = y
-            screen.blit(option, rect)
-            y += Y_VAR
+    for option in options_render:
+        rect = option.get_rect()
+        rect.x = X_INIT_OPT
+        rect.y = y
+        screen.blit(option, rect)
+        y += Y_VAR
 
 
 def draw_labels(screen : pg.surface.Surface, labels : list[dict]):

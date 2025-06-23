@@ -47,7 +47,7 @@ def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
         methods.draw_buttons(screen, stages_buttons)
 
 
-def run_game(screen : pg.surface.Surface, events : list[pg.event.Event], dt : int):
+def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_game_on():
         if globals.get_avengers_on():
             background = backgrounds.get(AVENGERS)
@@ -61,7 +61,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event], dt : in
         
         methods.update_background()
         methods.update_buttons(game_buttons, events)
-        methods.update_game(current_questions, labels, events, dt)
+        methods.update_game(current_questions, labels, events)
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, game_buttons)
         methods.draw_game(screen, current_questions, labels)
@@ -86,15 +86,14 @@ def run_reset():
         globals.set_play_time(PLAY_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.disable_instances()
-        globals.set_is_gameover(False)
         globals.set_home_on(True)
 
 
-def execute(screen : pg.surface.Surface, events : list[pg.event.Event], dt : int):
+def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_home(screen, events)
     # run_settings(screen)
     # run_scores(screen, events)
     run_stages(screen, events)
-    run_game(screen, events, dt)
+    run_game(screen, events)
     run_gameover(screen, events)
     run_reset()

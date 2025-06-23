@@ -13,13 +13,12 @@ username_on = False
 reset_on = False
 click_on = False
 is_click = False
-is_gameover = False
 current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
 play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
-delay = INT_0
+gameover_delay = GAMEOVER_DELAY
 
 
 def set_home_on(value : bool) -> None:
@@ -107,9 +106,9 @@ def set_gameover_time(value : int) -> None:
     gameover_time = value
 
 
-def set_delay(value : int) -> None:
-    global delay
-    delay = value
+def set_gameover_delay(value : int) -> None:
+    global gameover_delay
+    gameover_delay = value
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -181,8 +180,8 @@ def get_gameover_time() -> int:
     return gameover_time
 
 
-def get_delay() -> int:
-    return delay
+def get_gameover_delay() -> int:
+    return gameover_delay
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -190,20 +189,10 @@ def set_is_click(value : bool) -> None:
     global is_click
     is_click = value
 
-
-def set_is_gameover(value : bool) -> None:
-    global is_gameover
-    is_gameover = value
-
-
 # ------------------------------------------------------------------------------------------- #
 
 def get_is_click() -> bool:
     return is_click
-
-
-def get_is_gameover() -> bool:
-    return is_gameover
 
 # ------------------------------------------------------------------------------------------- #
 

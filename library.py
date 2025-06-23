@@ -121,16 +121,19 @@ def set_question_win(is_win : bool):
 
 
 def set_question_lost(is_lost : bool):
-    if is_lost:
-        lives = globals.get_lives()
-        score = globals.get_score()
+    lives = globals.get_lives()
+    score = globals.get_score()
+
+    if is_lost and not lives == INT_0:
         lives -= INT_1
         score -= PENALTY
-        next_question = globals.get_current_question() + INT_1
         globals.set_lives(lives)
         globals.set_score(score)
-        globals.set_current_question(next_question)
-        globals.set_play_time(PLAY_TIME)
+        
+        if not lives == INT_0:
+            next_question = globals.get_current_question() + INT_1
+            globals.set_current_question(next_question)
+            globals.set_play_time(PLAY_TIME)
 
 
 def set_question_pass(is_pass : bool):
@@ -140,21 +143,19 @@ def set_question_pass(is_pass : bool):
         globals.set_play_time(PLAY_TIME)
 
 
-def check_gameover(max_index : int, dt : int):
+def check_gameover(max_index : int, events : list[pg.event.Event]):
     lives = globals.get_lives()
-    delay = globals.get_delay()
+    time = globals.get_gameover_delay()
 
     if lives == INT_0 or globals.get_current_question == max_index:
-        globals.set_is_gameover(True)
-        delay += dt
-        print(delay)
+        for e in events:
+            if e.type == EVENT_1000MS:
+                time -= 1
+                globals.set_gameover_delay(time)
 
-        if delay >= GAMEOVER_DELAY:
-            globals.set_delay(INT_0)
+        if time == INT_0:
             globals.disable_instances()
             globals.set_gameover_on(True)
-        else:
-            globals.set_delay(delay)
 
 
 def is_integer(string : str) -> bool:
