@@ -3,6 +3,7 @@ import json
 import random
 from datetime import date, datetime
 import csv
+import copy
 from constants import *
 import globals
 
@@ -23,7 +24,7 @@ def load_scores(path : str) -> list[dict]:
         scores = []
 
         for line in file:
-            data = line.split()
+            data = line.strip().split(COMMA_STR)
             user = {}
             user[NAME] = data[INT_0]
             user[SCORE] = data[INT_1]
@@ -209,6 +210,11 @@ def sort_arrays(arrays : list[list], ascending : bool=True):
 def sort_scores(scores : list[dict], ascending : bool):
     scores_list = [int(user.get(SCORE)) for user in scores]
     sort_arrays([scores_list, scores], ascending)
+
+
+def create_scores_copy(scores : list[dict]):
+    scores_copy = copy.deepcopy(scores)
+    globals.set_scores_copy(scores_copy)
 
 
 def is_integer(string : str) -> bool:

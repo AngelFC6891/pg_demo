@@ -21,6 +21,7 @@ username = VOID_STR
 play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
+score_copy = []
 
 
 def set_home_on(value : bool) -> None:
@@ -122,6 +123,11 @@ def set_gameover_delay(value : int) -> None:
     global gameover_delay
     gameover_delay = value
 
+
+def set_scores_copy(copy : list[dict]):
+    global score_copy
+    score_copy = copy
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_home_on() -> bool:
@@ -202,6 +208,10 @@ def get_gameover_time() -> int:
 
 def get_gameover_delay() -> int:
     return gameover_delay
+
+
+def get_scores_copy() -> list[dict]:
+    return score_copy
 
 # ------------------------------------------------------------------------------------------- #
 

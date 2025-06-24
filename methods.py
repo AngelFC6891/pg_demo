@@ -2,6 +2,7 @@ from copy import deepcopy
 from constants import *
 import library
 import globals
+import pprint
 
 
 def update_background():
@@ -152,10 +153,18 @@ def update_gameover(events : list[pg.event.Event]):
 
 
 def update_scores(scores : list[dict], top : int=1):
-    library.sort_scores(scores, ascending=False)
-    font_color = WHITE
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD_ENABLE)
+    font_color = AQUA
+    font_sys = pg.font.SysFont(FONT_SCORES, FONT_SIZE_SCORES, BOLD_ENABLE)
 
+    for i in range(top):
+        user = scores[i]
+        user[POSITION] = str(i+1)
+        headers = list(user.keys())
+
+        for header in headers:
+            if header in TABLE_HEADERS:
+                header_render = f'{header}{HYPHEN_STR}{RENDER}'
+                user[header_render] = font_sys.render(user.get(header), True, font_color)
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -205,25 +214,48 @@ def draw_labels(screen : pg.surface.Surface, labels : list[dict]):
         screen.blit(label_render, rect)
 
 
-def draw_scores(screen : pg.surface.Surface, scores : list[dict]):
-    for score in scores:
-        score_render = score.get(f'{SCORE}{HYPHEN_STR}{RENDER}')
-        rect = score_render.get_rect()
-        rect.x = score.get(X)
-        rect.y = score.get(Y)
-        screen.blit(score_render, rect)
+def draw_scores(screen : pg.surface.Surface, scores : list[dict], top : int=1):
+    y = Y_INIT_TABLE
+
+    for i in range(top):
+        user = scores[i]
+        draw_user_position(screen, user, y)
+        draw_user_name(screen, user, y)
+        draw_user_score(screen, user, y)
+        draw_user_date(screen, user, y)
+        y += Y_VAR_TABLE
 
 
-def draw_scores_themself(score : dict):
-    pass
+def draw_user_position(screen : pg.surface.Surface, user : dict, y : int):
+    position_render = user.get(f'{POSITION}{HYPHEN_STR}{RENDER}')
+    rect = position_render.get_rect()
+    rect.right = X_POS
+    rect.top = y
+    screen.blit(position_render, rect)
 
 
-def draw_scores_names(score : dict):
-    pass
+def draw_user_name(screen : pg.surface.Surface, user : dict, y : int):
+    name_render = user.get(f'{NAME}{HYPHEN_STR}{RENDER}')
+    rect = name_render.get_rect()
+    rect.left = X_NAME
+    rect.top = y
+    screen.blit(name_render, rect)
 
 
-def draw_scores_dates(score : dict):
-    pass
+def draw_user_score(screen : pg.surface.Surface, user : dict, y : int):
+    score_render = user.get(f'{SCORE}{HYPHEN_STR}{RENDER}')
+    rect = score_render.get_rect()
+    rect.right = X_SCORE
+    rect.top = y
+    screen.blit(score_render, rect)
+
+
+def draw_user_date(screen : pg.surface.Surface, user : dict, y : int):
+    date_render = user.get(f'{DATE}{HYPHEN_STR}{RENDER}')
+    rect = date_render.get_rect()
+    rect.left = X_DATE
+    rect.top = y
+    screen.blit(date_render, rect)
 
 
 def draw_game(screen : pg.surface.Surface, questions : list[dict], labels : list[dict]):

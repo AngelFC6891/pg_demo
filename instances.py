@@ -11,7 +11,8 @@ labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 scores = library.load_scores(SCORES_CSV)
-scores_copy = copy.deepcopy(scores)
+library.create_scores_copy(scores)
+library.sort_scores(globals.get_scores_copy(), ascending=False)
 library.shuffle_questions(questions)
 avengers_questions = questions.get(AVENGERS_QUESTIONS)
 simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
@@ -42,12 +43,13 @@ def run_settings(screen : pg.surface.Surface):
 
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
+        scores_copy = globals.get_scores_copy()
         methods.update_background()
         methods.update_buttons(scores_buttons, events)
         methods.update_scores(scores_copy, top=INT_10)
         methods.draw_background(screen, scores_background)
-        methods.draw_scores(screen, scores_copy)
         methods.draw_buttons(screen, scores_buttons)
+        methods.draw_scores(screen, scores_copy, top=INT_10)
         
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -103,7 +105,7 @@ def run_reset():
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_home(screen, events)
     # run_settings(screen)
-    # run_scores(screen, events)
+    run_scores(screen, events)
     run_stages(screen, events)
     run_game(screen, events)
     run_gameover(screen, events)

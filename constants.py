@@ -24,6 +24,7 @@ STARWARS = 'starwars'
 GAMEOVER = 'gameover'
 
 # GENERIC KEYS
+POSITION = 'position'
 NAME = 'name'
 DATE = 'date'
 FILE = 'file'
@@ -36,6 +37,7 @@ ANSWER = 'answer'
 BUTTONS = 'buttons'
 LABELS = 'labels'
 RENDER = 'render'
+OPTION = 'option'
 
 # FILES
 R = 'r'
@@ -80,11 +82,20 @@ Y_INIT_OPT = 300
 X_INIT_OPT = 125
 Y_VAR = 40
 
+# SCORES TABLE INIT POSITIONS
+X_POS = 85
+X_NAME = 100
+X_SCORE = 365
+X_DATE = 390
+Y_INIT_TABLE = 180
+Y_VAR_TABLE = 30
+
 # GENERIC STRINGS
 VOID_STR = ''
 SPACE_STR = ' '
 BREAK_STR = '\n'
 HYPHEN_STR = '_'
+COMMA_STR = ','
 
 # EVENTS
 EVENT_1000MS = pg.USEREVENT
@@ -119,11 +130,12 @@ FONT_SIZE_OPT = 24
 FONT_SIZE_LAB = 20
 FONT_SIZE_SCORES = 25
 BOLD_ENABLE = True
-BOLD_DISABLE = False
-OPTION = 'option'
 OPTIONS = [1,2,3,4]
 QUESTION_RENDER = 'question_render'
 OPTIONS_RENDER = 'options_render'
+
+# TABLE HEADERS
+TABLE_HEADERS = [POSITION, NAME, SCORE, DATE]
 
 # COLORS
 YELLOW = (230,233,0)
