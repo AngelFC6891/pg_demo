@@ -231,6 +231,17 @@ def get_user_scores(path : str):
     copy_scores(scores)
     sort_scores(globals.get_scores_copy(), ascending=False)
 
+# ------------------------------------------------------------------------------------------- #
+
+def is_letter(char : str) -> bool:
+    output = True
+    ascii = ord(char)
+    
+    if not (ascii >= 65 and ascii <= 90) and not (ascii >= 97 and ascii <= 122):
+        output = False
+
+    return output
+
 
 def is_integer(string : str) -> bool:
     output = len(string) > INT_0

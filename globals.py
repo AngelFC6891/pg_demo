@@ -19,6 +19,7 @@ current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
 username = VOID_STR
+warning = VOID_STR
 play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
@@ -115,6 +116,11 @@ def set_username(value : str) -> None:
     username = value
 
 
+def set_warning(value : str) -> None:
+    global warning
+    warning = value
+
+
 def set_username_ok(value : bool) -> None:
     global username_ok
     username_ok = value
@@ -206,6 +212,10 @@ def get_score() -> int:
 
 def get_username() -> str:
     return username
+
+
+def get_warning() -> str:
+    return warning
 
 
 def get_username_ok() -> bool:

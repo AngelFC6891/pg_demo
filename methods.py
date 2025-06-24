@@ -74,10 +74,10 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
 
 
 def update_question(question : dict):
-    question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX)
+    question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX_BLOCK)
     question_render = []
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_QUEST, BOLD_ENABLE)
+    font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_QUEST, BOLD_ENABLE)
 
     for block in question_blocks:
         question_render.append(font_sys.render(block, True, font_color))
@@ -88,7 +88,7 @@ def update_question(question : dict):
 def update_options(question : dict):
     options = []
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_OPT, BOLD_ENABLE)
+    font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_OPT, BOLD_ENABLE)
 
     for key in question.keys():
         if type(key) == int:
@@ -100,7 +100,7 @@ def update_options(question : dict):
 
 def update_labels(labels : list[dict]):
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD_ENABLE)
+    font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_LAB, BOLD_ENABLE)
 
     for label in labels:
         key_render = f'{label.get(ID)}{HYPHEN_STR}{RENDER}'
@@ -157,7 +157,7 @@ def update_gameover(events : list[pg.event.Event]):
 
 def update_scores(scores : list[dict], top : int=1):
     font_color = AQUA
-    font_sys = pg.font.SysFont(FONT_SCORES, FONT_SIZE_SCORES, BOLD_ENABLE)
+    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_SCORES, BOLD_ENABLE)
 
     for i in range(top):
         user = scores[i]
@@ -168,6 +168,34 @@ def update_scores(scores : list[dict], top : int=1):
             if header in TABLE_HEADERS:
                 header_render = f'{header}{HYPHEN_STR}{RENDER}'
                 user[header_render] = font_sys.render(user.get(header), True, font_color)
+
+
+def update_username(events : list[pg.event.Event]):
+    font_color = VIOLET
+    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_SCORES, BOLD_ENABLE)
+    username = globals.get_username()
+    score = globals.get_score()
+    if username == VOID_STR : username += HYPHEN_STR
+
+    for e in events:
+        if e.type == pg.KEYDOWN:
+            if e.key == pg.K_BACKSPACE:
+                if len(username) > 1 : username = username[:-2] + HYPHEN_STR
+            else:
+                if not library.is_letter(e.unicode):
+                    globals.set_warning(WARNING_USE_LETTERS)
+                else:
+                    if len(username) - 1 < USERNAME_LEN_MAX:
+                        username = username[:-1] + e.unicode + HYPHEN_STR
+                        globals.set_username(username)
+        else:
+            if len(username) < USERNAME_LEN_MIN:
+                globals.set_warning(WARNING_MIN_MAX)
+            else:
+                globals.set_warning(WARNING_NAME_OK)
+                globals.set_username_ok(True)
+
+    
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -267,3 +295,20 @@ def draw_game(screen : pg.surface.Surface, questions : list[dict], labels : list
     draw_options(screen, question)
     draw_labels(screen, labels)
     
+
+def draw_username(screen : pg.surface.Surface):
+    font_color = VIOLET
+    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_SCORE, BOLD_ENABLE)
+    score = globals.get_score()
+    score_render = font_sys.render(str(score), True, font_color)
+    rect = score_render.get_rect()
+    rect.x = X_USERNAME_SCORE
+    rect.y = Y_USERNAME_SCORE
+    screen.blit(score_render, rect)
+    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_USERNAME, BOLD_ENABLE)
+    username = globals.get_username()
+    username_render = font_sys.render(username, True, font_color)
+    rect = username_render.get_rect()
+    rect.x = X_USERNAME
+    rect.y = Y_USERNAME
+    screen.blit(username_render, rect)
