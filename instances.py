@@ -90,10 +90,10 @@ def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_username_on():
         methods.update_background()
         methods.update_buttons(username_buttons, events)
-        methods.update_username(events) # -------------------FALTA
+        methods.update_username(events)
         methods.draw_background(screen, username_background)
-        methods.draw_buttons(screen, game_buttons)
-        methods.draw_username(screen) # -------------------FALTA
+        methods.draw_buttons(screen, username_buttons)
+        methods.draw_username(screen)
 
 
 def run_reset():
@@ -104,9 +104,10 @@ def run_reset():
         globals.set_score(SCORE_INIT)
         globals.set_play_time(PLAY_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
+        globals.set_username(VOID_STR)
         globals.disable_instances()
+        globals.set_username_ok(False)
         globals.set_home_on(True)
-        # FALTA RESETEAR USERNAME
 
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -116,5 +117,5 @@ def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_stages(screen, events)
     run_game(screen, events)
     run_gameover(screen, events)
-    # run_username(screen, events)
+    run_username(screen, events)
     run_reset()

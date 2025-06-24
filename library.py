@@ -144,8 +144,8 @@ def get_blocks(string : str, len_max : int) -> list[str]:
     return blocks
 
 
-def get_font_color() -> None | tuple:
-    font_color = None
+def get_font_color() -> tuple:
+    font_color = WHITE
 
     if globals.get_avengers_on():
         font_color = YELLOW
@@ -153,6 +153,13 @@ def get_font_color() -> None | tuple:
         font_color = BLUE
     elif globals.get_starwars_on():
         font_color = WHITE
+    elif globals.get_username_on():
+        warning = globals.get_warning()
+
+        if warning in [WARNING_MIN_MAX, WARNING_USE_LETTERS]:
+            font_color = RED
+        elif warning == WARNING_NAME_OK:
+            font_color = GREEN
 
     return font_color
 
