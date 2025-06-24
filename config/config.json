@@ -10,7 +10,8 @@
         {"id": "avengers_button", "file": "avengers.png", "x": 60, "y": 248},
         {"id": "simpsons_button", "file": "simpsons.png", "x": 322, "y": 248},
         {"id": "starwars_button", "file": "starwars.png", "x": 190, "y": 410},
-        {"id": "pass_button", "file": "pass.png", "x": 456, "y": 505}
+        {"id": "pass_button", "file": "pass.png", "x": 456, "y": 505},
+        {"id": "enter_button", "file": "enter.png", "x": 210, "y": 460}
         ],
     "labels":
         [

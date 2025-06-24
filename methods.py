@@ -1,8 +1,7 @@
-from copy import deepcopy
 from constants import *
 import library
 import globals
-import pprint
+# import pprint
 
 
 def update_background():
@@ -59,10 +58,20 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
                         globals.set_starwars_on(True)
 
                 elif id in GAME_BUTTONS:
-
+                    
                     if id == PASS_BUTTON:
                         if not globals.get_lives() == 0 : library.set_question_pass(True, max_index)
-                        
+
+                elif id in USERNAME_BUTTONS:
+
+                    if id == ENTER_BUTTON:
+                        if globals.get_username_ok():
+                            user_data = library.get_user_data()
+                            library.add_user_data(user_data)
+                            library.get_user_scores(SCORES_CSV)
+                            globals.disable_instances()
+                            globals.set_home_on(True)
+
 
 def update_question(question : dict):
     question_blocks = library.get_blocks(question.get(QUESTION), LEN_MAX)
@@ -94,14 +103,8 @@ def update_labels(labels : list[dict]):
     font_sys = pg.font.SysFont(FONT, FONT_SIZE_LAB, BOLD_ENABLE)
 
     for label in labels:
-        if label.get(ID) == LIVES:
-            label[LIVES_RENDER] = font_sys.render(str(globals.get_lives()), True, font_color)
-        
-        elif label.get(ID) == TIME:
-            label[TIME_RENDER] = font_sys.render(str(globals.get_play_time()), True, font_color)
-        
-        elif label.get(ID) == SCORE:
-            label[SCORE_RENDER] = font_sys.render(str(globals.get_score()), True, font_color)
+        key_render = f'{label.get(ID)}{HYPHEN_STR}{RENDER}'
+        label[key_render] = font_sys.render(library.get_label_value(label.get(ID)), True, font_color)
 
 
 def update_game(questions : list[dict], labels : list[dict], events : list[pg.event.Event]):
@@ -117,7 +120,7 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
         else:
             for e in events:
                 if e.type == EVENT_1000MS:
-                    time -= 1
+                    time -= INT_1
                     globals.set_play_time(time)
 
                 if e.type == pg.KEYDOWN:

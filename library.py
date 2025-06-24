@@ -8,7 +8,6 @@ from constants import *
 import globals
 
 
-
 def load_config(path : str, key : str) -> dict:
     config = {}
     
@@ -109,6 +108,16 @@ def get_labels(config : dict) -> list[dict]:
     return config.get(LABELS)
 
 
+def get_label_value(id : str) -> None | str:
+    label_value = None
+
+    if id == LIVES : label_value = str(globals.get_lives())
+    elif id == TIME : label_value = str(globals.get_play_time())
+    elif id == SCORE : label_value = str(globals.get_score())
+
+    return label_value
+
+
 def get_blocks(string : str, len_max : int) -> list[str]:
     words = string.split(SPACE_STR)
     blocks = []
@@ -162,7 +171,7 @@ def set_question_lost(is_lost : bool, max_index : int):
 
     if is_lost and not lives == INT_0:
         lives -= INT_1
-        score -= PENALTY
+        if not score == INT_0 : score -= PENALTY
         globals.set_lives(lives)
         globals.set_score(score)
         if not lives == INT_0 : set_question_pass(True, max_index)
@@ -186,7 +195,7 @@ def check_gameover(events : list[pg.event.Event]):
     if lives == INT_0 or globals.get_questover_on():
         for e in events:
             if e.type == EVENT_1000MS:
-                time -= 1
+                time -= INT_1
                 globals.set_gameover_delay(time)
 
         if time == INT_0:
@@ -197,13 +206,13 @@ def check_gameover(events : list[pg.event.Event]):
 def sort_arrays(arrays : list[list], ascending : bool=True):
     array_ref = arrays[0]
 
-    for i in range(len(array_ref)-1):
-        for j in range(i+1, len(array_ref)):
+    for i in range(len(array_ref)-INT_1):
+        for j in range(i+INT_1, len(array_ref)):
             if (ascending and array_ref[i] > array_ref[j]) or (not ascending and array_ref[i] < array_ref[j]):
                 array_ref[i], array_ref[j] = array_ref[j], array_ref[i]
 
-                if len(arrays) > 1:
-                    for k in range(1, len(arrays)):
+                if len(arrays) > INT_1:
+                    for k in range(INT_1, len(arrays)):
                         arrays[k][i], arrays[k][j] = arrays[k][j], arrays[k][i]
 
 
@@ -212,9 +221,15 @@ def sort_scores(scores : list[dict], ascending : bool):
     sort_arrays([scores_list, scores], ascending)
 
 
-def create_scores_copy(scores : list[dict]):
+def copy_scores(scores : list[dict]):
     scores_copy = copy.deepcopy(scores)
     globals.set_scores_copy(scores_copy)
+
+
+def get_user_scores(path : str):
+    scores = load_scores(path)
+    copy_scores(scores)
+    sort_scores(globals.get_scores_copy(), ascending=False)
 
 
 def is_integer(string : str) -> bool:
@@ -224,7 +239,7 @@ def is_integer(string : str) -> bool:
         ascii = ord(string[i])
 
         if i == INT_0 and ascii == INT_45:
-            if len(string) > 1:
+            if len(string) > INT_1:
                 continue
             else:
                 output = False
@@ -235,92 +250,3 @@ def is_integer(string : str) -> bool:
             break
     
     return output
-
-
-# #ESPECIFICA --> SOLO CONSOLA
-# def pedir_numero(mensaje:str,mensaje_error:str,minimo:int,maximo:int) -> int:
-#     numero_ingresado = int(input(mensaje))
-#     while numero_ingresado > maximo or numero_ingresado < minimo:
-#         numero_ingresado = int(input(mensaje_error))
-#     return numero_ingresado
-
-# #GENERAL (PUEDE SERVIRME EN PYGAME)
-# def mezclar_lista(lista_preguntas:list) -> None:
-#     random.shuffle(lista_preguntas)
-    
-# def mostrar_datos_juego(datos_juego:dict) -> None:
-#     print(f"PUNTUACION: {datos_juego["puntuacion"]}")
-#     print(f"VIDAS RESTANTES: {datos_juego["vidas"]}")
-    
-# def mostrar_pregunta(pregunta_actual:dict) -> None:
-#     print(f"\n{pregunta_actual["pregunta"]}")
-#     print(f"1.{pregunta_actual["respuesta_1"]}")
-#     print(f"2.{pregunta_actual["respuesta_2"]}")
-#     print(f"3.{pregunta_actual["respuesta_3"]}")
-    
-# def terminar_juego(datos_juego:dict) -> None:
-#     print(f"TERMINO EL JUEGO\nPUNTUACION: {datos_juego["puntuacion"]} PUNTOS")
-    
-#     nombre_usuario = input("Ingrese su nombre: ")
-#     datos_juego["nombre"] = nombre_usuario
-    
-#     confirmacion = input("¿Desea guardar la puntuacion? (si/no) ")
-    
-#     if confirmacion == "si":
-#         #GUARDAN LOS RANKING
-#         pass
-        
-# #ESPECIFICA --> SOLO CONSOLA
-# def jugar_preguntados_consola(lista_preguntas:list,datos_juego:dict) -> None:
-#     contador = 0
-#     lapso = 1 / FPS
-#     indice = 0
-#     # actual = time.time() 
-#     #tiempo_juego = 30   
-#     mezclar_lista(lista_preguntas)
-    
-#     while datos_juego["vidas"] != 0:
-#         if indice >= len(lista_preguntas):
-#             mezclar_lista(lista_preguntas)
-#             indice = 0
-        
-#         pregunta_actual = lista_preguntas[indice]
-#         # fin = time.time()
-#         # tiempo_juego -= int(fin - actual)
-#         # actual = time.time()
-        
-#         mostrar_datos_juego(datos_juego)
-#         #print(f"TIEMPO JUEGO: {tiempo_juego} SEGUNDOS")
-#         contador+=1        
-    
-#         mostrar_pregunta(pregunta_actual)
-#         respuesta = pedir_numero("Su respuesta:","Reingrese su respuesta (1-3):",1,3)
-
-#         os.system("clear")
-#         if verificar_respuesta(pregunta_actual,datos_juego,respuesta) == True:
-#             print("RESPUESTA CORRECTA")
-#         else:
-#             print("RESPUESTA INCORRECTA")
-        
-#         indice += 1
-#         time.sleep(lapso)
-#         os.system("clear")
-        
-#     terminar_juego(datos_juego)
-
-# #GENERAL (FUNCIONA TANTO EN PYGAME COMO EN CONSOLA)
-# def verificar_respuesta(pregunta_actual:dict,datos_juego:dict,respuesta:int) -> bool:
-#     if respuesta == pregunta_actual["respuesta_correcta"]:
-#         retorno = True
-#         datos_juego["puntuacion"] += REWARD
-#     else:
-#         retorno = False
-#         datos_juego["puntuacion"] -= PENALTY
-#         datos_juego["vidas"] -=1
-        
-#     return retorno
-
-# #GENERAL 
-# def reiniciar_estadisticas(datos_juego:dict) -> None:#(FUNCIONA TANTO EN PYGAME COMO EN CONSOLA)
-#     datos_juego["vidas"] = LIVES
-#     datos_juego["puntuacion"] = 0

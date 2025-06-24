@@ -14,6 +14,7 @@ username_on = False
 reset_on = False
 click_on = False
 is_click = False
+username_ok = False
 current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
@@ -114,6 +115,11 @@ def set_username(value : str) -> None:
     username = value
 
 
+def set_username_ok(value : bool) -> None:
+    global username_ok
+    username_ok = value
+
+
 def set_gameover_time(value : int) -> None:
     global gameover_time
     gameover_time = value
@@ -202,6 +208,10 @@ def get_username() -> str:
     return username
 
 
+def get_username_ok() -> bool:
+    return username_ok
+
+
 def get_gameover_time() -> int:
     return gameover_time
 
@@ -237,5 +247,6 @@ def disable_instances():
     set_stages_on(False)
     set_game_on(False)
     set_gameover_on(False)
+    set_username_on(False)
     set_questover_on(False)
     set_reset_on(False)

@@ -1,4 +1,4 @@
-import copy
+# import copy
 from constants import *
 import library
 import methods
@@ -10,10 +10,8 @@ buttons = library.get_buttons(config)
 labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
-scores = library.load_scores(SCORES_CSV)
-library.create_scores_copy(scores)
-library.sort_scores(globals.get_scores_copy(), ascending=False)
 library.shuffle_questions(questions)
+library.get_user_scores(SCORES_CSV)
 avengers_questions = questions.get(AVENGERS_QUESTIONS)
 simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
 starwars_questions = questions.get(STARWARS_QUESTIONS)
@@ -21,11 +19,12 @@ home_background = backgrounds.get(HOME)
 stages_background = backgrounds.get(STAGES)
 gameover_background = backgrounds.get(GAMEOVER)
 scores_background = backgrounds.get(SCORES)
+username_background = backgrounds.get(USERNAME)
 home_buttons = [button for button in buttons if button.get(ID) in HOME_BUTTONS]
 stages_buttons = [button for button in buttons if button.get(ID) in STAGES_BUTTONS]
 game_buttons = [button for button in buttons if button.get(ID) in GAME_BUTTONS]
 scores_buttons = [button for button in buttons if button.get(ID) in SCORES_BUTTONS]
-
+username_buttons = [button for button in buttons if button.get(ID) in USERNAME_BUTTONS]
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
@@ -82,12 +81,19 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
+        methods.update_background()
         methods.update_gameover(events)
         methods.draw_background(screen, gameover_background)
 
 
 def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
-    pass
+    if globals.get_username_on():
+        methods.update_background()
+        methods.update_buttons(username_buttons, events)
+        methods.update_username(events) # -------------------FALTA
+        methods.draw_background(screen, username_background)
+        methods.draw_buttons(screen, game_buttons)
+        methods.draw_username(screen) # -------------------FALTA
 
 
 def run_reset():
@@ -100,13 +106,15 @@ def run_reset():
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.disable_instances()
         globals.set_home_on(True)
+        # FALTA RESETEAR USERNAME
 
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_home(screen, events)
-    # run_settings(screen)
+    # run_settings(screen, events)
     run_scores(screen, events)
     run_stages(screen, events)
     run_game(screen, events)
     run_gameover(screen, events)
+    # run_username(screen, events)
     run_reset()
