@@ -13,9 +13,6 @@ questions = library.get_questions()
 music = library.get_music(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_CSV)
-# avengers_questions = questions.get(AVENGERS_QUESTIONS)
-# simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
-# starwars_questions = questions.get(STARWARS_QUESTIONS)
 home_background = backgrounds.get(HOME)
 stages_background = backgrounds.get(STAGES)
 gameover_background = backgrounds.get(GAMEOVER)
@@ -26,10 +23,6 @@ stages_buttons = [button for button in buttons if button.get(ID) in STAGES_BUTTO
 game_buttons = [button for button in buttons if button.get(ID) in GAME_BUTTONS]
 scores_buttons = [button for button in buttons if button.get(ID) in SCORES_BUTTONS]
 username_buttons = [button for button in buttons if button.get(ID) in USERNAME_BUTTONS]
-# game_music = music.get(GAME_MUSIC)
-# avengers_music = music.get(AVENGERS_MUSIC)
-# simpsons_music = music.get(SIMPSONS_MUSIC)
-# starwars_music = music.get(STARWARS_MUSIC)
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:

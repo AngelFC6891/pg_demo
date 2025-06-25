@@ -129,9 +129,7 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
                     globals.set_play_time(time)
 
                 if e.type == pg.KEYDOWN:
-            
                     if library.is_integer(e.unicode) and int(e.unicode) in OPTIONS:
-
                         if not int(e.unicode) == answer:
                             is_lost = True
                         else:
