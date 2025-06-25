@@ -36,7 +36,6 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
-        methods.play_music(music.get(GAME_MUSIC))
         scores_copy = globals.get_scores_copy()
         methods.update_buttons(buttons.get(SCORES), events)
         methods.update_scores(scores_copy, top=INT_10)
@@ -80,14 +79,12 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
-        methods.play_music(music.get(GAME_MUSIC))
         methods.update_gameover(events)
         methods.draw_background(screen, backgrounds.get(GAMEOVER))
 
 
 def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_username_on():
-        methods.play_music(music.get(GAME_MUSIC))
         methods.update_buttons(buttons.get(USERNAME), events)
         methods.update_username(events)
         methods.draw_background(screen, backgrounds.get(USERNAME))

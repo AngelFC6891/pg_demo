@@ -86,8 +86,8 @@ def update_settings_buttons(id : str):
         globals.set_music_on(value)
     
     elif id == ON_EFFECTS_BUTTON:
-        value = not globals.get_music_on()
-        globals.set_music_on(value)
+        value = not globals.get_effects_on()
+        globals.set_effects_on(value)
 
 
 def update_question(question : dict):
@@ -215,9 +215,12 @@ def update_username(events : list[pg.event.Event]):
                     globals.set_warning(WARNING_USE_LETTERS)
 
 
-def update_settings(events : list[pg.event.Event]):
-    bar_music = pg.Rect()
-    bar_effects = pg.Rect()
+def update_settings(bars : list[dict], events : list[pg.event.Event]):
+    for bar in bars:
+        if bar.get(ID) == BAR_MUSIC:
+            pass
+        elif bar.get(ID) == BAR_EFFECTS:
+            pass
 
 
 # ------------------------------------------------------------------------------------------- #

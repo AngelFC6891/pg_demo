@@ -192,3 +192,5 @@ VOL_MUSIC_INIT = 0.25
 VOL_EFFECTS_INIT = 0.15
 VOL_MAX = 1
 VOL_POWER = 0.01
+BAR_MUSIC = 'bar_music'
+BAR_EFFECTS = 'bar_effects'

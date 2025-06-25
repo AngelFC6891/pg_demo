@@ -285,7 +285,7 @@ def get_user_scores(path : str):
     sort_scores(globals.get_scores_copy(), ascending=False)
 
 
-def get_settings_bars(config : dict) -> dict[str, pg.rect.Rect]:
+def get_settings_bars(config : dict) -> list[dict]:
     bars = config.get(BARS)
 
     for bar in bars:
