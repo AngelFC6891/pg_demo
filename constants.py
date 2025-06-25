@@ -19,6 +19,7 @@ HOME = 'home'
 SETTINGS = 'settings'
 SCORES = 'scores'
 STAGES = 'stages'
+GAME = 'game'
 AVENGERS = 'avengers'
 SIMPSONS = 'simpsons'
 STARWARS = 'starwars'
@@ -40,6 +41,10 @@ BUTTONS = 'buttons'
 LABELS = 'labels'
 RENDER = 'render'
 OPTION = 'option'
+BARS = 'bars'
+W = 'w'
+H = 'h'
+RECT = 'rect'
 
 # FILES
 R = 'r'
@@ -115,17 +120,23 @@ EVENT_1000MS = pg.USEREVENT
 PLAY_BUTTON = 'play_button'
 SETTINGS_BUTTON = 'settings_button'
 SCORES_BUTTON = 'scores_button'
-HOME_BUTTONS = [PLAY_BUTTON, SETTINGS_BUTTON, SCORES_BUTTON]
 HOME_BUTTON = 'home_button'
 PASS_BUTTON = 'pass_button'
 ENTER_BUTTON = 'enter_button'
 AVENGERS_BUTTON = 'avengers_button'
 SIMPSONS_BUTTON = 'simpsons_button'
 STARWARS_BUTTON = 'starwars_button'
-STAGES_BUTTONS = [HOME_BUTTON, AVENGERS_BUTTON, SIMPSONS_BUTTON, STARWARS_BUTTON]
-GAME_BUTTONS = [PASS_BUTTON]
-SCORES_BUTTONS = [HOME_BUTTON]
-USERNAME_BUTTONS = [ENTER_BUTTON]
+ON_MUSIC_BUTTON = 'on_music_button'
+ON_EFFECTS_BUTTON = 'on_effects_button'
+INSTANCES_BUTTONS =\
+{
+    HOME: [PLAY_BUTTON,SETTINGS_BUTTON,SCORES_BUTTON],
+    STAGES: [HOME_BUTTON,AVENGERS_BUTTON,SIMPSONS_BUTTON,STARWARS_BUTTON],
+    GAME: [PASS_BUTTON],
+    SCORES: [HOME_BUTTON],
+    USERNAME: [ENTER_BUTTON],
+    SETTINGS: [HOME_BUTTON,ON_MUSIC_BUTTON,ON_EFFECTS_BUTTON]
+}
 
 # LABELS
 LIVES = 'lives'
@@ -169,12 +180,15 @@ WARNING_USE_LETTERS = 'Use only letters'
 WARNING_NAME_OK = 'User name ok'
 
 # MUSIC AND EFFECTS
+ON = 1
+OFF = 0
 MUSIC = 'music'
-VOLUME = 'volume'
 LOOP = 'loop'
 GAME_MUSIC = 'game_music'
 AVENGERS_MUSIC = 'avengers_music'
 SIMPSONS_MUSIC = 'simpsons_music'
 STARWARS_MUSIC = 'starwars_music'
+VOL_MUSIC_INIT = 0.25
+VOL_EFFECTS_INIT = 0.15
 VOL_MAX = 1
 VOL_POWER = 0.01

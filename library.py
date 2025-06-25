@@ -95,13 +95,17 @@ def get_questions() -> dict[str, list]:
     return questions
 
 
-def get_buttons(config : dict) -> list[dict]:
+def get_buttons(config : dict) -> dict[str, list]:
     buttons = config.get(BUTTONS)
+    buttons_dict = {}
 
     for button in buttons:
         button[IMAGE] = pg.image.load(f'{IMAGES}/{BUTTONS}/{button.get(FILE)}')
+    
+    for key, value in INSTANCES_BUTTONS.items():
+        buttons_dict[key] = [button for button in buttons if button.get(ID) in value]
 
-    return buttons
+    return buttons_dict
 
 
 def get_labels(config : dict) -> list[dict]:
@@ -228,6 +232,30 @@ def check_username_ok(username : str):
         globals.set_username_ok(True)
 
 
+def get_click_pressed(events : list[pg.event.Event], rect : pg.rect.Rect) -> bool:
+    click_pressed = False
+    pos = pg.mouse.get_pos()
+
+    if rect.collidepoint(pos):
+
+        if pg.mouse.get_pressed()[INT_0]:
+            globals.set_is_click(True)
+        else:
+            globals.set_is_click(False)
+        
+    if not globals.get_click_on():
+        for e in events:
+            if e.type == pg.MOUSEBUTTONDOWN:
+                if rect.collidepoint(e.pos):
+                    globals.set_click_on(True)
+    else:
+        if not globals.get_is_click():
+            globals.set_click_on(False)
+            click_pressed = True
+
+    return click_pressed
+
+
 def sort_arrays(arrays : list[list], ascending : bool=True):
     array_ref = arrays[0]
 
@@ -255,6 +283,19 @@ def get_user_scores(path : str):
     scores = load_scores(path)
     copy_scores(scores)
     sort_scores(globals.get_scores_copy(), ascending=False)
+
+
+def get_settings_bars(config : dict) -> dict[str, pg.rect.Rect]:
+    bars = config.get(BARS)
+
+    for bar in bars:
+        x = bar.get(X)
+        y = bar.get(Y)
+        w = bar.get(W)
+        h = bar.get(H)
+        bar[RECT] = pg.Rect(x,y,w,h)
+
+    return bars
 
 # ------------------------------------------------------------------------------------------- #
 

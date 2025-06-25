@@ -1,8 +1,8 @@
-# import copy
 from constants import *
 import library
 import methods
 import globals
+# import pprint
 
 
 config = library.load_config(CONFIG, DATA)
@@ -11,51 +11,45 @@ labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 music = library.get_music(config)
+bars = library.get_settings_bars(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_CSV)
-home_background = backgrounds.get(HOME)
-stages_background = backgrounds.get(STAGES)
-gameover_background = backgrounds.get(GAMEOVER)
-scores_background = backgrounds.get(SCORES)
-username_background = backgrounds.get(USERNAME)
-home_buttons = [button for button in buttons if button.get(ID) in HOME_BUTTONS]
-stages_buttons = [button for button in buttons if button.get(ID) in STAGES_BUTTONS]
-game_buttons = [button for button in buttons if button.get(ID) in GAME_BUTTONS]
-scores_buttons = [button for button in buttons if button.get(ID) in SCORES_BUTTONS]
-username_buttons = [button for button in buttons if button.get(ID) in USERNAME_BUTTONS]
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
     if globals.get_home_on():
         methods.play_music(music.get(GAME_MUSIC))
-        methods.update_background()
-        methods.update_buttons(home_buttons, events)
-        methods.draw_background(screen, home_background)
-        methods.draw_buttons(screen, home_buttons)
+        methods.update_buttons(buttons.get(HOME), events)
+        methods.draw_background(screen, backgrounds.get(HOME))
+        methods.draw_buttons(screen, buttons.get(HOME))
         
 
-def run_settings(screen : pg.surface.Surface):
+def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
-        pass
+        methods.play_music(music.get(GAME_MUSIC))
+        methods.update_buttons(buttons.get(SETTINGS), events)
+        # methods.update_bars(bars)
+        methods.draw_background(screen, backgrounds.get(SETTINGS))
+        methods.draw_buttons(screen, buttons.get(SETTINGS))
+        # methods.draw_bars(bars)
 
 
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
+        methods.play_music(music.get(GAME_MUSIC))
         scores_copy = globals.get_scores_copy()
-        methods.update_background()
-        methods.update_buttons(scores_buttons, events)
+        methods.update_buttons(buttons.get(SCORES), events)
         methods.update_scores(scores_copy, top=INT_10)
-        methods.draw_background(screen, scores_background)
-        methods.draw_buttons(screen, scores_buttons)
+        methods.draw_background(screen, backgrounds.get(SCORES))
+        methods.draw_buttons(screen, buttons.get(SCORES))
         methods.draw_scores(screen, scores_copy, top=INT_10)
         
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_stages_on():
-        methods.update_background()
-        methods.update_buttons(stages_buttons, events)
-        methods.draw_background(screen, stages_background)
-        methods.draw_buttons(screen, stages_buttons)
+        methods.update_buttons(buttons.get(STAGES), events)
+        methods.draw_background(screen, backgrounds.get(STAGES))
+        methods.draw_buttons(screen, buttons.get(STAGES))
 
 
 def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -71,35 +65,33 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
             current_questions = questions.get(SIMPSONS_QUESTIONS)
             current_music = music.get(SIMPSONS_MUSIC)
         
-        elif globals.get_starwars_on:
+        elif globals.get_starwars_on():
             background = backgrounds.get(STARWARS)
             current_questions = questions.get(STARWARS_QUESTIONS)
             current_music = music.get(STARWARS_MUSIC)
         
         methods.play_music(current_music)
-        methods.update_background()
-        methods.update_buttons(game_buttons, events, len(current_questions))
+        methods.update_buttons(buttons.get(GAME), events, len(current_questions))
         methods.update_game(current_questions, labels, events)
         methods.draw_background(screen, background)
-        methods.draw_buttons(screen, game_buttons)
+        methods.draw_buttons(screen, buttons.get(GAME))
         methods.draw_game(screen, current_questions, labels)
 
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
         methods.play_music(music.get(GAME_MUSIC))
-        methods.update_background()
         methods.update_gameover(events)
-        methods.draw_background(screen, gameover_background)
+        methods.draw_background(screen, backgrounds.get(GAMEOVER))
 
 
 def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_username_on():
-        methods.update_background()
-        methods.update_buttons(username_buttons, events)
+        methods.play_music(music.get(GAME_MUSIC))
+        methods.update_buttons(buttons.get(USERNAME), events)
         methods.update_username(events)
-        methods.draw_background(screen, username_background)
-        methods.draw_buttons(screen, username_buttons)
+        methods.draw_background(screen, backgrounds.get(USERNAME))
+        methods.draw_buttons(screen, buttons.get(USERNAME))
         methods.draw_username(screen)
 
 
@@ -119,7 +111,7 @@ def run_reset():
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_home(screen, events)
-    # run_settings(screen, events)
+    run_settings(screen, events)
     run_scores(screen, events)
     run_stages(screen, events)
     run_game(screen, events)

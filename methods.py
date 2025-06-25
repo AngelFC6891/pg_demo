@@ -4,10 +4,6 @@ import globals
 # import pprint
 
 
-def update_background():
-    pass
-
-
 def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_index : int=0) -> None:
     for button in buttons:
         id = button.get(ID)
@@ -15,67 +11,83 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
         rect = image.get_rect()
         rect.x = button.get(X)
         rect.y = button.get(Y)
-        pos = pg.mouse.get_pos()
         
-        if rect.collidepoint(pos):
-            if pg.mouse.get_pressed()[INT_0]:
-                globals.set_is_click(True)
-            else:
-                globals.set_is_click(False)
-        
-        if not globals.get_click_on():
-            for e in events:
-                if e.type == pg.MOUSEBUTTONDOWN:
-                    if rect.collidepoint(e.pos):
-                        globals.set_click_on(True)
-        else:
-            if not globals.get_is_click():
-                globals.set_click_on(False)
+        if library.get_click_pressed(events, rect):
 
-                if id == HOME_BUTTON:
-                    globals.disable_instances()
-                    globals.set_home_on(True)
-                
-                elif id in HOME_BUTTONS:
-                    globals.disable_instances()
+            if globals.get_home_on() : update_home_buttons(id)
+            elif globals.get_settings_on() : update_settings_buttons(id)
+            elif globals.get_scores_on() : update_scores_buttons(id)
+            elif globals.get_stages_on() : update_stages_buttons(id)
+            elif globals.get_game_on() : update_game_buttons(id)
+            elif globals.get_username_on() : update_username_buttons(id)
 
-                    if id == PLAY_BUTTON:
-                        globals.set_stages_on(True)
-                    elif id == SETTINGS_BUTTON:
-                        pass
-                        # globals.set_settings_on(True)
-                    elif id == SCORES_BUTTON:
-                        globals.set_scores_on(True)
-                
-                elif id in STAGES_BUTTONS:
-                    play_music(off=True)
-                    globals.set_play_music(False)
-                    globals.disable_instances()
-                    globals.set_game_on(True)
 
-                    if id == AVENGERS_BUTTON:
-                        globals.set_avengers_on(True)
-                    elif id == SIMPSONS_BUTTON:
-                        globals.set_simpsons_on(True)
-                    elif id == STARWARS_BUTTON:
-                        globals.set_starwars_on(True)
+def update_home_buttons(id : str):
+    if id in [PLAY_BUTTON, SETTINGS_BUTTON, SCORES_BUTTON]:
+        globals.disable_instances()
 
-                elif id in GAME_BUTTONS:
-                    
-                    if id == PASS_BUTTON:
-                        if not globals.get_lives() == 0 : library.set_question_pass(True, max_index)
+        if id == PLAY_BUTTON:
+            globals.set_stages_on(True)
+        elif id == SETTINGS_BUTTON:
+            globals.set_settings_on(True)
+        elif id == SCORES_BUTTON:
+            globals.set_scores_on(True)
 
-                elif id in USERNAME_BUTTONS:
 
-                    if id == ENTER_BUTTON:
-                        if globals.get_username_ok():
-                            username = globals.get_username()
-                            globals.set_username(username[:-1])
-                            user_data = library.get_user_data()
-                            library.add_user_data(SCORES_CSV, user_data)
-                            library.get_user_scores(SCORES_CSV)
-                            globals.disable_instances()
-                            globals.set_reset_on(True)
+def update_stages_buttons(id : str):
+    if id == HOME_BUTTON:
+        globals.disable_instances()
+        globals.set_home_on(True)
+
+    elif id in [AVENGERS_BUTTON, SIMPSONS_BUTTON, STARWARS_BUTTON]:
+        play_music(off=True)
+        globals.set_play_music(False)
+        globals.disable_instances()
+        globals.set_game_on(True)
+
+        if id == AVENGERS_BUTTON:
+            globals.set_avengers_on(True)
+        elif id == SIMPSONS_BUTTON:
+            globals.set_simpsons_on(True)
+        elif id == STARWARS_BUTTON:
+            globals.set_starwars_on(True)
+
+
+def update_game_buttons(id : str, max_index : int):
+    if id == PASS_BUTTON:
+        if not globals.get_lives() == 0 : library.set_question_pass(True, max_index)
+
+
+def update_username_buttons(id : str):
+    if id == ENTER_BUTTON:
+        if globals.get_username_ok():
+            username = globals.get_username()
+            globals.set_username(username[:-1])
+            user_data = library.get_user_data()
+            library.add_user_data(SCORES_CSV, user_data)
+            library.get_user_scores(SCORES_CSV)
+            globals.disable_instances()
+            globals.set_reset_on(True)
+
+
+def update_scores_buttons(id: str):
+    if id == HOME_BUTTON:
+        globals.disable_instances()
+        globals.set_home_on(True)
+
+
+def update_settings_buttons(id : str):
+    if id == HOME_BUTTON:
+        globals.disable_instances()
+        globals.set_home_on(True)
+    
+    elif id == ON_MUSIC_BUTTON:
+        value = not globals.get_music_on()
+        globals.set_music_on(value)
+    
+    elif id == ON_EFFECTS_BUTTON:
+        value = not globals.get_music_on()
+        globals.set_music_on(value)
 
 
 def update_question(question : dict):
@@ -202,6 +214,12 @@ def update_username(events : list[pg.event.Event]):
                 else:
                     globals.set_warning(WARNING_USE_LETTERS)
 
+
+def update_settings(events : list[pg.event.Event]):
+    bar_music = pg.Rect()
+    bar_effects = pg.Rect()
+
+
 # ------------------------------------------------------------------------------------------- #
 
 def draw_background(screen : pg.surface.Surface, backg : pg.surface.Surface):
@@ -214,7 +232,19 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
         rect = image.get_rect()
         rect.x = button.get(X)
         rect.y = button.get(Y)
-        screen.blit(image, rect)
+        id = button.get(ID)
+        
+        if id in [ON_MUSIC_BUTTON, ON_EFFECTS_BUTTON]:
+            
+            if id == ON_MUSIC_BUTTON:
+                if globals.get_music_on():
+                    screen.blit(image, rect)
+            
+            elif id == ON_EFFECTS_BUTTON:
+                if globals.get_effects_on():
+                    screen.blit(image, rect)
+        else:
+            screen.blit(image, rect)
 
 
 def draw_question(screen : pg.surface.Surface, question : dict):
@@ -339,12 +369,18 @@ def draw_warning(screen : pg.surface.Surface):
 
 # ------------------------------------------------------------------------------------------- #
 
-def play_music(music_config : dict={}, off : bool=False):
-    if not globals.get_play_music():
-        pg.mixer.music.load(f'{SOUNDS}/{music_config.get(FILE)}')
-        pg.mixer.music.set_volume(music_config.get(VOLUME))
-        pg.mixer.music.play(loops=music_config.get(LOOP))
-        globals.set_play_music(True)
+def play_music(config : dict={}, off : bool=False):
+    if globals.get_music_on():
+        if not globals.get_play_music():
+            volume = globals.get_vol_music()
+            pg.mixer.music.load(f'{SOUNDS}/{config.get(FILE)}')
+            pg.mixer.music.set_volume(volume)
+            pg.mixer.music.play(loops=config.get(LOOP))
+            globals.set_play_music(True)
+        else:
+            if off:
+                pg.mixer.music.stop()
     else:
-        if off:
+        if pg.mixer.music.get_busy():
             pg.mixer.music.stop()
+            globals.set_play_music(False)

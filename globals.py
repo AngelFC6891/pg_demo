@@ -13,8 +13,8 @@ questover_on = False
 username_on = False
 reset_on = False
 click_on = False
-music_on = False
-effects_on = False
+music_on = True
+effects_on = True
 is_click = False
 username_ok = False
 play_music = False
@@ -26,6 +26,8 @@ warning = VOID_STR
 play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
+vol_music = VOL_MUSIC_INIT
+vol_effects = VOL_EFFECTS_INIT
 score_copy = []
 
 
@@ -154,9 +156,14 @@ def set_gameover_delay(value : int) -> None:
     gameover_delay = value
 
 
-def set_scores_copy(copy : list[dict]):
+def set_scores_copy(copy : list[dict]) -> None:
     global score_copy
     score_copy = copy
+
+
+def set_vol_music(value : float) -> None:
+    global vol_music
+    vol_music = value
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -262,6 +269,10 @@ def get_gameover_delay() -> int:
 
 def get_scores_copy() -> list[dict]:
     return score_copy
+
+
+def get_vol_music() -> float:
+    return vol_music
 
 # ------------------------------------------------------------------------------------------- #
 
