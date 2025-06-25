@@ -10,11 +10,12 @@ buttons = library.get_buttons(config)
 labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
+music = library.get_music(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_CSV)
-avengers_questions = questions.get(AVENGERS_QUESTIONS)
-simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
-starwars_questions = questions.get(STARWARS_QUESTIONS)
+# avengers_questions = questions.get(AVENGERS_QUESTIONS)
+# simpsons_questions = questions.get(SIMPSONS_QUESTIONS)
+# starwars_questions = questions.get(STARWARS_QUESTIONS)
 home_background = backgrounds.get(HOME)
 stages_background = backgrounds.get(STAGES)
 gameover_background = backgrounds.get(GAMEOVER)
@@ -25,15 +26,20 @@ stages_buttons = [button for button in buttons if button.get(ID) in STAGES_BUTTO
 game_buttons = [button for button in buttons if button.get(ID) in GAME_BUTTONS]
 scores_buttons = [button for button in buttons if button.get(ID) in SCORES_BUTTONS]
 username_buttons = [button for button in buttons if button.get(ID) in USERNAME_BUTTONS]
+# game_music = music.get(GAME_MUSIC)
+# avengers_music = music.get(AVENGERS_MUSIC)
+# simpsons_music = music.get(SIMPSONS_MUSIC)
+# starwars_music = music.get(STARWARS_MUSIC)
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
     if globals.get_home_on():
+        methods.play_music(music.get(GAME_MUSIC))
         methods.update_background()
         methods.update_buttons(home_buttons, events)
         methods.draw_background(screen, home_background)
         methods.draw_buttons(screen, home_buttons)
-
+        
 
 def run_settings(screen : pg.surface.Surface):
     if globals.get_settings_on():
@@ -61,16 +67,23 @@ def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_game_on():
+
         if globals.get_avengers_on():
             background = backgrounds.get(AVENGERS)
-            current_questions = avengers_questions
+            current_questions = questions.get(AVENGERS_QUESTIONS)
+            current_music = music.get(AVENGERS_MUSIC)
+        
         elif globals.get_simpsons_on():
             background = backgrounds.get(SIMPSONS)
-            current_questions = simpsons_questions
+            current_questions = questions.get(SIMPSONS_QUESTIONS)
+            current_music = music.get(SIMPSONS_MUSIC)
+        
         elif globals.get_starwars_on:
             background = backgrounds.get(STARWARS)
-            current_questions = starwars_questions
+            current_questions = questions.get(STARWARS_QUESTIONS)
+            current_music = music.get(STARWARS_MUSIC)
         
+        methods.play_music(current_music)
         methods.update_background()
         methods.update_buttons(game_buttons, events, len(current_questions))
         methods.update_game(current_questions, labels, events)
@@ -81,6 +94,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
+        methods.play_music(music.get(GAME_MUSIC))
         methods.update_background()
         methods.update_gameover(events)
         methods.draw_background(screen, gameover_background)

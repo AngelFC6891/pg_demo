@@ -118,6 +118,16 @@ def get_label_value(id : str) -> None | str:
     return label_value
 
 
+def get_music(config : dict) -> dict[str, dict]:
+    music_list = config.get(MUSIC)
+    music_dict = {}
+
+    for music in music_list:
+        music_dict[music.get(ID)] = {key: value for key,value in music.items() if not key == ID}
+    
+    return music_dict
+
+
 def get_blocks(string : str, len_max : int) -> list[str]:
     words = string.split(SPACE_STR)
     blocks = []
@@ -208,6 +218,14 @@ def check_gameover(events : list[pg.event.Event]):
         if time == INT_0:
             globals.disable_instances()
             globals.set_gameover_on(True)
+
+
+def check_username_ok(username : str):
+    if len(username) - INT_1 < USERNAME_LEN_MIN:
+        globals.set_warning(WARNING_MIN_MAX)
+    else:
+        globals.set_warning(WARNING_NAME_OK)
+        globals.set_username_ok(True)
 
 
 def sort_arrays(arrays : list[list], ascending : bool=True):

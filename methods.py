@@ -42,11 +42,14 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
                     if id == PLAY_BUTTON:
                         globals.set_stages_on(True)
                     elif id == SETTINGS_BUTTON:
-                        globals.set_settings_on(True)
+                        pass
+                        # globals.set_settings_on(True)
                     elif id == SCORES_BUTTON:
                         globals.set_scores_on(True)
                 
                 elif id in STAGES_BUTTONS:
+                    play_music(off=True)
+                    globals.set_play_music(False)
                     globals.disable_instances()
                     globals.set_game_on(True)
 
@@ -142,9 +145,14 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
     update_labels(labels)
     library.check_gameover(events)
 
+    if globals.get_gameover_on():
+        play_music(off=True)
+        globals.set_play_music(False)
+
 
 def update_gameover(events : list[pg.event.Event]):
     time = globals.get_gameover_time()
+    play_music()
 
     for e in events:
         if e.type == EVENT_1000MS:
@@ -183,6 +191,7 @@ def update_username(events : list[pg.event.Event]):
                 if len(username) > 1:
                     username = username[:-2] + HYPHEN_STR
                     globals.set_username(username)
+                    library.check_username_ok(username)
             else:
                 if not e.unicode == VOID_STR:
                     if not library.is_letter(e.unicode):
@@ -191,12 +200,7 @@ def update_username(events : list[pg.event.Event]):
                         if len(username) - INT_1 < USERNAME_LEN_MAX:
                             username = username[:-1] + e.unicode + HYPHEN_STR
                             globals.set_username(username.upper())
-                        
-                        if len(username) - INT_1 < USERNAME_LEN_MIN:
-                            globals.set_warning(WARNING_MIN_MAX)
-                        else:
-                            globals.set_warning(WARNING_NAME_OK)
-                            globals.set_username_ok(True)
+                            library.check_username_ok(username)
                 else:
                     globals.set_warning(WARNING_USE_LETTERS)
 
@@ -334,3 +338,15 @@ def draw_warning(screen : pg.surface.Surface):
     rect.x = (screen.get_width() - warning_render.get_width()) / 2
     rect.y = Y_WARNING
     screen.blit(warning_render, rect)
+
+# ------------------------------------------------------------------------------------------- #
+
+def play_music(music_config : dict={}, off : bool=False):
+    if not globals.get_play_music():
+        pg.mixer.music.load(f'{SOUNDS}/{music_config.get(FILE)}')
+        pg.mixer.music.set_volume(music_config.get(VOLUME))
+        pg.mixer.music.play(loops=music_config.get(LOOP))
+        globals.set_play_music(True)
+    else:
+        if off:
+            pg.mixer.music.stop()

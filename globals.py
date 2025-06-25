@@ -13,8 +13,11 @@ questover_on = False
 username_on = False
 reset_on = False
 click_on = False
+music_on = False
+effects_on = False
 is_click = False
 username_ok = False
+play_music = False
 current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
@@ -81,6 +84,11 @@ def set_username_on(value : bool) -> None:
     username_on = value
 
 
+def set_play_music(value : bool) -> None:
+    global play_music
+    play_music = value
+
+
 def set_reset_on(value : bool) -> None:
     global reset_on
     reset_on = value
@@ -89,6 +97,16 @@ def set_reset_on(value : bool) -> None:
 def set_click_on(value : bool) -> None:
     global click_on
     click_on = value
+
+
+def set_music_on(value : bool) -> None:
+    global music_on
+    music_on = value
+
+
+def set_effects_on(value : bool) -> None:
+    global effects_on
+    effects_on = value
 
 
 def set_current_question(value : int) -> None:
@@ -186,12 +204,24 @@ def get_username_on() -> bool:
     return username_on
 
 
+def get_play_music() -> bool:
+    return play_music
+
+
 def get_reset_on() -> bool:
     return reset_on
 
 
 def get_click_on() -> bool:
     return click_on
+
+
+def get_music_on() -> bool:
+    return music_on
+
+
+def get_effects_on() -> bool:
+    return effects_on
 
 
 def get_current_question() -> int:

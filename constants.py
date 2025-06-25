@@ -9,6 +9,7 @@ CAPTION = 'Funny Quest'
 DATA = 'data'
 CONFIG = 'config/config.json'
 SCORES_CSV = 'scores.csv'
+SOUNDS = 'sounds'
 
 # INSTANCES
 IMAGES = 'images'
@@ -166,3 +167,14 @@ GREEN = (0,255,0)
 WARNING_MIN_MAX = 'Use at least 3 characters and 8 as maximum'
 WARNING_USE_LETTERS = 'Use only letters'
 WARNING_NAME_OK = 'User name ok'
+
+# MUSIC AND EFFECTS
+MUSIC = 'music'
+VOLUME = 'volume'
+LOOP = 'loop'
+GAME_MUSIC = 'game_music'
+AVENGERS_MUSIC = 'avengers_music'
+SIMPSONS_MUSIC = 'simpsons_music'
+STARWARS_MUSIC = 'starwars_music'
+VOL_MAX = 1
+VOL_POWER = 0.01
