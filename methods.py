@@ -59,15 +59,20 @@ def update_game_buttons(id : str, max_index : int):
 
 
 def update_username_buttons(id : str):
-    if id == ENTER_BUTTON:
+    if id == OKAY_BUTTON:
         if globals.get_username_ok():
             username = globals.get_username()
             globals.set_username(username[:-1])
             user_data = library.get_user_data()
-            library.add_user_data(SCORES_CSV, user_data)
-            library.get_user_scores(SCORES_CSV)
+            library.add_user_data(SCORES_JSON, user_data)
+            library.get_user_scores(SCORES_JSON)
             globals.disable_instances()
             globals.set_reset_on(True)
+    
+    elif id == CANCEL_BUTTON:
+        globals.disable_instances()
+        globals.set_reset_on(True)
+
 
 
 def update_scores_buttons(id: str):
@@ -384,18 +389,6 @@ def draw_username_score(screen : pg.surface.Surface, font_color : tuple):
     rect.x = (screen.get_width() - username_render.get_width()) / 2
     rect.y = Y_USERNAME
     screen.blit(username_render, rect)
-
-
-def draw_volume_labels(screen : pg.surface.Surface, labels : list[dict]):
-    for label in labels:
-        
-        label_render = library.get_username()
-        username_render = font_sys.render(username, True, font_color)
-        rect = username_render.get_rect()
-        rect.x = (screen.get_width() - username_render.get_width()) / 2
-        rect.y = Y_USERNAME
-        screen.blit(username_render, rect)
-
 
 
 def draw_warning(screen : pg.surface.Surface):

@@ -11,7 +11,8 @@
         {"id": "simpsons_button", "file": "simpsons.png", "x": 322, "y": 248},
         {"id": "starwars_button", "file": "starwars.png", "x": 190, "y": 410},
         {"id": "pass_button", "file": "pass.png", "x": 456, "y": 505},
-        {"id": "enter_button", "file": "enter.png", "x": 210, "y": 475},
+        {"id": "okay_button", "file": "okay.png", "x": 85, "y": 475},
+        {"id": "cancel_button", "file": "cancel.png", "x": 336, "y": 475},
         {"id": "on_music_button", "file": "on.png", "x": 350, "y": 164},
         {"id": "on_effects_button", "file": "on.png", "x": 350, "y": 366}
         ],
@@ -25,8 +26,8 @@
             ],
             "settings_labels":
             [
-            {"id": "vol_music", "x": 482, "y": 244},
-            {"id": "vol_effects", "x": 482, "y": 446}
+            {"id": "vol_music", "x": 482, "y": 236},
+            {"id": "vol_effects", "x": 482, "y": 438}
             ]
         
         },
@@ -36,6 +37,13 @@
         {"id": "avengers_music", "file": "music/avengers.ogg", "loop": 0},
         {"id": "simpsons_music", "file": "music/simpsons.ogg", "loop": 0},
         {"id": "starwars_music", "file": "music/starwars.ogg", "loop": 0}
+        ],
+    "effects":
+        [
+        {"id": "button_effect", "file": "effects/button.ogg", "loop": 0},
+        {"id": "pass_effect", "file": "effects/pass.ogg", "loop": 0},
+        {"id": "win_effect", "file": "effects/win.ogg", "loop": 0},
+        {"id": "error_effect", "file": "effects/error.ogg", "loop": 0}
         ],
     "bars":
         [

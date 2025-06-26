@@ -9,6 +9,7 @@ CAPTION = 'Funny Quest'
 DATA = 'data'
 CONFIG = 'config/config.json'
 SCORES_CSV = 'scores.csv'
+SCORES_JSON = 'scores.json'
 SOUNDS = 'sounds'
 
 # INSTANCES
@@ -130,7 +131,8 @@ SETTINGS_BUTTON = 'settings_button'
 SCORES_BUTTON = 'scores_button'
 HOME_BUTTON = 'home_button'
 PASS_BUTTON = 'pass_button'
-ENTER_BUTTON = 'enter_button'
+OKAY_BUTTON = 'okay_button'
+CANCEL_BUTTON = 'cancel_button'
 AVENGERS_BUTTON = 'avengers_button'
 SIMPSONS_BUTTON = 'simpsons_button'
 STARWARS_BUTTON = 'starwars_button'
@@ -142,7 +144,7 @@ INSTANCES_BUTTONS =\
     STAGES: [HOME_BUTTON,AVENGERS_BUTTON,SIMPSONS_BUTTON,STARWARS_BUTTON],
     GAME: [PASS_BUTTON],
     SCORES: [HOME_BUTTON],
-    USERNAME: [ENTER_BUTTON],
+    USERNAME: [OKAY_BUTTON, CANCEL_BUTTON],
     SETTINGS: [HOME_BUTTON,ON_MUSIC_BUTTON,ON_EFFECTS_BUTTON]
 }
 
@@ -187,7 +189,7 @@ LIGHT_GREY = (147,147,147)
 CAKE = (255,205,210)
 
 # WARNINGS
-WARNING_MIN_MAX = 'Use at least 3 characters and 8 as maximum'
+WARNING_MIN_MAX = 'Use at least 3 letters and 8 as maximum'
 WARNING_USE_LETTERS = 'Use only letters'
 WARNING_NAME_OK = 'User name ok'
 
@@ -195,6 +197,7 @@ WARNING_NAME_OK = 'User name ok'
 ON = 1
 OFF = 0
 MUSIC = 'music'
+EFFECTS = 'effects'
 VOLUME = 'volume'
 LOOP = 'loop'
 GAME_MUSIC = 'game_music'

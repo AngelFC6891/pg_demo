@@ -19,24 +19,23 @@ def load_config(path : str, key : str) -> dict:
 
 
 def load_scores(path : str) -> list[dict]:
+    users = []
+
     with open(f'{SCORES}\{path}', R, encoding=UTF) as file:
-        scores = []
+        users = json.load(file)
 
-        for line in file:
-            data = line.strip().split(COMMA_STR)
-            user = {}
-            user[NAME] = data[INT_0]
-            user[SCORE] = data[INT_1]
-            user[DATE] = format_date(data[INT_2])
-            scores.append(user)
+        for user in users:
+            user[DATE] = format_date((user.get(DATE)))
 
-    return scores
+    return users
 
 
-def add_user_data(path : str, data : list):
-    with open(f'{SCORES}\{path}', A, newline=VOID_STR, encoding=UTF) as file:
-        writer = csv.writer(file)
-        writer.writerow(data)
+def add_user_data(path : str, data : dict):
+    scores = globals.get_scores_copy()
+    scores.append(data)
+
+    with open(f'{SCORES}\{path}', W, encoding=UTF) as file:
+        json.dump(scores, file, indent=INT_4)
 
 
 def format_date(date : str) -> str:
@@ -50,7 +49,9 @@ def shuffle_questions(questions : dict[str, list]):
 
 
 def get_user_data():
-    return [globals.get_username(), str(globals.get_score()), get_date()]
+    return {NAME: globals.get_username(),
+            SCORE: str(globals.get_score()),
+            DATE: get_date()}
 
 
 def get_date() -> str:
@@ -145,6 +146,10 @@ def get_music(config : dict) -> dict[str, dict]:
         music_dict[music.get(ID)] = {key: value for key,value in music.items() if not key == ID}
     
     return music_dict
+
+
+def get_effects(config : dict):
+    return config.get(EFFECTS)
 
 
 def get_blocks(string : str, len_max : int) -> list[str]:

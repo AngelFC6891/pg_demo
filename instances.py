@@ -14,8 +14,9 @@ questions = library.get_questions()
 bars = library.get_settings_bars(config)
 sliders = library.get_settings_sliders(config)
 music = library.get_music(config)
+effects = library.get_effects(config)
 library.shuffle_questions(questions)
-library.get_user_scores(SCORES_CSV)
+library.get_user_scores(SCORES_JSON)
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
