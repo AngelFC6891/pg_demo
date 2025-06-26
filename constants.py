@@ -198,6 +198,7 @@ ON = 1
 OFF = 0
 MUSIC = 'music'
 EFFECTS = 'effects'
+EFFECT = 'effect'
 VOLUME = 'volume'
 LOOP = 'loop'
 GAME_MUSIC = 'game_music'

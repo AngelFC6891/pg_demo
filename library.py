@@ -149,7 +149,13 @@ def get_music(config : dict) -> dict[str, dict]:
 
 
 def get_effects(config : dict):
-    return config.get(EFFECTS)
+    effects = []
+
+    for effect in config.get(EFFECTS):
+        effect[EFFECT] = pg.mixer.Sound(f'{SOUNDS}/{effect.get(FILE)}')
+        
+
+    return None
 
 
 def get_blocks(string : str, len_max : int) -> list[str]:

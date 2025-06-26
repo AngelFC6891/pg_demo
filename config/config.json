@@ -33,10 +33,10 @@
         },
     "music":
         [
-        {"id": "game_music", "file": "music/game.ogg", "loop": 0},
-        {"id": "avengers_music", "file": "music/avengers.ogg", "loop": 0},
-        {"id": "simpsons_music", "file": "music/simpsons.ogg", "loop": 0},
-        {"id": "starwars_music", "file": "music/starwars.ogg", "loop": 0}
+        {"id": "game_music", "file": "music/game.ogg", "loop": -1},
+        {"id": "avengers_music", "file": "music/avengers.ogg", "loop": -1},
+        {"id": "simpsons_music", "file": "music/simpsons.ogg", "loop": -1},
+        {"id": "starwars_music", "file": "music/starwars.ogg", "loop": -1}
         ],
     "effects":
         [
