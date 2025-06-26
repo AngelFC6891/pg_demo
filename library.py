@@ -232,7 +232,16 @@ def check_username_ok(username : str):
         globals.set_username_ok(True)
 
 
-def get_click_pressed(events : list[pg.event.Event], rect : pg.rect.Rect) -> bool:
+def check_slider_pressed(pos : tuple, rect : pg.rect.Rect):
+    click_pressed = False
+
+    if rect.collidepoint(pos) and pg.mouse.get_pressed()[INT_0]:
+        click_pressed = True
+    
+    return click_pressed
+
+
+def check_click_pressed(events : list[pg.event.Event], rect : pg.rect.Rect) -> bool:
     click_pressed = False
     pos = pg.mouse.get_pos()
 
@@ -302,7 +311,7 @@ def get_settings_sliders(config : dict) -> list[dict]:
     sliders = config.get(SLIDERS)
 
     for slider in sliders:
-        x = INT_0
+        x = slider.get(X)
         y = slider.get(Y)
         w = slider.get(W)
         h = slider.get(H)

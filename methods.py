@@ -12,13 +12,13 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
         rect.x = button.get(X)
         rect.y = button.get(Y)
         
-        if library.get_click_pressed(events, rect):
+        if library.check_click_pressed(events, rect):
 
             if globals.get_home_on() : update_home_buttons(id)
             elif globals.get_settings_on() : update_settings_buttons(id)
             elif globals.get_scores_on() : update_scores_buttons(id)
             elif globals.get_stages_on() : update_stages_buttons(id)
-            elif globals.get_game_on() : update_game_buttons(id)
+            elif globals.get_game_on() : update_game_buttons(id, max_index)
             elif globals.get_username_on() : update_username_buttons(id)
 
 
@@ -162,7 +162,6 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
 
 def update_gameover(events : list[pg.event.Event]):
     time = globals.get_gameover_time()
-    play_music()
 
     for e in events:
         if e.type == EVENT_1000MS:
@@ -216,19 +215,49 @@ def update_username(events : list[pg.event.Event]):
 
 
 def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.event.Event]):
-    vol_music = globals.get_vol_music()
-    # vol_effects = globals.get_vol_effects()
+    pos = pg.mouse.get_pos()
 
     for slider in sliders:
         id = slider.get(ID)
         rect = slider.get(RECT)
         rect.y = slider.get(Y)
-        rect_centerx = slider.get(CENTERX)
 
         if id == SLIDER_MUSIC:
+            volume = globals.get_vol_music()
+            bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
             bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
-            rect.centerx = rect_centerx + int((vol_music / INT_100) * bar_w)
+            
+        
+        # elif id == SLIDER_EFFECTS:
+        #     bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
+        #     bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
 
+        if library.check_slider_pressed(pos, rect):
+            pos_x = pos[INT_0]
+            
+            if pos_x >= bar_x and pos_x <= (bar_x + bar_w):
+                rect.centerx = pos_x
+            else:
+                if pos_x < bar_x : rect.centerx = bar_x
+                elif pos_x > (bar_x + bar_w) : rect.centerx = (bar_x + bar_w)
+
+            volume = (rect.centerx - bar_x) / bar_w
+            globals.set_vol_music(volume)
+        
+        else:
+            # if id == SLIDER_MUSIC:
+            #     volume = globals.get_vol_music()
+            
+            # elif id == SLIDER_EFFECTS:
+            #     volume = globals.get_vol_effects()
+
+            rect.centerx = bar_x + int(bar_w * volume)
+            print(rect.centerx)
+
+
+        pg.mixer.music.set_volume(volume)
+        # if id == SLIDER_MUSIC : globals.set_vol_music(volume)
+        # elif id == SLIDER_EFFECTS : globals.set_vol_effects(volume)
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -381,7 +410,7 @@ def draw_warning(screen : pg.surface.Surface):
 def draw_bars(screen : pg.surface.Surface, bars : list[dict]):
     for bar in bars:
         rect = bar.get(RECT)
-        color = bar.get(COLOR)
+        color = GREY
         border = bar.get(BORDER)
         pg.draw.rect(screen, color, rect, border)
 
@@ -390,10 +419,10 @@ def draw_sliders(screen : pg.surface.Surface, sliders : list[dict]):
     for slider in sliders:
         if slider.get(ID) == SLIDER_MUSIC:
             rect = slider.get(RECT)
-            color = slider.get(COLOR)
+            color = GREY
             border = slider.get(BORDER)
-            pg.draw.rect(screen, color, rect, border)
             screen.fill(LIGHT_GREY, rect)
+            pg.draw.rect(screen, color, rect, border)
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -412,3 +441,7 @@ def play_music(config : dict={}, off : bool=False):
         if pg.mixer.music.get_busy():
             pg.mixer.music.stop()
             globals.set_play_music(False)
+
+
+def play_effect(config : dict={}, off : bool=False):
+    pass

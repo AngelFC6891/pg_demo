@@ -10,9 +10,9 @@ buttons = library.get_buttons(config)
 labels = library.get_labels(config)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
-music = library.get_music(config)
 bars = library.get_settings_bars(config)
 sliders = library.get_settings_sliders(config)
+music = library.get_music(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_CSV)
 
@@ -81,6 +81,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
+        methods.play_music(music.get(GAME_MUSIC))
         methods.update_gameover(events)
         methods.draw_background(screen, backgrounds.get(GAMEOVER))
 

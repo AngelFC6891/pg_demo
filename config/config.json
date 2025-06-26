@@ -19,7 +19,9 @@
         [
         {"id": "lives", "x": 150, "y": 516},
         {"id": "time", "x": 258, "y": 516},
-        {"id": "score", "x": 386, "y": 516}
+        {"id": "score", "x": 386, "y": 516},
+        {"id": "vol_music", "x": 386, "y": 516},
+        {"id": "vol_effects", "x": 386, "y": 516}
         ],
     "music":
         [
@@ -30,13 +32,13 @@
         ],
     "bars":
         [
-        {"id": "bar_music", "x": 58, "y": 254, "w": 400, "h": 6, "border": 2, "color": [98,98,98]},
-        {"id": "bar_effects", "x": 58, "y": 455, "w": 400, "h": 6, "border": 2, "color": [98,98,98]}
+        {"id": "bar_music", "x": 58, "y": 254, "w": 400, "h": 6, "border": 2},
+        {"id": "bar_effects", "x": 58, "y": 455, "w": 400, "h": 6, "border": 2}
         ],
     "sliders":
         [
-        {"id": "slider_music", "centerx": 58, "y": 245, "w": 12, "h": 24, "border": 2, "color": [147,147,147]},
-        {"id": "slider_effects", "centerx": 58, "y": 446, "w": 12, "h": 24, "border": 2, "color": [147,147,147]}
+        {"id": "slider_music", "x": 0, "y": 245, "w": 12, "h": 24, "border": 2},
+        {"id": "slider_effects", "x": 0, "y": 446, "w": 12, "h": 24, "border": 2}
         ]
     }
 }

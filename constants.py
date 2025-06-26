@@ -75,7 +75,6 @@ INT_10 = 10
 INT_45 = 45
 INT_48 = 48
 INT_57 = 57
-INT_100 = 100
 
 # INTEGER VALUES
 FPS = 20
@@ -178,7 +177,8 @@ AQUA = (0,190,200)
 VIOLET = (145,25,255)
 RED = (255,0,0)
 GREEN = (0,255,0)
-LIGHT_GREY = (247,247,247)
+GREY = (98,98,98)
+LIGHT_GREY = (147,147,147)
 
 # WARNINGS
 WARNING_MIN_MAX = 'Use at least 3 characters and 8 as maximum'
@@ -189,16 +189,17 @@ WARNING_NAME_OK = 'User name ok'
 ON = 1
 OFF = 0
 MUSIC = 'music'
+VOLUME = 'volume'
 LOOP = 'loop'
 GAME_MUSIC = 'game_music'
 AVENGERS_MUSIC = 'avengers_music'
 SIMPSONS_MUSIC = 'simpsons_music'
 STARWARS_MUSIC = 'starwars_music'
-VOL_MUSIC_INIT = 0.25
-VOL_EFFECTS_INIT = 0.15
-VOL_MAX = 1
-VOL_POWER = 0.01
 BAR_MUSIC = 'bar_music'
 BAR_EFFECTS = 'bar_effects'
 SLIDER_MUSIC = 'slider_music'
 SLIDER_EFFECTS = 'slider_effects'
+VOL_MUSIC = 'vol_music'
+VOL_MUSIC_INIT = 0.15
+VOL_EFFECTS = 'vol_effects'
+VOL_EFFECTS_INIT = 0.15
