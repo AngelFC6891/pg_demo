@@ -1,5 +1,6 @@
 from constants import *
 import library
+import sound
 import globals
 # import pprint
 
@@ -11,18 +12,19 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
         rect = image.get_rect()
         rect.x = button.get(X)
         rect.y = button.get(Y)
+        effects = globals.get_effects()
         
         if library.check_click_pressed(events, rect):
 
-            if globals.get_home_on() : update_home_buttons(id)
-            elif globals.get_settings_on() : update_settings_buttons(id)
-            elif globals.get_scores_on() : update_scores_buttons(id)
-            elif globals.get_stages_on() : update_stages_buttons(id)
-            elif globals.get_game_on() : update_game_buttons(id, max_index)
-            elif globals.get_username_on() : update_username_buttons(id)
+            if globals.get_home_on() : update_home_buttons(id, effects.get(CLICK))
+            elif globals.get_settings_on() : update_settings_buttons(id, effects.get(CLICK))
+            elif globals.get_scores_on() : update_scores_buttons(id, effects.get(CLICK))
+            elif globals.get_stages_on() : update_stages_buttons(id, effects.get(CLICK))
+            elif globals.get_game_on() : update_game_buttons(id, max_index, effects.get(PASS))
+            elif globals.get_username_on() : update_username_buttons(id, effects.get(CLICK))
 
 
-def update_home_buttons(id : str):
+def update_home_buttons(id : str, effect : dict):
     if id in [PLAY_BUTTON, SETTINGS_BUTTON, SCORES_BUTTON]:
         globals.disable_instances()
 
@@ -33,14 +35,17 @@ def update_home_buttons(id : str):
         elif id == SCORES_BUTTON:
             globals.set_scores_on(True)
 
+        sound.play_effect(effect)
 
-def update_stages_buttons(id : str):
+
+def update_stages_buttons(id : str, effect : dict):
     if id == HOME_BUTTON:
         globals.disable_instances()
         globals.set_home_on(True)
+        sound.play_effect(effect)
 
     elif id in [AVENGERS_BUTTON, SIMPSONS_BUTTON, STARWARS_BUTTON]:
-        play_music(off=True)
+        sound.play_music(off=True)
         globals.set_play_music(False)
         globals.disable_instances()
         globals.set_game_on(True)
@@ -51,14 +56,19 @@ def update_stages_buttons(id : str):
             globals.set_simpsons_on(True)
         elif id == STARWARS_BUTTON:
             globals.set_starwars_on(True)
+        
+        sound.play_effect(effect)
 
 
-def update_game_buttons(id : str, max_index : int):
+def update_game_buttons(id : str, max_index : int, effect : dict):
     if id == PASS_BUTTON:
-        if not globals.get_lives() == 0 : library.set_question_pass(True, max_index)
+        if not globals.get_lives() == 0:
+            library.set_question_pass(True, max_index)
+        
+        sound.play_effect(effect)
 
 
-def update_username_buttons(id : str):
+def update_username_buttons(id : str, effect : dict):
     if id == OKAY_BUTTON:
         if globals.get_username_ok():
             username = globals.get_username()
@@ -68,31 +78,37 @@ def update_username_buttons(id : str):
             library.get_user_scores(SCORES_JSON)
             globals.disable_instances()
             globals.set_reset_on(True)
+            sound.play_effect(effect)
     
     elif id == CANCEL_BUTTON:
         globals.disable_instances()
         globals.set_reset_on(True)
+        sound.play_effect(effect)
 
 
-
-def update_scores_buttons(id: str):
+def update_scores_buttons(id: str, effect : dict):
     if id == HOME_BUTTON:
         globals.disable_instances()
         globals.set_home_on(True)
+        sound.play_effect(effect)
 
 
-def update_settings_buttons(id : str):
-    if id == HOME_BUTTON:
-        globals.disable_instances()
-        globals.set_home_on(True)
-    
-    elif id == ON_MUSIC_BUTTON:
-        value = not globals.get_music_on()
-        globals.set_music_on(value)
-    
-    elif id == ON_EFFECTS_BUTTON:
-        value = not globals.get_effects_on()
-        globals.set_effects_on(value)
+def update_settings_buttons(id : str, effect : dict):
+    if id in [HOME_BUTTON, ON_MUSIC_BUTTON, ON_EFFECTS_BUTTON]:
+
+        if id == HOME_BUTTON:
+            globals.disable_instances()
+            globals.set_home_on(True)
+        
+        elif id == ON_MUSIC_BUTTON:
+            value = not globals.get_music_on()
+            globals.set_music_on(value)
+        
+        elif id == ON_EFFECTS_BUTTON:
+            value = not globals.get_effects_on()
+            globals.set_effects_on(value)
+        
+        sound.play_effect(effect)
 
 
 def update_question(question : dict):
@@ -152,8 +168,9 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
                         else:
                             is_win = True
     
-    library.set_question_lost(is_lost, len(questions))
-    library.set_question_win(is_win, len(questions))
+    effects = globals.get_effects()
+    library.set_question_lost(is_lost, len(questions), effects.get(ERROR))
+    library.set_question_win(is_win, len(questions), effects.get(WIN))
     question = questions[globals.get_current_question()]
     update_question(question)
     update_options(question)
@@ -161,7 +178,7 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
     library.check_gameover(events)
 
     if globals.get_gameover_on():
-        play_music(off=True)
+        sound.play_music(off=True)
         globals.set_play_music(False)
 
 
@@ -417,25 +434,3 @@ def draw_sliders(screen : pg.surface.Surface, sliders : list[dict]):
         border = slider.get(BORDER)
         screen.fill(LIGHT_GREY, rect)
         pg.draw.rect(screen, color, rect, border)
-
-# ------------------------------------------------------------------------------------------- #
-
-def play_music(config : dict={}, off : bool=False):
-    if globals.get_music_on():
-        if not globals.get_play_music():
-            volume = globals.get_vol_music()
-            pg.mixer.music.load(f'{SOUNDS}/{config.get(FILE)}')
-            pg.mixer.music.set_volume(volume)
-            pg.mixer.music.play(loops=config.get(LOOP))
-            globals.set_play_music(True)
-        else:
-            if off:
-                pg.mixer.music.stop()
-    else:
-        if pg.mixer.music.get_busy():
-            pg.mixer.music.stop()
-            globals.set_play_music(False)
-
-
-def play_effect(config : dict={}, off : bool=False):
-    pass

@@ -40,10 +40,10 @@
         ],
     "effects":
         [
-        {"id": "button_effect", "file": "effects/button.ogg", "loop": 0},
-        {"id": "pass_effect", "file": "effects/pass.ogg", "loop": 0},
-        {"id": "win_effect", "file": "effects/win.ogg", "loop": 0},
-        {"id": "error_effect", "file": "effects/error.ogg", "loop": 0}
+        {"id": "click_effect", "file": "effects/click.wav", "loop": 0},
+        {"id": "pass_effect", "file": "effects/pass.wav", "loop": 0},
+        {"id": "win_effect", "file": "effects/win.wav", "loop": 0},
+        {"id": "error_effect", "file": "effects/error.wav", "loop": 0}
         ],
     "bars":
         [

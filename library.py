@@ -2,10 +2,10 @@ import os
 import json
 import random
 from datetime import date, datetime
-import csv
 import copy
 from constants import *
 import globals
+import sound
 
 
 def load_config(path : str, key : str) -> dict:
@@ -149,13 +149,15 @@ def get_music(config : dict) -> dict[str, dict]:
 
 
 def get_effects(config : dict):
-    effects = []
+    effects = {}
 
     for effect in config.get(EFFECTS):
         effect[EFFECT] = pg.mixer.Sound(f'{SOUNDS}/{effect.get(FILE)}')
-        
+        effect_id = effect.get(ID)
+        effect_key = effect_id.replace(f'{HYPHEN_STR}{EFFECT}', VOID_STR)
+        effects[effect_key] = effect
 
-    return None
+    globals.set_effects(effects)
 
 
 def get_blocks(string : str, len_max : int) -> list[str]:
@@ -215,15 +217,16 @@ def get_font_sys() -> pg.font.Font:
     return font_sys
 
 
-def set_question_win(is_win : bool, max_index : int):
+def set_question_win(is_win : bool, max_index : int, effect : dict):
     if is_win:
         score = globals.get_score()
         score += REWARD
         globals.set_score(score)
         set_question_pass(True, max_index)
+        sound.play_effect(effect)
 
 
-def set_question_lost(is_lost : bool, max_index : int):
+def set_question_lost(is_lost : bool, max_index : int, effect : dict):
     lives = globals.get_lives()
     score = globals.get_score()
 
@@ -233,6 +236,7 @@ def set_question_lost(is_lost : bool, max_index : int):
         globals.set_lives(lives)
         globals.set_score(score)
         if not lives == INT_0 : set_question_pass(True, max_index)
+        sound.play_effect(effect)
 
 
 def set_question_pass(is_pass : bool, max_index : int):

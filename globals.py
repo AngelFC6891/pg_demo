@@ -29,6 +29,7 @@ gameover_delay = GAMEOVER_DELAY
 vol_music = VOL_MUSIC_INIT
 vol_effects = VOL_EFFECTS_INIT
 score_copy = []
+effects = {}
 
 
 def set_home_on(value : bool) -> None:
@@ -170,6 +171,11 @@ def set_vol_effects(value : float) -> None:
     global vol_effects
     vol_effects = value
 
+
+def set_effects(value : dict) -> None:
+    global effects
+    effects = value
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_home_on() -> bool:
@@ -282,6 +288,10 @@ def get_vol_music() -> float:
 
 def get_vol_effects() -> float:
     return vol_effects
+
+
+def get_effects() -> dict:
+    return effects
 
 # ------------------------------------------------------------------------------------------- #
 

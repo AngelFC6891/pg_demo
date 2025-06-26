@@ -1,5 +1,6 @@
 from constants import *
 import library
+import sound
 import methods
 import globals
 # import pprint
@@ -14,14 +15,14 @@ questions = library.get_questions()
 bars = library.get_settings_bars(config)
 sliders = library.get_settings_sliders(config)
 music = library.get_music(config)
-effects = library.get_effects(config)
+library.get_effects(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_JSON)
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
     if globals.get_home_on():
-        methods.play_music(music.get(GAME_MUSIC))
+        sound.play_music(music.get(GAME_MUSIC))
         methods.update_buttons(buttons.get(HOME), events)
         methods.draw_background(screen, backgrounds.get(HOME))
         methods.draw_buttons(screen, buttons.get(HOME))
@@ -29,7 +30,7 @@ def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None
 
 def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
-        methods.play_music(music.get(GAME_MUSIC))
+        sound.play_music(music.get(GAME_MUSIC))
         methods.update_labels(settings_labels)
         methods.update_buttons(buttons.get(SETTINGS), events)
         methods.update_sliders(bars, sliders, events)
@@ -75,7 +76,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
             current_questions = questions.get(STARWARS_QUESTIONS)
             current_music = music.get(STARWARS_MUSIC)
         
-        methods.play_music(current_music)
+        sound.play_music(current_music)
         methods.update_buttons(buttons.get(GAME), events, len(current_questions))
         methods.update_game(current_questions, game_labels, events)
         methods.draw_background(screen, background)
@@ -85,7 +86,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_gameover_on():
-        methods.play_music(music.get(GAME_MUSIC))
+        sound.play_music(music.get(GAME_MUSIC))
         methods.update_gameover(events)
         methods.draw_background(screen, backgrounds.get(GAMEOVER))
 
