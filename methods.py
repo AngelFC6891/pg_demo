@@ -227,7 +227,6 @@ def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.eve
             bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
             bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
             
-        
         # elif id == SLIDER_EFFECTS:
         #     bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
         #     bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
@@ -244,17 +243,14 @@ def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.eve
             volume = (rect.centerx - bar_x) / bar_w
             globals.set_vol_music(volume)
         
-        else:
+        # else:
             # if id == SLIDER_MUSIC:
             #     volume = globals.get_vol_music()
             
             # elif id == SLIDER_EFFECTS:
             #     volume = globals.get_vol_effects()
 
-            rect.centerx = bar_x + int(bar_w * volume)
-            print(rect.centerx)
-
-
+        rect.centerx = bar_x + (bar_w * volume)
         pg.mixer.music.set_volume(volume)
         # if id == SLIDER_MUSIC : globals.set_vol_music(volume)
         # elif id == SLIDER_EFFECTS : globals.set_vol_effects(volume)
