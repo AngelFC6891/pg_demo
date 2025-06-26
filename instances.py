@@ -7,7 +7,8 @@ import globals
 
 config = library.load_config(CONFIG, DATA)
 buttons = library.get_buttons(config)
-labels = library.get_labels(config)
+game_labels = library.get_labels(config, GAME)
+settings_labels = library.get_labels(config, SETTINGS)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 bars = library.get_settings_bars(config)
@@ -28,12 +29,14 @@ def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None
 def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
         methods.play_music(music.get(GAME_MUSIC))
+        methods.update_labels(settings_labels)
         methods.update_buttons(buttons.get(SETTINGS), events)
         methods.update_sliders(bars, sliders, events)
         methods.draw_background(screen, backgrounds.get(SETTINGS))
         methods.draw_buttons(screen, buttons.get(SETTINGS))
         methods.draw_bars(screen, bars)
         methods.draw_sliders(screen, sliders)
+        methods.draw_labels(screen, settings_labels)
 
 
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -73,10 +76,10 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
         
         methods.play_music(current_music)
         methods.update_buttons(buttons.get(GAME), events, len(current_questions))
-        methods.update_game(current_questions, labels, events)
+        methods.update_game(current_questions, game_labels, events)
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, buttons.get(GAME))
-        methods.draw_game(screen, current_questions, labels)
+        methods.draw_game(screen, current_questions, game_labels)
 
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):

@@ -117,7 +117,7 @@ def update_options(question : dict):
 
 def update_labels(labels : list[dict]):
     font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_LAB, BOLD_ENABLE)
+    font_sys = library.get_font_sys()
 
     for label in labels:
         key_render = f'{label.get(ID)}{HYPHEN_STR}{RENDER}'
@@ -215,24 +215,23 @@ def update_username(events : list[pg.event.Event]):
 
 
 def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.event.Event]):
-    pos = pg.mouse.get_pos()
+    bar_x = bars[INT_0].get(X)
+    bar_w = bars[INT_0].get(W)
 
     for slider in sliders:
         id = slider.get(ID)
         rect = slider.get(RECT)
         rect.y = slider.get(Y)
+        pos = pg.mouse.get_pos()
+        pos_x, _ = pos
 
         if id == SLIDER_MUSIC:
             volume = globals.get_vol_music()
-            bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
-            bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
             
-        # elif id == SLIDER_EFFECTS:
-        #     bar_x = [bar.get(X) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
-        #     bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_EFFECTS][INT_0]
+        elif id == SLIDER_EFFECTS:
+            volume = globals.get_vol_effects()
 
         if library.check_slider_pressed(pos, rect):
-            pos_x = pos[INT_0]
             
             if pos_x >= bar_x and pos_x <= (bar_x + bar_w):
                 rect.centerx = pos_x
@@ -241,19 +240,14 @@ def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.eve
                 elif pos_x > (bar_x + bar_w) : rect.centerx = (bar_x + bar_w)
 
             volume = (rect.centerx - bar_x) / bar_w
-            globals.set_vol_music(volume)
-        
-        # else:
-            # if id == SLIDER_MUSIC:
-            #     volume = globals.get_vol_music()
+            if id == SLIDER_MUSIC:
+                pg.mixer.music.set_volume(volume)
+                globals.set_vol_music(volume)
             
-            # elif id == SLIDER_EFFECTS:
-            #     volume = globals.get_vol_effects()
+            elif id == SLIDER_EFFECTS:
+                globals.set_vol_effects(volume)
 
         rect.centerx = bar_x + (bar_w * volume)
-        pg.mixer.music.set_volume(volume)
-        # if id == SLIDER_MUSIC : globals.set_vol_music(volume)
-        # elif id == SLIDER_EFFECTS : globals.set_vol_effects(volume)
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -392,6 +386,18 @@ def draw_username_score(screen : pg.surface.Surface, font_color : tuple):
     screen.blit(username_render, rect)
 
 
+def draw_volume_labels(screen : pg.surface.Surface, labels : list[dict]):
+    for label in labels:
+        
+        label_render = library.get_username()
+        username_render = font_sys.render(username, True, font_color)
+        rect = username_render.get_rect()
+        rect.x = (screen.get_width() - username_render.get_width()) / 2
+        rect.y = Y_USERNAME
+        screen.blit(username_render, rect)
+
+
+
 def draw_warning(screen : pg.surface.Surface):
     font_color = library.get_font_color()
     font_sys = pg.font.SysFont(FONT_MV_BOLI, FONT_SIZE_WARNING)
@@ -413,12 +419,11 @@ def draw_bars(screen : pg.surface.Surface, bars : list[dict]):
 
 def draw_sliders(screen : pg.surface.Surface, sliders : list[dict]):
     for slider in sliders:
-        if slider.get(ID) == SLIDER_MUSIC:
-            rect = slider.get(RECT)
-            color = GREY
-            border = slider.get(BORDER)
-            screen.fill(LIGHT_GREY, rect)
-            pg.draw.rect(screen, color, rect, border)
+        rect = slider.get(RECT)
+        color = GREY
+        border = slider.get(BORDER)
+        screen.fill(LIGHT_GREY, rect)
+        pg.draw.rect(screen, color, rect, border)
 
 # ------------------------------------------------------------------------------------------- #
 

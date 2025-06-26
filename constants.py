@@ -39,6 +39,8 @@ QUESTION = 'question'
 ANSWER = 'answer'
 BUTTONS = 'buttons'
 LABELS = 'labels'
+GAME_LABELS = 'game_labels'
+SETTINGS_LABELS = 'settings_labels'
 RENDER = 'render'
 OPTION = 'option'
 BARS = 'bars'
@@ -75,6 +77,7 @@ INT_10 = 10
 INT_45 = 45
 INT_48 = 48
 INT_57 = 57
+INT_100 = 100
 
 # INTEGER VALUES
 FPS = 30
@@ -116,6 +119,7 @@ SPACE_STR = ' '
 HYPHEN_STR = '_'
 COMMA_STR = ','
 ASTERISK_STR = '*'
+PERCENT_STR = '%'
 
 # EVENTS
 EVENT_1000MS = pg.USEREVENT
@@ -161,6 +165,7 @@ FONT_SIZE_SCORES = 25
 FONT_SIZE_USERNAME = 48
 FONT_SIZE_SCORE = 60
 FONT_SIZE_WARNING = 24
+FONT_SIZE_VOLUME = 24
 BOLD_ENABLE = True
 OPTIONS = [1,2,3,4]
 QUESTION_RENDER = 'question_render'
@@ -179,6 +184,7 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 GREY = (98,98,98)
 LIGHT_GREY = (147,147,147)
+CAKE = (255,205,210)
 
 # WARNINGS
 WARNING_MIN_MAX = 'Use at least 3 characters and 8 as maximum'

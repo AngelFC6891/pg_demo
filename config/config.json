@@ -16,13 +16,20 @@
         {"id": "on_effects_button", "file": "on.png", "x": 350, "y": 366}
         ],
     "labels":
-        [
-        {"id": "lives", "x": 150, "y": 516},
-        {"id": "time", "x": 258, "y": 516},
-        {"id": "score", "x": 386, "y": 516},
-        {"id": "vol_music", "x": 386, "y": 516},
-        {"id": "vol_effects", "x": 386, "y": 516}
-        ],
+        {
+            "game_labels":
+            [
+            {"id": "lives", "x": 150, "y": 516},
+            {"id": "time", "x": 258, "y": 516},
+            {"id": "score", "x": 386, "y": 516}
+            ],
+            "settings_labels":
+            [
+            {"id": "vol_music", "x": 482, "y": 244},
+            {"id": "vol_effects", "x": 482, "y": 446}
+            ]
+        
+        },
     "music":
         [
         {"id": "game_music", "file": "music/game.ogg", "loop": 0},
@@ -37,8 +44,8 @@
         ],
     "sliders":
         [
-        {"id": "slider_music", "x": 0, "y": 245, "w": 12, "h": 24, "border": 2},
-        {"id": "slider_effects", "x": 0, "y": 446, "w": 12, "h": 24, "border": 2}
+        {"id": "slider_music", "x": 0, "y": 242, "w": 16, "h": 30, "border": 2},
+        {"id": "slider_effects", "x": 0, "y": 443, "w": 16, "h": 30, "border": 2}
         ]
     }
 }

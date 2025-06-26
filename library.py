@@ -108,18 +108,33 @@ def get_buttons(config : dict) -> dict[str, list]:
     return buttons_dict
 
 
-def get_labels(config : dict) -> list[dict]:
-    return config.get(LABELS)
+def get_labels(config : dict, instance : str) -> list[dict]:
+    labels_dict = config.get(LABELS)
+
+    if instance == GAME:
+        labels = labels_dict.get(GAME_LABELS)
+    elif instance == SETTINGS:
+        labels = labels_dict.get(SETTINGS_LABELS)
+
+    return labels
 
 
 def get_label_value(id : str) -> None | str:
-    label_value = None
+    value = None
 
-    if id == LIVES : label_value = str(globals.get_lives())
-    elif id == TIME : label_value = str(globals.get_play_time())
-    elif id == SCORE : label_value = str(globals.get_score())
+    if id == LIVES : value = str(globals.get_lives())
+    elif id == TIME : value = str(globals.get_play_time())
+    elif id == SCORE : value = str(globals.get_score())
+    
+    elif id == VOL_MUSIC:
+        vol_music = int(globals.get_vol_music() * INT_100)
+        value = f'{vol_music}{PERCENT_STR}'
 
-    return label_value
+    elif id == VOL_EFFECTS:
+        vol_effects = int(globals.get_vol_effects() * INT_100)
+        value = f'{vol_effects}{PERCENT_STR}'
+
+    return value
 
 
 def get_music(config : dict) -> dict[str, dict]:
@@ -175,7 +190,18 @@ def get_font_color() -> tuple:
         elif warning == WARNING_NAME_OK:
             font_color = GREEN
 
+    elif globals.get_settings_on():
+        font_color = CAKE
+
     return font_color
+
+def get_font_sys() -> pg.font.Font:
+    if globals.get_game_on():
+        font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_LAB, BOLD_ENABLE)
+    elif globals.get_settings_on():
+        font_sys = pg.font.SysFont(FONT_MV_BOLI, FONT_SIZE_VOLUME, BOLD_ENABLE)
+
+    return font_sys
 
 
 def set_question_win(is_win : bool, max_index : int):
