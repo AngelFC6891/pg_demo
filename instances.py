@@ -12,6 +12,7 @@ backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 music = library.get_music(config)
 bars = library.get_settings_bars(config)
+sliders = library.get_settings_sliders(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_CSV)
 
@@ -28,10 +29,11 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
         methods.play_music(music.get(GAME_MUSIC))
         methods.update_buttons(buttons.get(SETTINGS), events)
-        # methods.update_bars(bars)
+        methods.update_sliders(bars, sliders, events)
         methods.draw_background(screen, backgrounds.get(SETTINGS))
         methods.draw_buttons(screen, buttons.get(SETTINGS))
-        # methods.draw_bars(bars)
+        methods.draw_bars(screen, bars)
+        methods.draw_sliders(screen, sliders)
 
 
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):

@@ -165,6 +165,11 @@ def set_vol_music(value : float) -> None:
     global vol_music
     vol_music = value
 
+
+def set_vol_effects(value : float) -> None:
+    global vol_effects
+    vol_effects = value
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_home_on() -> bool:
@@ -273,6 +278,10 @@ def get_scores_copy() -> list[dict]:
 
 def get_vol_music() -> float:
     return vol_music
+
+
+def get_vol_effects() -> float:
+    return vol_effects
 
 # ------------------------------------------------------------------------------------------- #
 

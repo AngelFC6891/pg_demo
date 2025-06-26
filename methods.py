@@ -215,12 +215,19 @@ def update_username(events : list[pg.event.Event]):
                     globals.set_warning(WARNING_USE_LETTERS)
 
 
-def update_settings(bars : list[dict], events : list[pg.event.Event]):
-    for bar in bars:
-        if bar.get(ID) == BAR_MUSIC:
-            pass
-        elif bar.get(ID) == BAR_EFFECTS:
-            pass
+def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.event.Event]):
+    vol_music = globals.get_vol_music()
+    # vol_effects = globals.get_vol_effects()
+
+    for slider in sliders:
+        id = slider.get(ID)
+        rect = slider.get(RECT)
+        rect.y = slider.get(Y)
+        rect_centerx = slider.get(CENTERX)
+
+        if id == SLIDER_MUSIC:
+            bar_w = [bar.get(W) for bar in bars if bar.get(ID) == BAR_MUSIC][INT_0]
+            rect.centerx = rect_centerx + int((vol_music / INT_100) * bar_w)
 
 
 # ------------------------------------------------------------------------------------------- #
@@ -369,6 +376,24 @@ def draw_warning(screen : pg.surface.Surface):
     rect.x = (screen.get_width() - warning_render.get_width()) / 2
     rect.y = Y_WARNING
     screen.blit(warning_render, rect)
+
+
+def draw_bars(screen : pg.surface.Surface, bars : list[dict]):
+    for bar in bars:
+        rect = bar.get(RECT)
+        color = bar.get(COLOR)
+        border = bar.get(BORDER)
+        pg.draw.rect(screen, color, rect, border)
+
+
+def draw_sliders(screen : pg.surface.Surface, sliders : list[dict]):
+    for slider in sliders:
+        if slider.get(ID) == SLIDER_MUSIC:
+            rect = slider.get(RECT)
+            color = slider.get(COLOR)
+            border = slider.get(BORDER)
+            pg.draw.rect(screen, color, rect, border)
+            screen.fill(LIGHT_GREY, rect)
 
 # ------------------------------------------------------------------------------------------- #
 

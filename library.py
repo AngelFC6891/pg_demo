@@ -297,6 +297,19 @@ def get_settings_bars(config : dict) -> list[dict]:
 
     return bars
 
+
+def get_settings_sliders(config : dict) -> list[dict]:
+    sliders = config.get(SLIDERS)
+
+    for slider in sliders:
+        x = INT_0
+        y = slider.get(Y)
+        w = slider.get(W)
+        h = slider.get(H)
+        slider[RECT] = pg.Rect(x,y,w,h)
+
+    return sliders
+
 # ------------------------------------------------------------------------------------------- #
 
 def is_letter(char : str) -> bool:

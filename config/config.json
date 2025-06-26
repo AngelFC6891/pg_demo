@@ -31,7 +31,12 @@
     "bars":
         [
         {"id": "bar_music", "x": 58, "y": 254, "w": 400, "h": 6, "border": 2, "color": [98,98,98]},
-        {"id": "bar_effects", "x": 58, "y": 456, "w": 400, "h": 6, "border": 2, "color": [98,98,98]}
+        {"id": "bar_effects", "x": 58, "y": 455, "w": 400, "h": 6, "border": 2, "color": [98,98,98]}
+        ],
+    "sliders":
+        [
+        {"id": "slider_music", "centerx": 58, "y": 245, "w": 12, "h": 24, "border": 2, "color": [147,147,147]},
+        {"id": "slider_effects", "centerx": 58, "y": 446, "w": 12, "h": 24, "border": 2, "color": [147,147,147]}
         ]
     }
 }

@@ -42,9 +42,13 @@ LABELS = 'labels'
 RENDER = 'render'
 OPTION = 'option'
 BARS = 'bars'
+SLIDERS = 'sliders'
 W = 'w'
 H = 'h'
 RECT = 'rect'
+COLOR = 'color'
+BORDER = 'border'
+CENTERX = 'centerx'
 
 # FILES
 R = 'r'
@@ -71,6 +75,7 @@ INT_10 = 10
 INT_45 = 45
 INT_48 = 48
 INT_57 = 57
+INT_100 = 100
 
 # INTEGER VALUES
 FPS = 20
@@ -173,6 +178,7 @@ AQUA = (0,190,200)
 VIOLET = (145,25,255)
 RED = (255,0,0)
 GREEN = (0,255,0)
+LIGHT_GREY = (247,247,247)
 
 # WARNINGS
 WARNING_MIN_MAX = 'Use at least 3 characters and 8 as maximum'
@@ -194,3 +200,5 @@ VOL_MAX = 1
 VOL_POWER = 0.01
 BAR_MUSIC = 'bar_music'
 BAR_EFFECTS = 'bar_effects'
+SLIDER_MUSIC = 'slider_music'
+SLIDER_EFFECTS = 'slider_effects'
