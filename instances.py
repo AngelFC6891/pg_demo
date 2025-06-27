@@ -112,6 +112,10 @@ def run_reset():
         globals.disable_instances()
         globals.set_username_ok(False)
         globals.set_home_on(True)
+        globals.set_pass_on(True)
+        globals.set_repeat_on(True)
+        globals.set_bomb_on(True)
+        globals.set_rewardx2_on(True)
 
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):

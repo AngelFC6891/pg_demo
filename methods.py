@@ -25,7 +25,7 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
 
 
 def update_home_buttons(id : str, effect : dict):
-    if id in [PLAY_BUTTON, SETTINGS_BUTTON, SCORES_BUTTON]:
+    if id in INSTANCES_BUTTONS.get(HOME):
         globals.disable_instances()
 
         if id == PLAY_BUTTON:
@@ -43,8 +43,7 @@ def update_stages_buttons(id : str, effect : dict):
         globals.disable_instances()
         globals.set_home_on(True)
         sound.play_effect(effect)
-
-    elif id in [AVENGERS_BUTTON, SIMPSONS_BUTTON, STARWARS_BUTTON]:
+    else:
         sound.play_music(off=True)
         globals.set_play_music(False)
         globals.disable_instances()
@@ -61,10 +60,17 @@ def update_stages_buttons(id : str, effect : dict):
 
 
 def update_game_buttons(id : str, max_index : int, effect : dict):
-    if id == PASS_BUTTON:
-        if not globals.get_lives() == 0:
-            library.set_question_pass(True, max_index)
-        
+    if id in INSTANCES_BUTTONS.get(GAME):
+    
+        if id == PASS_BUTTON:
+            library.pass_question(max_index)
+        elif id == REPEAT_BUTTON:
+            library.repeat_question()
+        elif id == BOMB_BUTTON:
+            pass
+        elif id == REWARDX2_BUTTON:
+            pass
+            
         sound.play_effect(effect)
 
 
@@ -293,6 +299,24 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
             
             elif id == ON_EFFECTS_BUTTON:
                 if globals.get_effects_on():
+                    screen.blit(image, rect)
+
+        elif id in INSTANCES_BUTTONS.get(GAME):
+            
+            if id == PASS_BUTTON:
+                if globals.get_pass_on():
+                    screen.blit(image, rect)
+            
+            elif id == REPEAT_BUTTON:
+                if globals.get_repeat_on():
+                    screen.blit(image, rect)
+
+            elif id == BOMB_BUTTON:
+                if globals.get_bomb_on():
+                    screen.blit(image, rect)
+
+            elif id == REWARDX2_BUTTON:
+                if globals.get_rewardx2_on():
                     screen.blit(image, rect)
         else:
             screen.blit(image, rect)

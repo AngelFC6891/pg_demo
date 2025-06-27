@@ -15,6 +15,10 @@ reset_on = False
 click_on = False
 music_on = True
 effects_on = True
+pass_on = True
+repeat_on = True
+bomb_on = True
+rewardx2_on = True
 is_click = False
 username_ok = False
 play_music = False
@@ -28,7 +32,8 @@ gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
 vol_music = VOL_MUSIC_INIT
 vol_effects = VOL_EFFECTS_INIT
-score_copy = []
+scores_list = []
+scores_copy = []
 effects = {}
 
 
@@ -112,6 +117,26 @@ def set_effects_on(value : bool) -> None:
     effects_on = value
 
 
+def set_pass_on(value : bool) -> None:
+    global pass_on
+    pass_on = value
+
+
+def set_repeat_on(value : bool) -> None:
+    global repeat_on
+    repeat_on = value
+
+
+def set_bomb_on(value : bool) -> None:
+    global bomb_on
+    bomb_on = value
+
+
+def set_rewardx2_on(value : bool) -> None:
+    global rewardx2_on
+    rewardx2_on = value
+
+
 def set_current_question(value : int) -> None:
     global current_question
     current_question = value
@@ -157,9 +182,14 @@ def set_gameover_delay(value : int) -> None:
     gameover_delay = value
 
 
+def set_scores_list(value : list) -> list[dict]:
+    global scores_list
+    scores_list = value
+
+
 def set_scores_copy(copy : list[dict]) -> None:
-    global score_copy
-    score_copy = copy
+    global scores_copy
+    scores_copy = copy
 
 
 def set_vol_music(value : float) -> None:
@@ -175,6 +205,9 @@ def set_vol_effects(value : float) -> None:
 def set_effects(value : dict) -> None:
     global effects
     effects = value
+
+
+
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -242,6 +275,22 @@ def get_effects_on() -> bool:
     return effects_on
 
 
+def get_pass_on() -> bool:
+    return pass_on
+
+
+def get_repeat_on() -> bool:
+    return repeat_on
+
+
+def get_bomb_on() -> bool:
+    return bomb_on
+
+
+def get_rewardx2_on() -> bool:
+    return rewardx2_on
+
+
 def get_current_question() -> int:
     return current_question
 
@@ -278,8 +327,12 @@ def get_gameover_delay() -> int:
     return gameover_delay
 
 
+def get_scores_list() -> list[dict]:
+    return scores_list
+
+
 def get_scores_copy() -> list[dict]:
-    return score_copy
+    return scores_copy
 
 
 def get_vol_music() -> float:

@@ -9,7 +9,6 @@ def run():
     pg.display.set_caption(CAPTION)
     pg.init()
     pg.font.init()
-    pg.mixer.init()
     clock = pg.time.Clock()
     pg.time.set_timer(EVENT_1000MS, MS_1000)
 

@@ -24,16 +24,15 @@ def load_scores(path : str) -> list[dict]:
     with open(f'{SCORES}\{path}', R, encoding=UTF) as file:
         users = json.load(file)
 
-        for user in users:
-            user[DATE] = format_date((user.get(DATE)))
+        # for user in users:
+        #     user[DATE] = format_date((user.get(DATE)))
 
     return users
 
 
-def add_user_data(path : str, data : dict):
-    scores = globals.get_scores_copy()
-    for user in scores : user[DATE] = format_date(user.get(DATE), False)
-    scores.append(data)
+def add_user_data(path : str, user_data : dict):
+    scores = globals.get_scores_list()
+    scores.append(user_data)
 
     with open(f'{SCORES}\{path}', W, encoding=UTF) as file:
         json.dump(scores, file, indent=INT_4)
@@ -228,7 +227,7 @@ def set_question_win(is_win : bool, max_index : int, effect : dict):
         score = globals.get_score()
         score += REWARD
         globals.set_score(score)
-        set_question_pass(True, max_index)
+        pass_question(max_index)
         sound.play_effect(effect)
 
 
@@ -241,12 +240,12 @@ def set_question_lost(is_lost : bool, max_index : int, effect : dict):
         if not score == INT_0 : score -= PENALTY
         globals.set_lives(lives)
         globals.set_score(score)
-        if not lives == INT_0 : set_question_pass(True, max_index)
+        if not lives == INT_0 : pass_question(max_index)
         sound.play_effect(effect)
 
 
-def set_question_pass(is_pass : bool, max_index : int):
-    if is_pass:
+def pass_question(max_index : int):
+    if globals.get_pass_on() and not globals.get_lives() == INT_0:
         next_question = globals.get_current_question() + INT_1
 
         if not next_question == max_index:
@@ -254,6 +253,16 @@ def set_question_pass(is_pass : bool, max_index : int):
             globals.set_play_time(PLAY_TIME)
         else:
             globals.set_questover_on(True)
+
+        globals.set_pass_on(False)
+
+
+def repeat_question():
+    if globals.get_repeat_on() and not globals.get_lives() == 0:
+        previous_question = globals.get_current_question() - INT_1
+        globals.set_current_question(previous_question)
+        globals.set_play_time(PLAY_TIME)
+        globals.set_repeat_on(False)
 
 
 def check_gameover(events : list[pg.event.Event]):
@@ -332,11 +341,16 @@ def sort_scores(scores : list[dict], ascending : bool):
 
 def copy_scores(scores : list[dict]):
     scores_copy = copy.deepcopy(scores)
+
+    for user in scores_copy:
+        user[DATE] = format_date((user.get(DATE)))
+
     globals.set_scores_copy(scores_copy)
 
 
 def get_user_scores(path : str):
     scores = load_scores(path)
+    globals.set_scores_list(scores)
     copy_scores(scores)
     sort_scores(globals.get_scores_copy(), ascending=False)
 
