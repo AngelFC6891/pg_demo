@@ -245,16 +245,15 @@ def set_question_lost(is_lost : bool, max_index : int, effect : dict):
 
 
 def pass_question(max_index : int):
-    if globals.get_pass_on() and not globals.get_lives() == INT_0:
-        next_question = globals.get_current_question() + INT_1
+    next_question = globals.get_current_question() + INT_1
 
-        if not next_question == max_index:
-            globals.set_current_question(next_question)
-            globals.set_play_time(PLAY_TIME)
-        else:
-            globals.set_questover_on(True)
+    if not next_question == max_index:
+        globals.set_current_question(next_question)
+        globals.set_play_time(PLAY_TIME)
+    else:
+        globals.set_questover_on(True)
 
-        globals.set_pass_on(False)
+    globals.set_pass_on(False)
 
 
 def repeat_question():

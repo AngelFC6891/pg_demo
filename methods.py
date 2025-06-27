@@ -60,18 +60,19 @@ def update_stages_buttons(id : str, effect : dict):
 
 
 def update_game_buttons(id : str, max_index : int, effect : dict):
-    if id in INSTANCES_BUTTONS.get(GAME):
-    
-        if id == PASS_BUTTON:
-            library.pass_question(max_index)
-        elif id == REPEAT_BUTTON:
-            library.repeat_question()
-        elif id == BOMB_BUTTON:
-            pass
-        elif id == REWARDX2_BUTTON:
-            pass
+    if not globals.get_lives() == INT_0:
+        if id in INSTANCES_BUTTONS.get(GAME):
             
-        sound.play_effect(effect)
+            if id == PASS_BUTTON:
+                if globals.get_pass_on() : library.pass_question(max_index)
+            elif id == REPEAT_BUTTON:
+                if globals.get_repeat_on() : library.repeat_question()
+            elif id == BOMB_BUTTON:
+                pass
+            elif id == REWARDX2_BUTTON:
+                pass
+        
+            sound.play_effect(effect)
 
 
 def update_username_buttons(id : str, effect : dict):
@@ -169,10 +170,15 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
 
                 if e.type == pg.KEYDOWN:
                     if library.is_integer(e.unicode) and int(e.unicode) in OPTIONS:
-                        if not int(e.unicode) == answer:
+                        user_answer = int(e.unicode)
+
+                        if not user_answer == answer:
                             is_lost = True
+                            globals.set_wrong_answer(user_answer)
+                            globals.set_is_lost(True)
                         else:
                             is_win = True
+                            globals.set_is_lost(False)
     
     effects = globals.get_effects()
     library.set_question_lost(is_lost, len(questions), effects.get(ERROR))
@@ -338,11 +344,15 @@ def draw_options(screen : pg.surface.Surface, question : dict):
     options_render = question.get(OPTIONS_RENDER)
     y = Y_INIT_OPT
 
-    for option in options_render:
+    for i, option in enumerate(options_render):
         rect = option.get_rect()
         rect.x = X_INIT_OPT
         rect.y = y
-        screen.blit(option, rect)
+        if globals.get_repeat_on() and globals.get_is_lost():
+            if globals.get_wrong_answer() == (i+1):
+                pass
+        else:
+            screen.blit(option, rect)
         y += Y_VAR
 
 
