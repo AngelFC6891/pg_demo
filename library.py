@@ -32,15 +32,21 @@ def load_scores(path : str) -> list[dict]:
 
 def add_user_data(path : str, data : dict):
     scores = globals.get_scores_copy()
+    for user in scores : user[DATE] = format_date(user.get(DATE), False)
     scores.append(data)
 
     with open(f'{SCORES}\{path}', W, encoding=UTF) as file:
         json.dump(scores, file, indent=INT_4)
 
 
-def format_date(date : str) -> str:
-    date_obj = datetime.strptime(date, STANDAR_FORMAT)
-    return date_obj.strftime(FORMAT)
+def format_date(date : str, input_standar : bool=True) -> str:
+    if input_standar:
+        input_f, output_f = STANDAR_FORMAT, FORMAT
+    else:
+        input_f, output_f = FORMAT, STANDAR_FORMAT
+
+    date_obj = datetime.strptime(date, input_f)
+    return date_obj.strftime(output_f)
 
 
 def shuffle_questions(questions : dict[str, list]):
