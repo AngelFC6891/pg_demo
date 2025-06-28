@@ -20,6 +20,7 @@ repeat_on = True
 bomb_on = True
 rewardx2_on = True
 is_click = False
+is_pass = False
 is_repeat = False
 is_rewardx2 = False
 is_bomb = False
@@ -373,6 +374,11 @@ def set_is_click(value : bool) -> None:
     is_click = value
 
 
+def set_is_pass(value : bool) -> None:
+    global is_pass
+    is_pass = value
+
+
 def set_is_repeat(value : bool) -> None:
     global is_repeat
     is_repeat = value
@@ -391,6 +397,10 @@ def set_is_bomb(value : bool) -> None:
 
 def get_is_click() -> bool:
     return is_click
+
+
+def get_is_pass() -> bool:
+    return is_pass
 
 
 def get_is_repeat() -> bool:

@@ -62,19 +62,24 @@ def update_stages_buttons(id : str, effect : dict):
 
 def update_game_buttons(id : str, questions : list[dict], effect : dict):
     max_index = len(questions)
-    answer = questions[globals.get_current_question()].get(ANSWER)
+    current_question = questions[globals.get_current_question()]
+    answer = current_question.get(ANSWER)
 
     if not globals.get_lives() == INT_0:
         if id in INSTANCES_BUTTONS.get(GAME):
             
             if id == PASS_BUTTON:
+                # SI EL JUGADOR ELIGE PASAR Y REPITIÓ LA PREGUNTA, ACTIVÓ LA BOMBA O DUPLICÓ LA RECOMPENSA,
+                # PIERDE EL COMODÍN
+
                 if globals.get_pass_on():
                     library.pass_question(max_index)
+                    globals.set_is_pass(True)
                     globals.set_pass_on(False)
                     
             elif id == REPEAT_BUTTON:
-                # SOLO FUNCIONA SI EL JUGADOR ELIGIÓ PREVIAMENTE UNA OPCION Y NO USÓ ACTUALMENTE LA BOMBA
-
+                # SOLO FUNCIONA SI EL JUGADOR ELIGIÓ PREVIAMENTE UNA OPCION
+                
                 if globals.get_repeat_on() and globals.get_wrong_answer() and not globals.get_is_bomb():
                     library.repeat_question()
                     globals.set_is_repeat(True)
@@ -84,8 +89,9 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
                 # SOLO FUNCIONA SI EL JUGADOR NO ESTÁ REPITIENDO LA PREGUNTA
 
                 if globals.get_bomb_on() and not globals.get_is_repeat():
-                    wrong_answers = [key for key in questions.keys() if type(key) == int and not key == answer]
+                    wrong_answers = [key for key in current_question.keys() if type(key) == int and not key == answer]
                     random.shuffle(wrong_answers)
+                    globals.set_wrong_answers(wrong_answers[:-1])
                     globals.set_is_bomb(True)
                     globals.set_bomb_on(False)
 
@@ -378,13 +384,14 @@ def draw_options(screen : pg.surface.Surface, question : dict):
         rect = option.get_rect()
         rect.x = X_INIT_OPT
         rect.y = y
-        if not globals.get_repeat_on() and\
-            globals.get_wrong_answer() == (i + INT_1):
-            pass
+        if globals.get_is_repeat():
+            if not (i + INT_1) == globals.get_wrong_answer():
+                screen.blit(option, rect)
+        elif globals.get_is_bomb():
+            if not (i + INT_1) in globals.get_wrong_answers():
+                screen.blit(option, rect)
         else:
             screen.blit(option, rect)
-        if globals.get_is_bomb():
-            pass
         y += Y_VAR
 
 

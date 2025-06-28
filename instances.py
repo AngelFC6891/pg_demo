@@ -23,7 +23,7 @@ library.get_user_scores(SCORES_JSON)
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
     if globals.get_home_on():
         sound.play_music(music.get(GAME_MUSIC))
-        methods.update_buttons(buttons.get(HOME), events)
+        methods.update_buttons(questions, buttons.get(HOME), events)
         methods.draw_background(screen, backgrounds.get(HOME))
         methods.draw_buttons(screen, buttons.get(HOME))
         
@@ -32,7 +32,7 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
         sound.play_music(music.get(GAME_MUSIC))
         methods.update_labels(settings_labels)
-        methods.update_buttons(buttons.get(SETTINGS), events)
+        methods.update_buttons(questions, buttons.get(SETTINGS), events)
         methods.update_sliders(bars, sliders, events)
         methods.draw_background(screen, backgrounds.get(SETTINGS))
         methods.draw_buttons(screen, buttons.get(SETTINGS))
@@ -44,7 +44,7 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
         scores_copy = globals.get_scores_copy()
-        methods.update_buttons(buttons.get(SCORES), events)
+        methods.update_buttons(questions, buttons.get(SCORES), events)
         methods.update_scores(scores_copy, top=INT_10)
         methods.draw_background(screen, backgrounds.get(SCORES))
         methods.draw_buttons(screen, buttons.get(SCORES))
@@ -53,7 +53,7 @@ def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_stages_on():
-        methods.update_buttons(buttons.get(STAGES), events)
+        methods.update_buttons(questions, buttons.get(STAGES), events)
         methods.draw_background(screen, backgrounds.get(STAGES))
         methods.draw_buttons(screen, buttons.get(STAGES))
 

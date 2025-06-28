@@ -257,7 +257,9 @@ def pass_question(max_index : int):
     else:
         globals.set_questover_on(True)
 
-    if globals.get_repeat_on() and globals.get_wrong_answer() : globals.set_wrong_answer(None)
+    if globals.get_is_pass():
+        globals.set_is_pass(False)
+        globals.set_wrong_answer(None)
     if globals.get_is_repeat() : globals.set_is_repeat(False)
     if globals.get_is_bomb() : globals.set_is_bomb(False)
     if globals.get_is_rewardx2() : globals.set_is_rewardx2(False)
