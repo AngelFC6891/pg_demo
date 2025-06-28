@@ -6,7 +6,7 @@ import globals
 # import pprint
 
 
-def update_buttons(questions : list[dict], buttons : list[dict], events : list[pg.event.Event]) -> None:
+def update_buttons(questions : list[dict]=[], buttons : list[dict]=[], events : list[pg.event.Event]=[]) -> None:
     for button in buttons:
         id = button.get(ID)
         image = button.get(IMAGE)
@@ -18,9 +18,10 @@ def update_buttons(questions : list[dict], buttons : list[dict], events : list[p
         if library.check_click_pressed(events, rect):
 
             if globals.get_home_on() : update_home_buttons(id, effects.get(CLICK))
-            elif globals.get_settings_on() : update_settings_buttons(id, effects.get(CLICK))
-            elif globals.get_scores_on() : update_scores_buttons(id, effects.get(CLICK))
-            elif globals.get_stages_on() : update_stages_buttons(id, effects.get(CLICK))
+            elif globals.get_settings_on() : update_settings_buttons(id, effects)
+            elif globals.get_difficulty_on() : update_difficulty_buttons(id, effects)
+            elif globals.get_scores_on() : update_scores_buttons(id, effects.get(PASS))
+            elif globals.get_stages_on() : update_stages_buttons(id, effects)
             elif globals.get_game_on() : update_game_buttons(id, questions, effects.get(PASS))
             elif globals.get_username_on() : update_username_buttons(id, effects.get(CLICK))
 
@@ -39,12 +40,14 @@ def update_home_buttons(id : str, effect : dict):
         sound.play_effect(effect)
 
 
-def update_stages_buttons(id : str, effect : dict):
+def update_stages_buttons(id : str, effects : dict[dict]):
     if id == HOME_BUTTON:
+        effect = effects.get(PASS)
         globals.disable_instances()
         globals.set_home_on(True)
         sound.play_effect(effect)
     else:
+        effect = effects.get(CLICK)
         sound.play_music(off=True)
         globals.set_play_music(False)
         globals.disable_instances()
@@ -128,14 +131,22 @@ def update_scores_buttons(id: str, effect : dict):
         sound.play_effect(effect)
 
 
-def update_settings_buttons(id : str, effect : dict):
-    if id in [HOME_BUTTON, ON_MUSIC_BUTTON, ON_EFFECTS_BUTTON]:
+def update_settings_buttons(id : str, effects : dict[dict]):
+    if id in [HOME_BUTTON, NEXT_BUTTON]:
+        effect = effects.get(PASS)
+        globals.disable_instances()
 
         if id == HOME_BUTTON:
-            globals.disable_instances()
             globals.set_home_on(True)
-        
-        elif id == ON_MUSIC_BUTTON:
+
+        elif id == NEXT_BUTTON:
+            globals.set_difficulty_on(True)
+
+        sound.play_effect(effect)
+    else:
+        effect = effects.get(CLICK)
+
+        if id == ON_MUSIC_BUTTON:
             value = not globals.get_music_on()
             globals.set_music_on(value)
         
@@ -143,6 +154,35 @@ def update_settings_buttons(id : str, effect : dict):
             value = not globals.get_effects_on()
             globals.set_effects_on(value)
         
+        sound.play_effect(effect)
+
+
+def update_difficulty_buttons(id : str, effects : dict[dict]):
+    if id in [HOME_BUTTON, BACK_BUTTON]:
+        effect = effects.get(PASS)
+        globals.disable_instances()
+
+        if id == HOME_BUTTON:
+            globals.set_home_on(True)
+
+        elif id == BACK_BUTTON:
+            globals.set_settings_on(True)
+
+        sound.play_effect(effect)
+    else:
+        library.reset_difficulty_game()
+        effect = effects.get(CLICK)
+
+        if id == EASY_BUTTON:
+            globals.set_easy_on(True)
+        
+        elif id == MIDDLE_BUTTON:
+            globals.set_middle_on(True)
+
+        elif id == HARD_BUTTON:
+            globals.set_hard_on(True)
+        
+        library.set_difficulty_game()
         sound.play_effect(effect)
 
 
@@ -333,7 +373,7 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
         rect.y = button.get(Y)
         id = button.get(ID)
         
-        if id in [ON_MUSIC_BUTTON, ON_EFFECTS_BUTTON]:
+        if globals.get_settings_on():
             
             if id == ON_MUSIC_BUTTON:
                 if globals.get_music_on():
@@ -342,8 +382,26 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
             elif id == ON_EFFECTS_BUTTON:
                 if globals.get_effects_on():
                     screen.blit(image, rect)
+            else:
+                screen.blit(image, rect)
 
-        elif id in INSTANCES_BUTTONS.get(GAME):
+        elif globals.get_difficulty_on():
+            
+            if id == EASY_BUTTON:
+                if globals.get_easy_on():
+                    screen.blit(image, rect)
+            
+            elif id == MIDDLE_BUTTON:
+                if globals.get_middle_on():
+                    screen.blit(image, rect)
+
+            elif id == HARD_BUTTON:
+                if globals.get_hard_on():
+                    screen.blit(image, rect)
+            else:
+                screen.blit(image, rect)
+
+        elif globals.get_game_on():
             
             if id == PASS_BUTTON:
                 if globals.get_pass_on():
@@ -495,7 +553,7 @@ def draw_warning(screen : pg.surface.Surface):
 def draw_bars(screen : pg.surface.Surface, bars : list[dict]):
     for bar in bars:
         rect = bar.get(RECT)
-        color = GREY
+        color = BLUE_BORDER
         border = bar.get(BORDER)
         pg.draw.rect(screen, color, rect, border)
 
@@ -503,7 +561,7 @@ def draw_bars(screen : pg.surface.Surface, bars : list[dict]):
 def draw_sliders(screen : pg.surface.Surface, sliders : list[dict]):
     for slider in sliders:
         rect = slider.get(RECT)
-        color = GREY
+        color = BLUE_BORDER
         border = slider.get(BORDER)
-        screen.fill(LIGHT_GREY, rect)
+        screen.fill(BLUE_INNER, rect)
         pg.draw.rect(screen, color, rect, border)

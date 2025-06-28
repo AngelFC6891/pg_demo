@@ -5,8 +5,13 @@
         [
         {"id": "play_button", "file": "play.png", "x": 206, "y": 280},
         {"id": "settings_button", "file": "settings.png", "x": 206, "y": 383},
+        {"id": "easy_button", "file": "select.png", "x": 164, "y": 168},
+        {"id": "middle_button", "file": "select.png", "x": 164, "y": 265},
+        {"id": "hard_button", "file": "select.png", "x": 164, "y": 362},
         {"id": "scores_button", "file": "scores.png", "x": 206, "y": 486},
         {"id": "home_button", "file": "home.png", "x": 8, "y": 8},
+        {"id": "next_button", "file": "next.png", "x": 10, "y": 550},
+        {"id": "back_button", "file": "back.png", "x": 10, "y": 550},
         {"id": "avengers_button", "file": "avengers.png", "x": 60, "y": 248},
         {"id": "simpsons_button", "file": "simpsons.png", "x": 322, "y": 248},
         {"id": "starwars_button", "file": "starwars.png", "x": 190, "y": 410},
@@ -21,18 +26,23 @@
         ],
     "labels":
         {
-            "game_labels":
+        "game_labels":
             [
             {"id": "lives", "x": 150, "y": 516},
             {"id": "time", "x": 258, "y": 516},
             {"id": "score", "x": 386, "y": 516}
             ],
-            "settings_labels":
+        "settings_labels":
             [
             {"id": "vol_music", "x": 482, "y": 236},
             {"id": "vol_effects", "x": 482, "y": 438}
+            ],
+        "difficulty_labels":
+            [
+            {"id": "play_time", "x": 306, "y": 438},
+            {"id": "lives", "x": 306, "y": 478},
+            {"id": "penalty", "x": 306, "y": 518}
             ]
-        
         },
     "music":
         [

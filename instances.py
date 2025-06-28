@@ -10,6 +10,7 @@ config = library.load_config(CONFIG, DATA)
 buttons = library.get_buttons(config)
 game_labels = library.get_labels(config, GAME)
 settings_labels = library.get_labels(config, SETTINGS)
+difficulty_labels = library.get_labels(config, DIFFICULTY)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 bars = library.get_settings_bars(config)
@@ -18,12 +19,13 @@ music = library.get_music(config)
 library.get_effects(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_JSON)
+library.set_difficulty_game()
 
 
 def run_home(screen : pg.surface.Surface, events : list[pg.event.Event]) -> None:
     if globals.get_home_on():
         sound.play_music(music.get(GAME_MUSIC))
-        methods.update_buttons(questions, buttons.get(HOME), events)
+        methods.update_buttons(buttons=buttons.get(HOME), events=events)
         methods.draw_background(screen, backgrounds.get(HOME))
         methods.draw_buttons(screen, buttons.get(HOME))
         
@@ -32,7 +34,7 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_settings_on():
         sound.play_music(music.get(GAME_MUSIC))
         methods.update_labels(settings_labels)
-        methods.update_buttons(questions, buttons.get(SETTINGS), events)
+        methods.update_buttons(buttons=buttons.get(SETTINGS), events=events)
         methods.update_sliders(bars, sliders, events)
         methods.draw_background(screen, backgrounds.get(SETTINGS))
         methods.draw_buttons(screen, buttons.get(SETTINGS))
@@ -41,10 +43,19 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
         methods.draw_labels(screen, settings_labels)
 
 
+def run_difficulty(screen : pg.surface.Surface, events : list[pg.event.Event]):
+    if globals.get_difficulty_on():
+        methods.update_labels(difficulty_labels)
+        methods.update_buttons(buttons=buttons.get(DIFFICULTY), events=events)
+        methods.draw_background(screen, backgrounds.get(DIFFICULTY))
+        methods.draw_buttons(screen, buttons.get(DIFFICULTY))
+        methods.draw_labels(screen, difficulty_labels)
+
+
 def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_scores_on():
         scores_copy = globals.get_scores_copy()
-        methods.update_buttons(questions, buttons.get(SCORES), events)
+        methods.update_buttons(buttons=buttons.get(SCORES), events=events)
         methods.update_scores(scores_copy, top=INT_10)
         methods.draw_background(screen, backgrounds.get(SCORES))
         methods.draw_buttons(screen, buttons.get(SCORES))
@@ -53,7 +64,7 @@ def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_stages_on():
-        methods.update_buttons(questions, buttons.get(STAGES), events)
+        methods.update_buttons(buttons=buttons.get(STAGES), events=events)
         methods.draw_background(screen, backgrounds.get(STAGES))
         methods.draw_buttons(screen, buttons.get(STAGES))
 
@@ -93,7 +104,7 @@ def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_username_on():
-        methods.update_buttons(buttons.get(USERNAME), events)
+        methods.update_buttons(buttons=buttons.get(USERNAME), events=events)
         methods.update_username(events)
         methods.draw_background(screen, backgrounds.get(USERNAME))
         methods.draw_buttons(screen, buttons.get(USERNAME))
@@ -103,24 +114,26 @@ def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
 def run_reset():
     if globals.get_reset_on():
         library.shuffle_questions(questions)
+        # library.reset_difficulty_game()
         globals.set_current_question(QUEST_INIT)
-        globals.set_lives(LIVES_INIT)
         globals.set_score(SCORE_INIT)
-        globals.set_play_time(PLAY_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.set_username(VOID_STR)
         globals.disable_instances()
         globals.set_username_ok(False)
+        # globals.set_middle_on(True)
         globals.set_home_on(True)
         globals.set_pass_on(True)
         globals.set_repeat_on(True)
         globals.set_bomb_on(True)
         globals.set_rewardx2_on(True)
+        library.set_difficulty_game()
 
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_home(screen, events)
     run_settings(screen, events)
+    run_difficulty(screen, events)
     run_scores(screen, events)
     run_stages(screen, events)
     run_game(screen, events)

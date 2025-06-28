@@ -24,9 +24,6 @@ def load_scores(path : str) -> list[dict]:
     with open(f'{SCORES}\{path}', R, encoding=UTF) as file:
         users = json.load(file)
 
-        # for user in users:
-        #     user[DATE] = format_date((user.get(DATE)))
-
     return users
 
 
@@ -54,9 +51,12 @@ def shuffle_questions(questions : dict[str, list]):
 
 
 def get_user_data():
-    return {NAME: globals.get_username(),
-            SCORE: str(globals.get_score()),
-            DATE: get_date()}
+    return\
+    {
+        NAME: globals.get_username(),
+        SCORE: str(globals.get_score()),
+        DATE: get_date()
+    }
 
 
 def get_date() -> str:
@@ -85,7 +85,7 @@ def get_questions() -> dict[str, list]:
 
         with open(f'{QUESTIONS}\{file_csv}', R, encoding=UTF) as file:
             for line in file:
-                data = line.split(',')
+                data = line.split(COMMA_STR)
                 question = {}
                 question[QUESTION] = data[INT_0]
                 question[INT_1] = data[INT_1]
@@ -121,24 +121,32 @@ def get_labels(config : dict, instance : str) -> list[dict]:
         labels = labels_dict.get(GAME_LABELS)
     elif instance == SETTINGS:
         labels = labels_dict.get(SETTINGS_LABELS)
+    elif instance == DIFFICULTY:
+        labels = labels_dict.get(DIFFICULTY_LABELS)
 
     return labels
 
 
 def get_label_value(id : str) -> None | str:
     value = None
-
-    if id == LIVES : value = str(globals.get_lives())
-    elif id == TIME : value = str(globals.get_play_time())
-    elif id == SCORE : value = str(globals.get_score())
+    if globals.get_game_on():
+        if id == LIVES : value = str(globals.get_lives())
+        elif id == TIME : value = str(globals.get_play_time())
+        elif id == SCORE : value = str(globals.get_score())
     
-    elif id == VOL_MUSIC:
-        vol_music = int(globals.get_vol_music() * INT_100)
-        value = f'{vol_music}{PERCENT_STR}'
+    elif globals.get_settings_on():
+        if id == VOL_MUSIC:
+            vol_music = int(globals.get_vol_music() * INT_100)
+            value = f'{vol_music}{PERCENT_STR}'
 
-    elif id == VOL_EFFECTS:
-        vol_effects = int(globals.get_vol_effects() * INT_100)
-        value = f'{vol_effects}{PERCENT_STR}'
+        elif id == VOL_EFFECTS:
+            vol_effects = int(globals.get_vol_effects() * INT_100)
+            value = f'{vol_effects}{PERCENT_STR}'
+
+    elif globals.get_difficulty_on():
+        if id == PLAY_TIME : value = str(globals.get_play_time_init())
+        elif id == LIVES : value = str(globals.get_lives_init())
+        elif id == PENALTY : value = str(globals.get_penalty())
 
     return value
 
@@ -193,13 +201,19 @@ def get_blocks(string : str, len_max : int) -> list[str]:
 
 def get_font_color() -> tuple:
     font_color = WHITE
+    
+    if globals.get_game_on():
 
-    if globals.get_avengers_on():
-        font_color = YELLOW
-    elif globals.get_simpsons_on():
-        font_color = BLUE
-    elif globals.get_starwars_on():
-        font_color = WHITE
+        if globals.get_avengers_on():
+            font_color = YELLOW
+        elif globals.get_simpsons_on():
+            font_color = BLUE
+        elif globals.get_starwars_on():
+            font_color = WHITE
+
+    elif globals.get_difficulty_on():
+        font_color = GREEN_CAKE
+    
     elif globals.get_username_on():
         warning = globals.get_warning()
 
@@ -213,13 +227,33 @@ def get_font_color() -> tuple:
 
     return font_color
 
+
 def get_font_sys() -> pg.font.Font:
     if globals.get_game_on():
         font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_LAB, BOLD_ENABLE)
     elif globals.get_settings_on():
         font_sys = pg.font.SysFont(FONT_MV_BOLI, FONT_SIZE_VOLUME, BOLD_ENABLE)
+    elif globals.get_difficulty_on():
+        font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_VOLUME, BOLD_ENABLE)
 
     return font_sys
+
+
+def set_difficulty_game():
+    if globals.get_easy_on():
+        play_time, lives, penalty = EASY
+        
+    elif globals.get_middle_on():
+        play_time, lives, penalty = MIDDLE
+
+    elif globals.get_hard_on():
+        play_time, lives, penalty = HARD
+
+    globals.set_play_time_init(play_time)
+    globals.set_play_time(play_time)
+    globals.set_lives_init(lives)
+    globals.set_lives(lives)
+    globals.set_penalty(penalty)
 
 
 def set_question_win(is_win : bool, max_index : int, effect : dict):
@@ -241,19 +275,26 @@ def set_question_lost(is_lost : bool, max_index : int, effect : dict):
 
         if not lives == INT_0:
             lives -= INT_1
-            if not score == INT_0 : score -= PENALTY
+            if not score == INT_0 : score -= globals.get_penalty()
             globals.set_lives(lives)
             globals.set_score(score)
             if not lives == INT_0 : pass_question(max_index)
             sound.play_effect(effect)
 
 
+def reset_difficulty_game():
+    globals.set_easy_on(False)
+    globals.set_middle_on(False)
+    globals.set_hard_on(False)
+
+
 def pass_question(max_index : int):
     next_question = globals.get_current_question() + INT_1
+    play_time = globals.get_play_time_init()
 
     if not next_question == max_index:
         globals.set_current_question(next_question)
-        globals.set_play_time(PLAY_TIME)
+        globals.set_play_time(play_time)
     else:
         globals.set_questover_on(True)
 
@@ -267,8 +308,9 @@ def pass_question(max_index : int):
 
 def repeat_question():
     previous_question = globals.get_current_question() - INT_1
+    play_time = globals.get_play_time_init()
     globals.set_current_question(previous_question)
-    globals.set_play_time(PLAY_TIME)
+    globals.set_play_time(play_time)
 
 
 def check_repeat_question(is_lost : bool, user_answer : int) -> bool:
@@ -413,17 +455,17 @@ def get_settings_sliders(config : dict) -> list[dict]:
 # ------------------------------------------------------------------------------------------- #
 
 def is_letter(char : str) -> bool:
-    output = True
+    is_letter = True
     ascii = ord(char)
     
     if not (ascii >= 65 and ascii <= 90) and not (ascii >= 97 and ascii <= 122):
-        output = False
+        is_letter = False
 
-    return output
+    return is_letter
 
 
 def is_integer(string : str) -> bool:
-    output = len(string) > INT_0
+    is_integer = len(string) > INT_0
     
     for i in range(len(string)):
         ascii = ord(string[i])
@@ -432,11 +474,11 @@ def is_integer(string : str) -> bool:
             if len(string) > INT_1:
                 continue
             else:
-                output = False
+                is_integer = False
                 break
          
         if ascii < INT_48 or ascii > INT_57:
-            output = False
+            is_integer = False
             break
     
-    return output
+    return is_integer

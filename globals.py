@@ -2,6 +2,7 @@ from constants import *
 
 home_on = True
 settings_on = False
+difficulty_on = False
 scores_on = False
 stages_on = False
 avengers_on = False
@@ -19,6 +20,9 @@ pass_on = True
 repeat_on = True
 bomb_on = True
 rewardx2_on = True
+easy_on = False
+middle_on = True
+hard_on = False
 is_click = False
 is_pass = False
 is_repeat = False
@@ -27,12 +31,15 @@ is_bomb = False
 username_ok = False
 play_music = False
 wrong_answer = None
+play_time = None
+play_time_init = None
+lives = None
+lives_init = None
+penalty = None
 current_question = QUEST_INIT
-lives = LIVES_INIT
 score = SCORE_INIT
 username = VOID_STR
 warning = VOID_STR
-play_time = PLAY_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
 vol_music = VOL_MUSIC_INIT
@@ -51,6 +58,11 @@ def set_home_on(value : bool) -> None:
 def set_settings_on(value : bool) -> None:
     global settings_on
     settings_on = value
+
+
+def set_difficulty_on(value : bool) -> None:
+    global difficulty_on
+    difficulty_on = value
 
 
 def set_scores_on(value : bool) -> None:
@@ -143,9 +155,34 @@ def set_rewardx2_on(value : bool) -> None:
     rewardx2_on = value
 
 
+def set_easy_on(value : bool) -> None:
+    global easy_on
+    easy_on = value
+
+
+def set_middle_on(value : bool) -> None:
+    global middle_on
+    middle_on = value
+
+
+def set_hard_on(value : bool) -> None:
+    global hard_on
+    hard_on = value
+
+
 def set_current_question(value : int) -> None:
     global current_question
     current_question = value
+
+
+def set_play_time(value : int) -> None:
+    global play_time
+    play_time = value
+
+
+def set_play_time_init(value : int) -> None:
+    global play_time_init
+    play_time_init = value
 
 
 def set_lives(value : int) -> None:
@@ -153,9 +190,14 @@ def set_lives(value : int) -> None:
     lives = value
 
 
-def set_play_time(value : int) -> None:
-    global play_time
-    play_time = value
+def set_lives_init(value : int) -> None:
+    global lives_init
+    lives_init = value
+
+
+def set_penalty(value : int) -> None:
+    global penalty
+    penalty = value
 
 
 def set_score(value : int) -> None:
@@ -232,6 +274,10 @@ def get_settings_on() -> bool:
     return settings_on
 
 
+def get_difficulty_on() -> bool:
+    return difficulty_on
+
+
 def get_scores_on() -> bool:
     return scores_on
 
@@ -304,16 +350,40 @@ def get_rewardx2_on() -> bool:
     return rewardx2_on
 
 
+def get_easy_on() -> bool:
+    return easy_on
+
+
+def get_middle_on() -> bool:
+    return middle_on
+
+
+def get_hard_on() -> bool:
+    return hard_on
+
+
 def get_current_question() -> int:
     return current_question
+
+
+def get_play_time() -> int:
+    return play_time
+
+
+def get_play_time_init() -> int:
+    return play_time_init
 
 
 def get_lives() -> int:
     return lives
 
 
-def get_play_time() -> int:
-    return play_time
+def get_lives_init() -> int:
+    return lives_init
+
+
+def get_penalty() -> int:
+    return penalty
 
 
 def get_score() -> int:
@@ -419,6 +489,7 @@ def get_is_bomb() -> bool:
 def disable_instances():
     set_home_on(False)
     set_settings_on(False)
+    set_difficulty_on(False)
     set_scores_on(False)
     set_stages_on(False)
     set_avengers_on(False)

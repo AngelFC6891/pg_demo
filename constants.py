@@ -19,6 +19,7 @@ QUESTIONS = 'questions'
 HOME = 'home'
 SETTINGS = 'settings'
 SCORES = 'scores'
+DIFFICULTY = 'difficulty'
 STAGES = 'stages'
 GAME = 'game'
 AVENGERS = 'avengers'
@@ -43,6 +44,7 @@ BUTTONS = 'buttons'
 LABELS = 'labels'
 GAME_LABELS = 'game_labels'
 SETTINGS_LABELS = 'settings_labels'
+DIFFICULTY_LABELS = 'difficulty_labels'
 RENDER = 'render'
 OPTION = 'option'
 BARS = 'bars'
@@ -85,11 +87,11 @@ INT_100 = 100
 FPS = 30
 MS_1000 = 1000
 REWARD = 100
-PENALTY = 25
+# PENALTY = 25
 QUEST_INIT = 0
-LIVES_INIT = 3
+LIVES_INIT = 0
 SCORE_INIT = 0
-PLAY_TIME = 10
+PLAY_TIME_INIT = 0
 GAMEOVER_TIME = 4
 GAMEOVER_DELAY = 2
 LEN_MAX_BLOCK = 24
@@ -131,6 +133,8 @@ PLAY_BUTTON = 'play_button'
 SETTINGS_BUTTON = 'settings_button'
 SCORES_BUTTON = 'scores_button'
 HOME_BUTTON = 'home_button'
+NEXT_BUTTON = 'next_button'
+BACK_BUTTON = 'back_button'
 PASS_BUTTON = 'pass_button'
 REPEAT_BUTTON = 'repeat_button'
 BOMB_BUTTON = 'bomb_button'
@@ -142,6 +146,9 @@ SIMPSONS_BUTTON = 'simpsons_button'
 STARWARS_BUTTON = 'starwars_button'
 ON_MUSIC_BUTTON = 'on_music_button'
 ON_EFFECTS_BUTTON = 'on_effects_button'
+EASY_BUTTON = 'easy_button'
+MIDDLE_BUTTON = 'middle_button'
+HARD_BUTTON = 'hard_button'
 INSTANCES_BUTTONS =\
 {
     HOME: [PLAY_BUTTON,SETTINGS_BUTTON,SCORES_BUTTON],
@@ -149,16 +156,21 @@ INSTANCES_BUTTONS =\
     GAME: [PASS_BUTTON, REPEAT_BUTTON, BOMB_BUTTON, REWARDX2_BUTTON],
     SCORES: [HOME_BUTTON],
     USERNAME: [OKAY_BUTTON, CANCEL_BUTTON],
-    SETTINGS: [HOME_BUTTON,ON_MUSIC_BUTTON,ON_EFFECTS_BUTTON]
+    SETTINGS: [HOME_BUTTON,NEXT_BUTTON,ON_MUSIC_BUTTON,ON_EFFECTS_BUTTON],
+    DIFFICULTY: [HOME_BUTTON,BACK_BUTTON,EASY_BUTTON,MIDDLE_BUTTON,HARD_BUTTON]
 }
 
 # LABELS
+PLAY_TIME = 'play_time'
 LIVES = 'lives'
-LIVES_RENDER = 'lives_render'
+PENALTY = 'penalty'
 TIME = 'time'
-TIME_RENDER = 'time_render'
 SCORE = 'score'
-SCORE_RENDER = 'score_render'
+# PLAY_TIME_RENDER = 'play_time_render'
+# LIVES_RENDER = 'lives_render'
+# PENALTY_RENDER = 'penalty_render'
+# TIME_RENDER = 'time_render'
+# SCORE_RENDER = 'score_render'
 
 # TEXT
 FONT_COURIER = 'Courier New'
@@ -183,13 +195,14 @@ TABLE_HEADERS = [POSITION, NAME, SCORE, DATE]
 # COLORS
 YELLOW = (230,233,0)
 BLUE = (10,0,204)
+BLUE_BORDER = (34,60,255)
+BLUE_INNER = (0,155,219)
 WHITE = (255,255,255)
 AQUA = (0,190,200)
 VIOLET = (145,25,255)
 RED = (255,0,0)
 GREEN = (0,255,0)
-GREY = (98,98,98)
-LIGHT_GREY = (147,147,147)
+GREEN_CAKE = (130,240,150)
 CAKE = (255,205,210)
 
 # WARNINGS
@@ -221,3 +234,8 @@ CLICK = 'click'
 WIN = 'win'
 ERROR = 'error'
 PASS = 'pass'
+
+# DIFFICULTY: PLAY TIME, LIVES AND PENALTY
+EASY = (12,4,25)
+MIDDLE = (9,3,40)
+HARD = (6,2,75)
