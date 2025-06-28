@@ -77,7 +77,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
             current_music = music.get(STARWARS_MUSIC)
         
         sound.play_music(current_music)
-        methods.update_buttons(buttons.get(GAME), events, len(current_questions))
+        methods.update_buttons(current_questions, buttons.get(GAME), events)
         methods.update_game(current_questions, game_labels, events)
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, buttons.get(GAME))

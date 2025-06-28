@@ -226,22 +226,26 @@ def set_question_win(is_win : bool, max_index : int, effect : dict):
     if is_win:
         score = globals.get_score()
         score += REWARD
+        if globals.get_is_rewardx2():
+            score += REWARD
+            globals.set_is_rewardx2(False)
         globals.set_score(score)
         pass_question(max_index)
         sound.play_effect(effect)
 
 
 def set_question_lost(is_lost : bool, max_index : int, effect : dict):
-    lives = globals.get_lives()
-    score = globals.get_score()
+    if is_lost:
+        lives = globals.get_lives()
+        score = globals.get_score()
 
-    if is_lost and not lives == INT_0:
-        lives -= INT_1
-        if not score == INT_0 : score -= PENALTY
-        globals.set_lives(lives)
-        globals.set_score(score)
-        if not lives == INT_0 : pass_question(max_index)
-        sound.play_effect(effect)
+        if not lives == INT_0:
+            lives -= INT_1
+            if not score == INT_0 : score -= PENALTY
+            globals.set_lives(lives)
+            globals.set_score(score)
+            if not lives == INT_0 : pass_question(max_index)
+            sound.play_effect(effect)
 
 
 def pass_question(max_index : int):
@@ -253,15 +257,40 @@ def pass_question(max_index : int):
     else:
         globals.set_questover_on(True)
 
-    globals.set_pass_on(False)
+    if globals.get_repeat_on() and globals.get_wrong_answer() : globals.set_wrong_answer(None)
+    if globals.get_is_repeat() : globals.set_is_repeat(False)
+    if globals.get_is_bomb() : globals.set_is_bomb(False)
+    if globals.get_is_rewardx2() : globals.set_is_rewardx2(False)
 
 
 def repeat_question():
-    if globals.get_repeat_on() and not globals.get_lives() == 0:
-        previous_question = globals.get_current_question() - INT_1
-        globals.set_current_question(previous_question)
-        globals.set_play_time(PLAY_TIME)
-        globals.set_repeat_on(False)
+    previous_question = globals.get_current_question() - INT_1
+    globals.set_current_question(previous_question)
+    globals.set_play_time(PLAY_TIME)
+
+
+def check_repeat_question(is_lost : bool, user_answer : int) -> bool:
+    lost_ok = is_lost
+
+    if is_lost and user_answer == globals.get_wrong_answer():
+        lost_ok = False
+    else:
+        globals.set_wrong_answer(None)
+        globals.set_is_repeat(False)
+
+    return lost_ok
+
+
+def check_bomb_question(is_lost : bool, user_answer : int):
+    lost_ok = is_lost
+    wrong_answers = globals.get_wrong_answers()
+
+    if is_lost and user_answer in [wrong_answers[INT_0], wrong_answers[INT_1]]:
+        lost_ok = False
+    else:
+        globals.set_is_bomb(False)
+
+    return lost_ok
 
 
 def check_gameover(events : list[pg.event.Event]):

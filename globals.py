@@ -20,8 +20,12 @@ repeat_on = True
 bomb_on = True
 rewardx2_on = True
 is_click = False
+is_repeat = False
+is_rewardx2 = False
+is_bomb = False
 username_ok = False
 play_music = False
+wrong_answer = None
 current_question = QUEST_INIT
 lives = LIVES_INIT
 score = SCORE_INIT
@@ -34,6 +38,7 @@ vol_music = VOL_MUSIC_INIT
 vol_effects = VOL_EFFECTS_INIT
 scores_list = []
 scores_copy = []
+wrong_answers = []
 effects = {}
 
 
@@ -207,7 +212,14 @@ def set_effects(value : dict) -> None:
     effects = value
 
 
+def set_wrong_answer(value : any) -> None:
+    global wrong_answer
+    wrong_answer = value
 
+
+def set_wrong_answers(value : list) -> None:
+    global wrong_answers
+    wrong_answers = value
 
 # ------------------------------------------------------------------------------------------- #
 
@@ -346,16 +358,51 @@ def get_vol_effects() -> float:
 def get_effects() -> dict:
     return effects
 
+
+def get_wrong_answer() -> any:
+    return wrong_answer
+
+
+def get_wrong_answers() -> list:
+    return wrong_answers
+
 # ------------------------------------------------------------------------------------------- #
 
 def set_is_click(value : bool) -> None:
     global is_click
     is_click = value
 
+
+def set_is_repeat(value : bool) -> None:
+    global is_repeat
+    is_repeat = value
+
+
+def set_is_rewardx2(value : bool) -> None:
+    global is_rewardx2
+    is_rewardx2 = value
+
+
+def set_is_bomb(value : bool) -> None:
+    global is_bomb
+    is_bomb = value
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_is_click() -> bool:
     return is_click
+
+
+def get_is_repeat() -> bool:
+    return is_repeat
+
+
+def get_is_rewardx2() -> bool:
+    return is_rewardx2
+
+
+def get_is_bomb() -> bool:
+    return is_bomb
 
 # ------------------------------------------------------------------------------------------- #
 

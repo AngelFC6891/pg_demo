@@ -20,7 +20,6 @@ def run():
                 pg.quit()
                 sys.exit()
 
-        # keys = pg.key.get_pressed()
         clock.tick(FPS)
         instances.execute(screen, events)
         pg.display.flip()

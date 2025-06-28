@@ -1,3 +1,4 @@
+import random
 from constants import *
 import library
 import sound
@@ -5,7 +6,7 @@ import globals
 # import pprint
 
 
-def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_index : int=0) -> None:
+def update_buttons(questions : list[dict], buttons : list[dict], events : list[pg.event.Event]) -> None:
     for button in buttons:
         id = button.get(ID)
         image = button.get(IMAGE)
@@ -20,7 +21,7 @@ def update_buttons(buttons : list[dict], events : list[pg.event.Event], max_inde
             elif globals.get_settings_on() : update_settings_buttons(id, effects.get(CLICK))
             elif globals.get_scores_on() : update_scores_buttons(id, effects.get(CLICK))
             elif globals.get_stages_on() : update_stages_buttons(id, effects.get(CLICK))
-            elif globals.get_game_on() : update_game_buttons(id, max_index, effects.get(PASS))
+            elif globals.get_game_on() : update_game_buttons(id, questions, effects.get(PASS))
             elif globals.get_username_on() : update_username_buttons(id, effects.get(CLICK))
 
 
@@ -59,18 +60,39 @@ def update_stages_buttons(id : str, effect : dict):
         sound.play_effect(effect)
 
 
-def update_game_buttons(id : str, max_index : int, effect : dict):
+def update_game_buttons(id : str, questions : list[dict], effect : dict):
+    max_index = len(questions)
+    answer = questions[globals.get_current_question()].get(ANSWER)
+
     if not globals.get_lives() == INT_0:
         if id in INSTANCES_BUTTONS.get(GAME):
             
             if id == PASS_BUTTON:
-                if globals.get_pass_on() : library.pass_question(max_index)
+                if globals.get_pass_on():
+                    library.pass_question(max_index)
+                    globals.set_pass_on(False)
+                    
             elif id == REPEAT_BUTTON:
-                if globals.get_repeat_on() : library.repeat_question()
+                # SOLO FUNCIONA SI EL JUGADOR ELIGIÓ PREVIAMENTE UNA OPCION Y NO USÓ ACTUALMENTE LA BOMBA
+
+                if globals.get_repeat_on() and globals.get_wrong_answer() and not globals.get_is_bomb():
+                    library.repeat_question()
+                    globals.set_is_repeat(True)
+                    globals.set_repeat_on(False)
+
             elif id == BOMB_BUTTON:
-                pass
+                # SOLO FUNCIONA SI EL JUGADOR NO ESTÁ REPITIENDO LA PREGUNTA
+
+                if globals.get_bomb_on() and not globals.get_is_repeat():
+                    wrong_answers = [key for key in questions.keys() if type(key) == int and not key == answer]
+                    random.shuffle(wrong_answers)
+                    globals.set_is_bomb(True)
+                    globals.set_bomb_on(False)
+
             elif id == REWARDX2_BUTTON:
-                pass
+                if globals.get_rewardx2_on():
+                    globals.set_is_rewardx2(True)
+                    globals.set_rewardx2_on(False)
         
             sound.play_effect(effect)
 
@@ -162,6 +184,7 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
 
         if time == INT_0:
             is_lost = True
+            if globals.get_repeat_on() : globals.set_wrong_answer(None)
         else:
             for e in events:
                 if e.type == EVENT_1000MS:
@@ -169,16 +192,23 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
                     globals.set_play_time(time)
 
                 if e.type == pg.KEYDOWN:
-                    if library.is_integer(e.unicode) and int(e.unicode) in OPTIONS:
+                    if library.is_integer(e.unicode):
                         user_answer = int(e.unicode)
 
-                        if not user_answer == answer:
-                            is_lost = True
-                            globals.set_wrong_answer(user_answer)
-                            globals.set_is_lost(True)
-                        else:
-                            is_win = True
-                            globals.set_is_lost(False)
+                        if user_answer in OPTIONS:
+
+                            if not user_answer == answer:
+                                is_lost = True
+                                if not globals.get_is_repeat() : globals.set_wrong_answer(user_answer)
+                            else:
+                                is_win = True
+                                if not globals.get_is_repeat() : globals.set_wrong_answer(None)
+                            
+                            if globals.get_is_repeat():
+                               is_lost = library.check_repeat_question(is_lost, user_answer)
+
+                            if globals.get_is_bomb():
+                                is_lost = library.check_bomb_question(is_lost, user_answer)
     
     effects = globals.get_effects()
     library.set_question_lost(is_lost, len(questions), effects.get(ERROR))
@@ -348,11 +378,13 @@ def draw_options(screen : pg.surface.Surface, question : dict):
         rect = option.get_rect()
         rect.x = X_INIT_OPT
         rect.y = y
-        if globals.get_repeat_on() and globals.get_is_lost():
-            if globals.get_wrong_answer() == (i+1):
-                pass
+        if not globals.get_repeat_on() and\
+            globals.get_wrong_answer() == (i + INT_1):
+            pass
         else:
             screen.blit(option, rect)
+        if globals.get_is_bomb():
+            pass
         y += Y_VAR
 
 
