@@ -76,7 +76,7 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
                 # PIERDE EL COMODÍN
 
                 if globals.get_pass_on():
-                    library.pass_question(max_index)
+                    library.pass_question(max_index, events=[])
                     globals.set_is_pass(True)
                     globals.set_pass_on(False)
                     
@@ -205,7 +205,7 @@ def update_options(question : dict):
 
     for key in question.keys():
         if type(key) == int:
-            option = f'{key}.{question.get(key)}'
+            option = f'{key}{PARENT_END_STR}{SPACE_STR}{question.get(key)}'
             options.append(font_sys.render(option, True, font_color))
 
     question[OPTIONS_RENDER] = options
@@ -216,15 +216,26 @@ def update_labels(labels : list[dict]):
     font_sys = library.get_font_sys()
 
     for label in labels:
-        key_render = f'{label.get(ID)}{HYPHEN_STR}{RENDER}'
+        key_render = f'{label.get(ID)}{LOW_HYPHEN_STR}{RENDER}'
         label[key_render] = font_sys.render(library.get_label_value(label.get(ID)), True, font_color)
 
 
-def update_game(questions : list[dict], labels : list[dict], events : list[pg.event.Event]):
+def update_item(is_win : bool, items : dict[str, dict], user_answer : int):
+    if user_answer:
+        item = items.get(RIGHT) if is_win else items.get(WRONG)
+        item[USER_ANSWER] = user_answer
+        globals.set_game_item(item)
+        globals.set_item_on(True)
+    else:
+        if not globals.get_item_on() : globals.set_game_item(None)
+
+
+def update_game(questions : list[dict], labels : list[dict], items : dict[str, dict], events : list[pg.event.Event]):
     is_lost = False
     is_win = False
+    user_answer = None
 
-    if not globals.get_questover_on():
+    if not (globals.get_questover_on() or globals.get_item_on()):
         answer = questions[globals.get_current_question()].get(ANSWER)
         time = globals.get_play_time()
 
@@ -251,23 +262,20 @@ def update_game(questions : list[dict], labels : list[dict], events : list[pg.ev
                                 if not globals.get_is_repeat() : globals.set_wrong_answer(None)
                             
                             if globals.get_is_repeat():
-                               is_lost = library.check_repeat_question(is_lost, user_answer)
+                                is_lost = library.check_repeat_question(is_lost, user_answer)
 
                             if globals.get_is_bomb():
                                 is_lost = library.check_bomb_question(is_lost, user_answer)
     
     effects = globals.get_effects()
-    library.set_question_lost(is_lost, len(questions), effects.get(ERROR))
-    library.set_question_win(is_win, len(questions), effects.get(WIN))
+    update_item(is_win, items, user_answer)
+    library.set_question_lost(is_lost, effects.get(ERROR))
+    library.set_question_win(is_win, effects.get(WIN))
+    library.pass_question(is_lost, len(questions), events)
     question = questions[globals.get_current_question()]
     update_question(question)
     update_options(question)
     update_labels(labels)
-    library.check_gameover(events)
-
-    if globals.get_gameover_on():
-        sound.play_music(off=True)
-        globals.set_play_music(False)
 
 
 def update_gameover(events : list[pg.event.Event]):
@@ -294,21 +302,21 @@ def update_scores(scores : list[dict], top : int=1):
 
         for header in headers:
             if header in TABLE_HEADERS:
-                header_render = f'{header}{HYPHEN_STR}{RENDER}'
+                header_render = f'{header}{LOW_HYPHEN_STR}{RENDER}'
                 user[header_render] = font_sys.render(user.get(header), True, font_color)
 
 
 def update_username(events : list[pg.event.Event]):
     username = globals.get_username()
     warning = globals.get_warning()
-    if username == VOID_STR : globals.set_username(HYPHEN_STR)
+    if username == VOID_STR : globals.set_username(LOW_HYPHEN_STR)
     if warning == VOID_STR : globals.set_warning(WARNING_MIN_MAX)
 
     for e in events:
         if e.type == pg.KEYDOWN:
             if e.key == pg.K_BACKSPACE:
                 if len(username) > 1:
-                    username = username[:-2] + HYPHEN_STR
+                    username = username[:-2] + LOW_HYPHEN_STR
                     globals.set_username(username)
                     library.check_username_ok(username)
             else:
@@ -317,7 +325,7 @@ def update_username(events : list[pg.event.Event]):
                         globals.set_warning(WARNING_USE_LETTERS)
                     else:
                         if len(username) - INT_1 < USERNAME_LEN_MAX:
-                            username = username[:-1] + e.unicode + HYPHEN_STR
+                            username = username[:-1] + e.unicode + LOW_HYPHEN_STR
                             globals.set_username(username.upper())
                             library.check_username_ok(username)
                 else:
@@ -436,12 +444,15 @@ def draw_question(screen : pg.surface.Surface, question : dict):
 
 def draw_options(screen : pg.surface.Surface, question : dict):
     options_render = question.get(OPTIONS_RENDER)
+    item = globals.get_game_item()
     y = Y_INIT_OPT
 
     for i, option in enumerate(options_render):
         rect = option.get_rect()
         rect.x = X_INIT_OPT
         rect.y = y
+        draw_game_item(screen, item, rect, i)
+
         if globals.get_is_repeat():
             if not (i + INT_1) == globals.get_wrong_answer():
                 screen.blit(option, rect)
@@ -450,12 +461,29 @@ def draw_options(screen : pg.surface.Surface, question : dict):
                 screen.blit(option, rect)
         else:
             screen.blit(option, rect)
+        
         y += Y_VAR
+
+
+def draw_game_item(screen : pg.surface.Surface, item : dict, option_rect : pg.rect.Rect, i : int):
+    if item:
+        user_answer = item.get(USER_ANSWER)
+
+        if user_answer == (i + INT_1):
+            image = item.get(IMAGE)
+            rect = image.get_rect()
+            rect.x = item.get(X)
+            
+            if item.get(ID) == RIGHT : rect.bottom = option_rect.bottom
+            elif item.get(ID) == WRONG : rect.centery = option_rect.centery
+
+            screen.blit(image, rect)
+            # pg.display.update()
 
 
 def draw_labels(screen : pg.surface.Surface, labels : list[dict]):
     for label in labels:
-        label_render = label.get(f'{label.get(ID)}{HYPHEN_STR}{RENDER}')
+        label_render = label.get(f'{label.get(ID)}{LOW_HYPHEN_STR}{RENDER}')
         rect = label_render.get_rect()
         rect.x = label.get(X)
         rect.y = label.get(Y)
@@ -475,7 +503,7 @@ def draw_scores(screen : pg.surface.Surface, scores : list[dict], top : int=1):
 
 
 def draw_user_position(screen : pg.surface.Surface, user : dict, y : int):
-    position_render = user.get(f'{POSITION}{HYPHEN_STR}{RENDER}')
+    position_render = user.get(f'{POSITION}{LOW_HYPHEN_STR}{RENDER}')
     rect = position_render.get_rect()
     rect.right = X_POS
     rect.top = y
@@ -483,7 +511,7 @@ def draw_user_position(screen : pg.surface.Surface, user : dict, y : int):
 
 
 def draw_user_name(screen : pg.surface.Surface, user : dict, y : int):
-    name_render = user.get(f'{NAME}{HYPHEN_STR}{RENDER}')
+    name_render = user.get(f'{NAME}{LOW_HYPHEN_STR}{RENDER}')
     rect = name_render.get_rect()
     rect.left = X_NAME
     rect.top = y
@@ -491,7 +519,7 @@ def draw_user_name(screen : pg.surface.Surface, user : dict, y : int):
 
 
 def draw_user_score(screen : pg.surface.Surface, user : dict, y : int):
-    score_render = user.get(f'{SCORE}{HYPHEN_STR}{RENDER}')
+    score_render = user.get(f'{SCORE}{LOW_HYPHEN_STR}{RENDER}')
     rect = score_render.get_rect()
     rect.right = X_SCORE
     rect.top = y
@@ -499,7 +527,7 @@ def draw_user_score(screen : pg.surface.Surface, user : dict, y : int):
 
 
 def draw_user_date(screen : pg.surface.Surface, user : dict, y : int):
-    date_render = user.get(f'{DATE}{HYPHEN_STR}{RENDER}')
+    date_render = user.get(f'{DATE}{LOW_HYPHEN_STR}{RENDER}')
     rect = date_render.get_rect()
     rect.left = X_DATE
     rect.top = y
@@ -511,7 +539,7 @@ def draw_game(screen : pg.surface.Surface, questions : list[dict], labels : list
     draw_question(screen, question)
     draw_options(screen, question)
     draw_labels(screen, labels)
-    
+
 
 def draw_username(screen : pg.surface.Surface):
     draw_username_itself(screen, font_color=VIOLET)

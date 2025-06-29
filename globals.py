@@ -23,6 +23,7 @@ rewardx2_on = True
 easy_on = False
 middle_on = True
 hard_on = False
+item_on = False
 is_click = False
 is_pass = False
 is_repeat = False
@@ -31,6 +32,7 @@ is_bomb = False
 username_ok = False
 play_music = False
 wrong_answer = None
+game_item = None
 play_time = None
 play_time_init = None
 lives = None
@@ -42,6 +44,7 @@ username = VOID_STR
 warning = VOID_STR
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
+pass_delay = PASS_DELAY
 vol_music = VOL_MUSIC_INIT
 vol_effects = VOL_EFFECTS_INIT
 scores_list = []
@@ -170,6 +173,11 @@ def set_hard_on(value : bool) -> None:
     hard_on = value
 
 
+def set_item_on(value : bool) -> None:
+    global item_on
+    item_on = value
+
+
 def set_current_question(value : int) -> None:
     global current_question
     current_question = value
@@ -230,6 +238,11 @@ def set_gameover_delay(value : int) -> None:
     gameover_delay = value
 
 
+def set_pass_delay(value : int) -> None:
+    global pass_delay
+    pass_delay = value
+
+
 def set_scores_list(value : list) -> list[dict]:
     global scores_list
     scores_list = value
@@ -258,6 +271,11 @@ def set_effects(value : dict) -> None:
 def set_wrong_answer(value : any) -> None:
     global wrong_answer
     wrong_answer = value
+
+
+def set_game_item(value : dict) -> None:
+    global game_item
+    game_item = value
 
 
 def set_wrong_answers(value : list) -> None:
@@ -362,6 +380,10 @@ def get_hard_on() -> bool:
     return hard_on
 
 
+def get_item_on() -> bool:
+    return item_on
+
+
 def get_current_question() -> int:
     return current_question
 
@@ -410,6 +432,10 @@ def get_gameover_delay() -> int:
     return gameover_delay
 
 
+def get_pass_delay() -> int:
+    return pass_delay
+
+
 def get_scores_list() -> list[dict]:
     return scores_list
 
@@ -432,6 +458,10 @@ def get_effects() -> dict:
 
 def get_wrong_answer() -> any:
     return wrong_answer
+
+
+def get_game_item() -> dict:
+    return game_item
 
 
 def get_wrong_answers() -> list:

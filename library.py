@@ -127,6 +127,18 @@ def get_labels(config : dict, instance : str) -> list[dict]:
     return labels
 
 
+def get_items(config : dict, instance : str) -> dict[str, dict]:
+    items = config.get(ITEMS)
+
+    if instance == GAME:
+        instance_items = items.get(GAME_ITEMS)
+
+        for item in instance_items.values():
+            item[IMAGE] = pg.image.load(f'{IMAGES}/{ITEMS}/{item.get(FILE)}')
+
+    return instance_items
+
+
 def get_label_value(id : str) -> None | str:
     value = None
     if globals.get_game_on():
@@ -167,7 +179,7 @@ def get_effects(config : dict):
     for effect in config.get(EFFECTS):
         effect[EFFECT] = pg.mixer.Sound(f'{SOUNDS}/{effect.get(FILE)}')
         effect_id = effect.get(ID)
-        effect_key = effect_id.replace(f'{HYPHEN_STR}{EFFECT}', VOID_STR)
+        effect_key = effect_id.replace(f'{LOW_HYPHEN_STR}{EFFECT}', VOID_STR)
         effects[effect_key] = effect
 
     globals.set_effects(effects)
@@ -256,7 +268,7 @@ def set_difficulty_game():
     globals.set_penalty(penalty)
 
 
-def set_question_win(is_win : bool, max_index : int, effect : dict):
+def set_question_win(is_win : bool, effect : dict):
     if is_win:
         score = globals.get_score()
         score += REWARD
@@ -264,11 +276,11 @@ def set_question_win(is_win : bool, max_index : int, effect : dict):
             score += REWARD
             globals.set_is_rewardx2(False)
         globals.set_score(score)
-        pass_question(max_index)
+        # pass_question(max_index, events)
         sound.play_effect(effect)
 
 
-def set_question_lost(is_lost : bool, max_index : int, effect : dict):
+def set_question_lost(is_lost : bool, effect : dict):
     if is_lost:
         lives = globals.get_lives()
         score = globals.get_score()
@@ -278,17 +290,11 @@ def set_question_lost(is_lost : bool, max_index : int, effect : dict):
             if not score == INT_0 : score -= globals.get_penalty()
             globals.set_lives(lives)
             globals.set_score(score)
-            if not lives == INT_0 : pass_question(max_index)
+            # if not lives == INT_0 : pass_question(max_index, events)
             sound.play_effect(effect)
 
 
-def reset_difficulty_game():
-    globals.set_easy_on(False)
-    globals.set_middle_on(False)
-    globals.set_hard_on(False)
-
-
-def pass_question(max_index : int):
+def set_next_question( max_index : int):
     next_question = globals.get_current_question() + INT_1
     play_time = globals.get_play_time_init()
 
@@ -298,12 +304,40 @@ def pass_question(max_index : int):
     else:
         globals.set_questover_on(True)
 
-    if globals.get_is_pass():
-        globals.set_is_pass(False)
-        globals.set_wrong_answer(None)
     if globals.get_is_repeat() : globals.set_is_repeat(False)
     if globals.get_is_bomb() : globals.set_is_bomb(False)
     if globals.get_is_rewardx2() : globals.set_is_rewardx2(False)
+
+
+def reset_difficulty_game():
+    globals.set_easy_on(False)
+    globals.set_middle_on(False)
+    globals.set_hard_on(False)
+
+
+def pass_question(is_lost : bool, max_index : int, events : list[pg.event.Event]):
+    if not globals.get_lives() == INT_0:
+
+        if globals.get_is_pass(): # EL JUGADOR ACTIVÓ PASAR PREGUNTA
+            globals.set_wrong_answer(None)
+            globals.set_is_pass(False)
+            set_next_question(max_index)
+        else:
+            if globals.get_item_on(): # EL JUGADOR RESPONDIÓ
+                time = globals.get_pass_delay()
+
+                for e in events:
+                    if e.type == EVENT_1000MS:
+                        time -= INT_1
+                        globals.set_pass_delay(time)
+
+                if time == 0:
+                    globals.set_pass_delay(PASS_DELAY)
+                    globals.set_item_on(False)
+                    set_next_question(max_index)
+
+            else: # SE TERMINÓ EL TIEMPO DE JUEGO Y EL JUGADOR NO RESPONDIÓ
+                if is_lost : set_next_question(max_index)
 
 
 def repeat_question():
@@ -350,6 +384,10 @@ def check_gameover(events : list[pg.event.Event]):
         if time == INT_0:
             globals.disable_instances()
             globals.set_gameover_on(True)
+
+    if globals.get_gameover_on():
+        sound.play_music(off=True)
+        globals.set_play_music(False)
 
 
 def check_username_ok(username : str):

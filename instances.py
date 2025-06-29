@@ -9,6 +9,7 @@ import globals
 config = library.load_config(CONFIG, DATA)
 buttons = library.get_buttons(config)
 game_labels = library.get_labels(config, GAME)
+game_items = library.get_items(config, GAME)
 settings_labels = library.get_labels(config, SETTINGS)
 difficulty_labels = library.get_labels(config, DIFFICULTY)
 backgrounds = library.get_backgrounds()
@@ -89,10 +90,11 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
         
         sound.play_music(current_music)
         methods.update_buttons(current_questions, buttons.get(GAME), events)
-        methods.update_game(current_questions, game_labels, events)
+        methods.update_game(current_questions, game_labels, game_items, events)
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, buttons.get(GAME))
         methods.draw_game(screen, current_questions, game_labels)
+        library.check_gameover(events)
 
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -114,14 +116,14 @@ def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
 def run_reset():
     if globals.get_reset_on():
         library.shuffle_questions(questions)
-        # library.reset_difficulty_game()
         globals.set_current_question(QUEST_INIT)
         globals.set_score(SCORE_INIT)
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.set_username(VOID_STR)
         globals.disable_instances()
+        globals.set_game_item(None)
+        globals.set_item_on(False)
         globals.set_username_ok(False)
-        # globals.set_middle_on(True)
         globals.set_home_on(True)
         globals.set_pass_on(True)
         globals.set_repeat_on(True)

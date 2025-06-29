@@ -24,6 +24,14 @@
         {"id": "on_music_button", "file": "on.png", "x": 350, "y": 164},
         {"id": "on_effects_button", "file": "on.png", "x": 350, "y": 366}
         ],
+    "items":
+        {
+        "game_items":
+            {
+            "right": {"id": "right", "file": "right.png", "x": 85},
+            "wrong": {"id": "wrong", "file": "wrong.png", "x": 85}
+            }
+        },
     "labels":
         {
         "game_labels":
