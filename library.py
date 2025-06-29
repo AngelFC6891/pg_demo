@@ -402,7 +402,7 @@ def check_slider_pressed(pos : tuple, rect : pg.rect.Rect):
     return click_pressed
 
 
-def check_click_pressed(events : list[pg.event.Event], rect : pg.rect.Rect) -> bool:
+def check_click_pressed(rect : pg.rect.Rect, button : dict, events : list[pg.event.Event]) -> bool:
     click_pressed = False
     pos = pg.mouse.get_pos()
 
@@ -410,8 +410,12 @@ def check_click_pressed(events : list[pg.event.Event], rect : pg.rect.Rect) -> b
 
         if pg.mouse.get_pressed()[INT_0]:
             globals.set_is_click(True)
+            button[STATE] = ST_CLICK
         else:
             globals.set_is_click(False)
+            button[STATE] = ST_HOVER
+    else:
+        button[STATE] = ST_NORMAL
         
     if not globals.get_click_on():
         for e in events:

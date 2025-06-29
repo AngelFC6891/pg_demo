@@ -15,7 +15,7 @@ def update_buttons(questions : list[dict]=[], buttons : list[dict]=[], events : 
         rect.y = button.get(Y)
         effects = globals.get_effects()
         
-        if library.check_click_pressed(events, rect):
+        if library.check_click_pressed(rect, button, events):
 
             if globals.get_home_on() : update_home_buttons(id, effects.get(CLICK))
             elif globals.get_settings_on() : update_settings_buttons(id, effects)
@@ -380,7 +380,8 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
         rect.x = button.get(X)
         rect.y = button.get(Y)
         id = button.get(ID)
-        
+        state = button.get(STATE)
+
         if globals.get_settings_on():
             
             if id == ON_MUSIC_BUTTON:
@@ -428,6 +429,16 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
                     screen.blit(image, rect)
         else:
             screen.blit(image, rect)
+
+        if not state == ST_NORMAL and id not in NO_EFFECT_BUTTONS:
+            surface_fill = pg.Surface((rect.width, rect.height), pg.SRCALPHA)
+
+            if state == ST_HOVER:
+                surface_fill.fill(BRIGHT_HOVER, special_flags=pg.BLEND_RGBA_ADD)
+            elif state == ST_CLICK:
+                surface_fill.fill(BRIGHT_CLICK, special_flags=pg.BLEND_RGBA_ADD)
+
+            screen.blit(surface_fill, rect)
 
 
 def draw_question(screen : pg.surface.Surface, question : dict):
