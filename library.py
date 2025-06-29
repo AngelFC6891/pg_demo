@@ -352,9 +352,6 @@ def check_repeat_question(is_lost : bool, user_answer : int) -> bool:
 
     if is_lost and user_answer == globals.get_wrong_answer():
         lost_ok = False
-    else:
-        globals.set_wrong_answer(None)
-        globals.set_is_repeat(False)
 
     return lost_ok
 
@@ -365,8 +362,6 @@ def check_bomb_question(is_lost : bool, user_answer : int):
 
     if is_lost and user_answer in [wrong_answers[INT_0], wrong_answers[INT_1]]:
         lost_ok = False
-    else:
-        globals.set_is_bomb(False)
 
     return lost_ok
 

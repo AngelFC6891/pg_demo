@@ -76,7 +76,7 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
                 # PIERDE EL COMODÍN
 
                 if globals.get_pass_on():
-                    library.pass_question(max_index, events=[])
+                    library.pass_question(False, max_index, events=[])
                     globals.set_is_pass(True)
                     globals.set_pass_on(False)
                     
