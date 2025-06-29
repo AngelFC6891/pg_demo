@@ -347,6 +347,28 @@ def repeat_question():
     globals.set_play_time(play_time)
 
 
+def check_user_answer(lost : any, win : any, answer : int, user_answer: int) -> tuple:
+    is_lost = lost
+    is_win = win
+
+    if user_answer in OPTIONS:
+
+        if not user_answer == answer:
+            is_lost = True
+            if not globals.get_is_repeat() : globals.set_wrong_answer(user_answer)
+        else:
+            is_win = True
+            if not globals.get_is_repeat() : globals.set_wrong_answer(None)
+        
+        if globals.get_is_repeat():
+            is_lost = check_repeat_question(is_lost, user_answer)
+
+        if globals.get_is_bomb():
+            is_lost = check_bomb_question(is_lost, user_answer)
+
+    return is_lost, is_win
+
+
 def check_repeat_question(is_lost : bool, user_answer : int) -> bool:
     lost_ok = is_lost
 

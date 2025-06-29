@@ -234,6 +234,7 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
     is_lost = False
     is_win = False
     user_answer = None
+    effects = globals.get_effects()
 
     if not (globals.get_questover_on() or globals.get_item_on()):
         answer = questions[globals.get_current_question()].get(ANSWER)
@@ -252,22 +253,8 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
                     if library.is_integer(e.unicode):
                         user_answer = int(e.unicode)
 
-                        if user_answer in OPTIONS:
-
-                            if not user_answer == answer:
-                                is_lost = True
-                                if not globals.get_is_repeat() : globals.set_wrong_answer(user_answer)
-                            else:
-                                is_win = True
-                                if not globals.get_is_repeat() : globals.set_wrong_answer(None)
-                            
-                            if globals.get_is_repeat():
-                                is_lost = library.check_repeat_question(is_lost, user_answer)
-
-                            if globals.get_is_bomb():
-                                is_lost = library.check_bomb_question(is_lost, user_answer)
+            is_lost, is_win = library.check_user_answer(is_lost, is_win, answer, user_answer)
     
-    effects = globals.get_effects()
     update_item(is_win, items, user_answer)
     library.set_question_lost(is_lost, effects.get(ERROR))
     library.set_question_win(is_win, effects.get(WIN))
