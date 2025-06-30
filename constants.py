@@ -177,11 +177,6 @@ LIVES = 'lives'
 PENALTY = 'penalty'
 TIME = 'time'
 SCORE = 'score'
-# PLAY_TIME_RENDER = 'play_time_render'
-# LIVES_RENDER = 'lives_render'
-# PENALTY_RENDER = 'penalty_render'
-# TIME_RENDER = 'time_render'
-# SCORE_RENDER = 'score_render'
 
 # TEXT
 FONT_COURIER = 'Courier New'
@@ -248,7 +243,7 @@ WIN = 'win'
 ERROR = 'error'
 PASS = 'pass'
 
-# DIFFICULTY: PLAY TIME, LIVES AND PENALTY
+# DIFFICULTY: (PLAY TIME, LIVES, PENALTY)
 EASY = (12,4,25)
 MIDDLE = (9,3,40)
 HARD = (6,2,75)

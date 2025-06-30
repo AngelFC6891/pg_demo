@@ -72,7 +72,7 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
         if id in INSTANCES_BUTTONS.get(GAME):
             
             if id == PASS_BUTTON:
-                # SI EL JUGADOR ELIGE PASAR Y REPITIÓ LA PREGUNTA, ACTIVÓ LA BOMBA O DUPLICÓ LA RECOMPENSA,
+                # SI EL JUGADOR REPITIÓ LA PREGUNTA, ACTIVÓ LA BOMBA O DUPLICÓ LA RECOMPENSA, Y LUEGO PASA,
                 # PIERDE EL COMODÍN
 
                 if globals.get_pass_on():
@@ -461,10 +461,12 @@ def draw_options(screen : pg.surface.Surface, question : dict):
             if not (i + INT_1) == globals.get_wrong_answer():
                 screen.blit(option, rect)
                 draw_shadow_option(screen, rect, pos)
+        
         elif globals.get_is_bomb():
             if not (i + INT_1) in globals.get_wrong_answers():
                 screen.blit(option, rect)
                 draw_shadow_option(screen, rect, pos)
+        
         else:
             screen.blit(option, rect)
             draw_shadow_option(screen, rect, pos)
