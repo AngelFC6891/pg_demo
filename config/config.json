@@ -36,9 +36,10 @@
         {
         "game_labels":
             [
-            {"id": "lives", "x": 150, "y": 516},
-            {"id": "time", "x": 258, "y": 516},
-            {"id": "score", "x": 386, "y": 516}
+            {"id": "number", "x": 150, "y": 485},
+            {"id": "lives", "x": 150, "y": 518},
+            {"id": "time", "x": 355, "y": 485},
+            {"id": "score", "x": 355, "y": 518}
             ],
         "settings_labels":
             [

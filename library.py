@@ -140,10 +140,11 @@ def get_items(config : dict, instance : str) -> dict[str, dict]:
     return instance_items
 
 
-def get_label_value(id : str) -> None | str:
+def get_label_value(id : str, max_index : int=0) -> None | str:
     value = None
     if globals.get_game_on():
-        if id == LIVES : value = str(globals.get_lives())
+        if id == NUMBER : value = f'{(globals.get_current_question()+INT_1)}{SLASH_STR}{max_index}'
+        elif id == LIVES : value = str(globals.get_lives())
         elif id == TIME : value = str(globals.get_play_time())
         elif id == SCORE : value = str(globals.get_score())
     

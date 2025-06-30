@@ -212,13 +212,13 @@ def update_options(question : dict):
         question[OPTIONS_RENDER] = options
 
 
-def update_labels(labels : list[dict]):
+def update_labels(labels : list[dict], max_index : int=0):
     font_color = library.get_font_color()
     font_sys = library.get_font_sys()
 
     for label in labels:
         key_render = f'{label.get(ID)}{LOW_HYPHEN_STR}{RENDER}'
-        label[key_render] = font_sys.render(library.get_label_value(label.get(ID)), True, font_color)
+        label[key_render] = font_sys.render(library.get_label_value(label.get(ID), max_index), True, font_color)
 
 
 def update_item(is_win : bool, items : dict[str, dict], user_answer : int):
@@ -267,7 +267,7 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
     question = questions[globals.get_current_question()]
     update_question(question)
     update_options(question)
-    update_labels(labels)
+    update_labels(labels, len(questions))
 
 
 def update_gameover(events : list[pg.event.Event]):
@@ -431,6 +431,11 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
                 surface_fill.fill(BRIGHT_CLICK, special_flags=pg.BLEND_RGBA_ADD)
 
             screen.blit(surface_fill, rect)
+
+
+def draw_number_ques(screen : pg.surface.Surface):
+    number_quest = str(globals.get_current_question() + INT_1)
+
 
 
 def draw_question(screen : pg.surface.Surface, question : dict):
