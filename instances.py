@@ -129,6 +129,9 @@ def run_reset():
         globals.set_repeat_on(True)
         globals.set_bomb_on(True)
         globals.set_rewardx2_on(True)
+        globals.set_is_repeat(False)
+        globals.set_is_bomb(False)
+        globals.set_is_rewardx2(False)
         library.set_difficulty_game()
 
 
