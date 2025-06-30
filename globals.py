@@ -9,6 +9,8 @@ avengers_on = False
 simpsons_on = False
 starwars_on = False
 game_on = False
+youwin_on = False
+continue_on = False
 gameover_on = False
 questover_on = False
 username_on = False
@@ -96,6 +98,16 @@ def set_stages_on(value : bool) -> None:
 def set_game_on(value : bool) -> None:
     global game_on
     game_on = value
+
+
+def set_continue_on(value : bool) -> None:
+    global continue_on
+    continue_on = value
+
+
+def set_youwin_on(value : bool) -> None:
+    global youwin_on
+    youwin_on = value
 
 
 def set_gameover_on(value : bool) -> None:
@@ -233,7 +245,7 @@ def set_gameover_time(value : int) -> None:
     gameover_time = value
 
 
-def set_gameover_delay(value : int) -> None:
+def set_endgame_delay(value : int) -> None:
     global gameover_delay
     gameover_delay = value
 
@@ -318,6 +330,14 @@ def get_starwars_on() -> bool:
 
 def get_game_on() -> bool:
     return game_on
+
+
+def get_continue_on() -> bool:
+    return continue_on
+
+
+def get_youwin_on() -> bool:
+    return youwin_on
 
 
 def get_gameover_on() -> bool:
@@ -428,7 +448,7 @@ def get_gameover_time() -> int:
     return gameover_time
 
 
-def get_gameover_delay() -> int:
+def get_endgame_delay() -> int:
     return gameover_delay
 
 

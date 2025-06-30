@@ -409,21 +409,25 @@ def check_bomb_question(is_lost : bool, user_answer : int):
     return lost_ok
 
 
-def check_gameover(events : list[pg.event.Event]):
+def check_endgame(events : list[pg.event.Event]):
     lives = globals.get_lives()
-    time = globals.get_gameover_delay()
+    time = globals.get_endgame_delay()
 
     if lives == INT_0 or globals.get_questover_on():
         for e in events:
             if e.type == EVENT_1000MS:
                 time -= INT_1
-                globals.set_gameover_delay(time)
+                globals.set_endgame_delay(time)
 
         if time == INT_0:
             globals.disable_instances()
-            globals.set_gameover_on(True)
 
-    if globals.get_gameover_on():
+            if lives == INT_0:
+                globals.set_gameover_on(True)
+            else:
+                if globals.get_questover_on() : globals.set_youwin_on(True)
+
+    if globals.get_gameover_on() or globals.get_youwin_on(True):
         sound.play_music(off=True)
         globals.set_play_music(False)
 

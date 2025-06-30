@@ -94,7 +94,17 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, buttons.get(GAME))
         methods.draw_game(screen, current_questions, game_labels)
-        library.check_gameover(events)
+        library.check_endgame(events)
+
+
+def run_youwin(screen : pg.surface.Surface, events : list[pg.event.Event]):
+    if globals.get_youwin_on():
+        pass
+
+
+def run_continue(screen : pg.surface.Surface, events : list[pg.event.Event]):
+    if globals.get_continue_on():
+        pass
 
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -142,6 +152,8 @@ def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
     run_scores(screen, events)
     run_stages(screen, events)
     run_game(screen, events)
+    run_youwin(screen, events)
+    run_continue(screen, events)
     run_gameover(screen, events)
     run_username(screen, events)
     run_reset()
