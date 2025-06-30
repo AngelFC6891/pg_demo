@@ -199,16 +199,17 @@ def update_question(question : dict):
 
 
 def update_options(question : dict):
-    options = []
-    font_color = library.get_font_color()
-    font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_OPT, BOLD_ENABLE)
+    if not question.get(OPTIONS_RENDER):
+        options = []
+        font_color = library.get_font_color()
+        font_sys = pg.font.SysFont(FONT_COURIER, FONT_SIZE_OPT, BOLD_ENABLE)
 
-    for key in question.keys():
-        if type(key) == int:
-            option = f'{key}{PARENT_END_STR}{SPACE_STR}{question.get(key)}'
-            options.append(font_sys.render(option, True, font_color))
+        for key in question.keys():
+            if type(key) == int:
+                option = f'{key}{PARENT_END_STR}{SPACE_STR}{question.get(key)}'
+                options.append(font_sys.render(option, True, font_color))
 
-    question[OPTIONS_RENDER] = options
+        question[OPTIONS_RENDER] = options
 
 
 def update_labels(labels : list[dict]):
@@ -237,12 +238,12 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
     effects = globals.get_effects()
 
     if not (globals.get_questover_on() or globals.get_item_on()):
-        answer = questions[globals.get_current_question()].get(ANSWER)
+        question = questions[globals.get_current_question()]
+        answer = question.get(ANSWER)
         time = globals.get_play_time()
 
         if time == INT_0:
             is_lost = True
-            if globals.get_repeat_on() : globals.set_wrong_answer(None)
         else:
             for e in events:
                 if e.type == EVENT_1000MS:
@@ -252,6 +253,10 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
                 if e.type == pg.KEYDOWN:
                     if library.is_integer(e.unicode):
                         user_answer = int(e.unicode)
+                
+                elif e.type == pg.MOUSEBUTTONDOWN:
+                    pos = pg.mouse.get_pos()
+                    user_answer = library.get_user_answer(pos, question, update_options)
 
             is_lost, is_win = library.check_user_answer(is_lost, is_win, answer, user_answer)
     
@@ -444,6 +449,7 @@ def draw_options(screen : pg.surface.Surface, question : dict):
     options_render = question.get(OPTIONS_RENDER)
     item = globals.get_game_item()
     y = Y_INIT_OPT
+    pos = pg.mouse.get_pos()
 
     for i, option in enumerate(options_render):
         rect = option.get_rect()
@@ -454,13 +460,23 @@ def draw_options(screen : pg.surface.Surface, question : dict):
         if globals.get_is_repeat():
             if not (i + INT_1) == globals.get_wrong_answer():
                 screen.blit(option, rect)
+                draw_shadow_option(screen, rect, pos)
         elif globals.get_is_bomb():
             if not (i + INT_1) in globals.get_wrong_answers():
                 screen.blit(option, rect)
+                draw_shadow_option(screen, rect, pos)
         else:
             screen.blit(option, rect)
+            draw_shadow_option(screen, rect, pos)
         
         y += Y_VAR
+
+
+def draw_shadow_option(screen : pg.surface.Surface, rect : pg.rect.Rect, pos : tuple):
+    if rect.collidepoint(pos):
+        surface_fill = pg.Surface((rect.width, rect.height), pg.SRCALPHA)
+        surface_fill.fill(BRIGHT_HOVER, special_flags=pg.BLEND_RGBA_ADD)
+        screen.blit(surface_fill, rect)
 
 
 def draw_game_item(screen : pg.surface.Surface, item : dict, option_rect : pg.rect.Rect, i : int):

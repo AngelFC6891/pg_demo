@@ -3,6 +3,7 @@ import json
 import random
 from datetime import date, datetime
 import copy
+from typing import Callable
 from constants import *
 import globals
 import sound
@@ -249,6 +250,25 @@ def get_font_sys() -> pg.font.Font:
         font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_VOLUME, BOLD_ENABLE)
 
     return font_sys
+
+
+def get_user_answer(pos : tuple, question : dict, update_options : Callable) -> int | None:
+    update_options(question)
+    user_answer = None
+    options_render = question.get(OPTIONS_RENDER)
+    y = Y_INIT_OPT
+
+    for i, option_render in enumerate(options_render):
+        rect = option_render.get_rect()
+        rect.x = X_INIT_OPT
+        rect.y = y
+
+        if rect.collidepoint(pos):
+            user_answer = i + INT_1
+
+        y += Y_VAR
+
+    return user_answer
 
 
 def set_difficulty_game():
