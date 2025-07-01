@@ -124,6 +124,8 @@ def get_labels(config : dict, instance : str) -> list[dict]:
         labels = labels_dict.get(SETTINGS_LABELS)
     elif instance == DIFFICULTY:
         labels = labels_dict.get(DIFFICULTY_LABELS)
+    elif instance == CONTINUE:
+        labels = labels_dict.get(CONTINUE_LABELS)
 
     return labels
 
@@ -142,6 +144,7 @@ def get_items(config : dict, instance : str) -> dict[str, dict]:
 
 def get_label_value(id : str, max_index : int=0) -> None | str:
     value = None
+
     if globals.get_game_on():
         if id == NUMBER : value = f'{(globals.get_current_question()+INT_1)}{SLASH_STR}{max_index}'
         elif id == LIVES : value = str(globals.get_lives())
@@ -161,6 +164,9 @@ def get_label_value(id : str, max_index : int=0) -> None | str:
         if id == PLAY_TIME : value = str(globals.get_play_time_init())
         elif id == LIVES : value = str(globals.get_lives_init())
         elif id == PENALTY : value = str(globals.get_penalty())
+
+    elif globals.get_continue_on():
+        if id == CONTINUE_COUNTDOWN : value = str(globals.get_continue_time())
 
     return value
 
@@ -425,9 +431,9 @@ def check_endgame(events : list[pg.event.Event]):
             if lives == INT_0:
                 globals.set_gameover_on(True)
             else:
-                if globals.get_questover_on() : globals.set_youwin_on(True)
+                globals.set_youwin_on(True) # EL JUGADOR GANA SI TERMINÓ EL CUESTIONARIO Y AUN TIENE VIDAS
 
-    if globals.get_gameover_on() or globals.get_youwin_on(True):
+    if globals.get_gameover_on() or globals.get_youwin_on():
         sound.play_music(off=True)
         globals.set_play_music(False)
 

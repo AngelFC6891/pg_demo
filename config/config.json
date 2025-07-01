@@ -21,6 +21,8 @@
         {"id": "rewardx2_button", "file": "rewardx2.png", "x": 485, "y": 312},
         {"id": "okay_button", "file": "okay.png", "x": 85, "y": 475},
         {"id": "cancel_button", "file": "cancel.png", "x": 336, "y": 475},
+        {"id": "yes_button", "file": "yes.png", "x": 94, "y": 410},
+        {"id": "no_button", "file": "no.png", "x": 358, "y": 410},
         {"id": "on_music_button", "file": "on.png", "x": 350, "y": 164},
         {"id": "on_effects_button", "file": "on.png", "x": 350, "y": 366}
         ],
@@ -51,6 +53,10 @@
             {"id": "play_time", "x": 306, "y": 438},
             {"id": "lives", "x": 306, "y": 478},
             {"id": "penalty", "x": 306, "y": 518}
+            ],
+        "continue_labels": 
+            [
+            {"id": "continue_countdown", "x": 239, "y": 258}
             ]
         },
     "music":
@@ -65,7 +71,8 @@
         {"id": "click_effect", "file": "effects/click.wav", "loop": 0},
         {"id": "pass_effect", "file": "effects/pass.wav", "loop": 0},
         {"id": "win_effect", "file": "effects/win.wav", "loop": 0},
-        {"id": "error_effect", "file": "effects/error.wav", "loop": 0}
+        {"id": "error_effect", "file": "effects/error.wav", "loop": 0},
+        {"id": "youwin_effect", "file": "effects/youwin.mp3", "loop": 0}
         ],
     "bars":
         [

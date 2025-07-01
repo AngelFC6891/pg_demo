@@ -23,6 +23,7 @@ def update_buttons(questions : list[dict]=[], buttons : list[dict]=[], events : 
             elif globals.get_scores_on() : update_scores_buttons(id, effects.get(PASS))
             elif globals.get_stages_on() : update_stages_buttons(id, effects)
             elif globals.get_game_on() : update_game_buttons(id, questions, effects.get(PASS))
+            elif globals.get_continue_on() : update_continue_button(id, effects.get(CLICK))
             elif globals.get_username_on() : update_username_buttons(id, effects.get(CLICK))
 
 
@@ -104,6 +105,19 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
                     globals.set_rewardx2_on(False)
         
             sound.play_effect(effect)
+
+
+def update_continue_button(id : str, effect : dict):
+    if id in INSTANCES_BUTTONS.get(CONTINUE):
+        globals.disable_instances()
+
+        if id == YES_BUTTON:
+            globals.set_stages_on(True)
+
+        elif id == NO_BUTTON:
+            globals.set_gameover_on(True)
+
+        sound.play_effect(effect)
 
 
 def update_username_buttons(id : str, effect : dict):
@@ -268,6 +282,35 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
     update_question(question)
     update_options(question)
     update_labels(labels, len(questions))
+
+
+def update_youwin(events : list[pg.event.Event]):
+    time = globals.get_youwin_time()
+    print(time)
+    if time == globals.get_youwin_time():
+        sound.play_effect(globals.get_effects().get(YOUWIN))
+
+    for e in events:
+        if e.type == EVENT_1000MS:
+            time -= 1
+            globals.set_youwin_time(time)
+
+    if time == 0:
+        globals.disable_instances()
+        globals.set_continue_on(True)
+
+
+def update_continue(events : list[pg.event.Event]):
+    time = globals.get_continue_time()
+
+    for e in events:
+        if e.type == EVENT_1000MS:
+            time -= 1
+            globals.set_continue_time(time)
+
+    if time == INT_0:
+        globals.disable_instances()
+        globals.set_gameover_on(True)
 
 
 def update_gameover(events : list[pg.event.Event]):

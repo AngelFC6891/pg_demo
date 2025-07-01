@@ -12,6 +12,7 @@ game_labels = library.get_labels(config, GAME)
 game_items = library.get_items(config, GAME)
 settings_labels = library.get_labels(config, SETTINGS)
 difficulty_labels = library.get_labels(config, DIFFICULTY)
+continue_labels = library.get_labels(config, CONTINUE)
 backgrounds = library.get_backgrounds()
 questions = library.get_questions()
 bars = library.get_settings_bars(config)
@@ -65,6 +66,7 @@ def run_scores(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_stages(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_stages_on():
+        sound.play_music(music.get(GAME_MUSIC))
         methods.update_buttons(buttons=buttons.get(STAGES), events=events)
         methods.draw_background(screen, backgrounds.get(STAGES))
         methods.draw_buttons(screen, buttons.get(STAGES))
@@ -99,12 +101,19 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_youwin(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_youwin_on():
-        pass
+        methods.update_youwin(events)
+        methods.draw_background(screen, backgrounds.get(YOUWIN))
 
 
 def run_continue(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_continue_on():
-        pass
+        sound.play_music(music.get(GAME_MUSIC))
+        methods.update_continue(events)
+        methods.update_labels(continue_labels, events)
+        methods.update_buttons(buttons=buttons.get(CONTINUE), events=events)
+        methods.draw_background(screen, backgrounds.get(CONTINUE))
+        methods.draw_labels(screen, continue_labels)
+        methods.draw_buttons(screen, buttons.get(CONTINUE))
 
 
 def run_gameover(screen : pg.surface.Surface, events : list[pg.event.Event]):
@@ -128,6 +137,8 @@ def run_reset():
         library.shuffle_questions(questions)
         globals.set_current_question(QUEST_INIT)
         globals.set_score(SCORE_INIT)
+        globals.set_youwin_time(YOUWIN_TIME)
+        globals.set_continue_time(CONTINUE_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.set_username(VOID_STR)
         globals.disable_instances()

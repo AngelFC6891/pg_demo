@@ -44,6 +44,8 @@ current_question = QUEST_INIT
 score = SCORE_INIT
 username = VOID_STR
 warning = VOID_STR
+youwin_time = YOUWIN_TIME
+continue_time = CONTINUE_TIME
 gameover_time = GAMEOVER_TIME
 gameover_delay = GAMEOVER_DELAY
 pass_delay = PASS_DELAY
@@ -238,6 +240,16 @@ def set_warning(value : str) -> None:
 def set_username_ok(value : bool) -> None:
     global username_ok
     username_ok = value
+
+
+def set_youwin_time(value : int) -> None:
+    global youwin_time
+    youwin_time = value
+
+
+def set_continue_time(value : int) -> None:
+    global continue_time
+    continue_time = value
 
 
 def set_gameover_time(value : int) -> None:
@@ -444,6 +456,14 @@ def get_username_ok() -> bool:
     return username_ok
 
 
+def get_youwin_time() -> int:
+    return youwin_time
+
+
+def get_continue_time() -> int:
+    return continue_time
+
+
 def get_gameover_time() -> int:
     return gameover_time
 
@@ -547,6 +567,8 @@ def disable_instances():
     set_starwars_on(False)
     set_stages_on(False)
     set_game_on(False)
+    set_youwin_on(False)
+    set_continue_on(False)
     set_gameover_on(False)
     set_username_on(False)
     set_questover_on(False)
