@@ -42,25 +42,25 @@ def update_home_buttons(id : str, effect : dict):
 
 
 def update_stages_buttons(id : str, effects : dict[dict]):
-    if id == HOME_BUTTON:
-        effect = effects.get(PASS)
+    if id in INSTANCES_BUTTONS.get(STAGES):
         globals.disable_instances()
-        globals.set_home_on(True)
-        sound.play_effect(effect)
-    else:
-        effect = effects.get(CLICK)
-        sound.play_music(off=True)
-        globals.set_play_music(False)
-        globals.disable_instances()
-        globals.set_game_on(True)
 
-        if id == AVENGERS_BUTTON:
-            globals.set_avengers_on(True)
-        elif id == SIMPSONS_BUTTON:
-            globals.set_simpsons_on(True)
-        elif id == STARWARS_BUTTON:
-            globals.set_starwars_on(True)
-        
+        if id == HOME_BUTTON:
+            effect = effects.get(PASS)
+            globals.set_home_on(True)
+        else:
+            effect = effects.get(CLICK)
+            sound.play_music(off=True)
+            globals.set_play_music(False)
+            globals.set_game_on(True)
+
+            if id == AVENGERS_BUTTON:
+                if not globals.get_avengers_complete() : globals.set_avengers_on(True)
+            elif id == SIMPSONS_BUTTON:
+                if not globals.get_simpsons_complete() : globals.set_simpsons_on(True)
+            elif id == STARWARS_BUTTON:
+                if not globals.get_starwars_complete() : globals.set_starwars_on(True)
+            
         sound.play_effect(effect)
 
 
@@ -73,8 +73,8 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
         if id in INSTANCES_BUTTONS.get(GAME):
             
             if id == PASS_BUTTON:
-                # SI EL JUGADOR REPITIÓ LA PREGUNTA, ACTIVÓ LA BOMBA O DUPLICÓ LA RECOMPENSA, Y LUEGO PASA,
-                # PIERDE EL COMODÍN
+                # SI EL JUGADOR REPITIÓ LA PREGUNTA, ACTIVÓ LA BOMBA O DUPLICÓ LA RECOMPENSA,
+                # Y LUEGO PASA, PIERDE EL COMODÍN
 
                 if globals.get_pass_on():
                     library.pass_question(False, max_index, events=[])
@@ -248,42 +248,43 @@ def update_item(is_win : bool, items : dict[str, dict], user_answer : int):
 
 
 def update_game(questions : list[dict], labels : list[dict], items : dict[str, dict], events : list[pg.event.Event]):
-    is_lost = False
-    is_win = False
-    user_answer = None
-    effects = globals.get_effects()
+    if not globals.get_questover_on():
+        is_lost = False
+        is_win = False
+        user_answer = None
+        effects = globals.get_effects()
 
-    if not (globals.get_questover_on() or globals.get_item_on()):
+        if not globals.get_item_on():
+            question = questions[globals.get_current_question()]
+            answer = question.get(ANSWER)
+            time = globals.get_play_time()
+
+            if time == INT_0:
+                is_lost = True
+            else:
+                for e in events:
+                    if e.type == EVENT_1000MS:
+                        time -= INT_1
+                        globals.set_play_time(time)
+
+                    if e.type == pg.KEYDOWN:
+                        if library.is_integer(e.unicode):
+                            user_answer = int(e.unicode)
+                    
+                    elif e.type == pg.MOUSEBUTTONDOWN:
+                        pos = pg.mouse.get_pos()
+                        user_answer = library.get_user_answer(pos, question, update_options)
+
+                is_lost, is_win = library.check_user_answer(is_lost, is_win, answer, user_answer)
+        
+        update_item(is_win, items, user_answer)
+        library.set_question_lost(is_lost, effects.get(ERROR))
+        library.set_question_win(is_win, effects.get(WIN))
+        library.pass_question(is_lost, len(questions), events)
         question = questions[globals.get_current_question()]
-        answer = question.get(ANSWER)
-        time = globals.get_play_time()
-
-        if time == INT_0:
-            is_lost = True
-        else:
-            for e in events:
-                if e.type == EVENT_1000MS:
-                    time -= INT_1
-                    globals.set_play_time(time)
-
-                if e.type == pg.KEYDOWN:
-                    if library.is_integer(e.unicode):
-                        user_answer = int(e.unicode)
-                
-                elif e.type == pg.MOUSEBUTTONDOWN:
-                    pos = pg.mouse.get_pos()
-                    user_answer = library.get_user_answer(pos, question, update_options)
-
-            is_lost, is_win = library.check_user_answer(is_lost, is_win, answer, user_answer)
-    
-    update_item(is_win, items, user_answer)
-    library.set_question_lost(is_lost, effects.get(ERROR))
-    library.set_question_win(is_win, effects.get(WIN))
-    library.pass_question(is_lost, len(questions), events)
-    question = questions[globals.get_current_question()]
-    update_question(question)
-    update_options(question)
-    update_labels(labels, len(questions))
+        update_question(question)
+        update_options(question)
+        update_labels(labels, len(questions))
 
 
 def update_youwin(events : list[pg.event.Event]):
@@ -299,7 +300,13 @@ def update_youwin(events : list[pg.event.Event]):
 
     if time == 0:
         globals.disable_instances()
-        globals.set_continue_on(True)
+        
+        if globals.get_avengers_complete() or\
+            globals.get_simpsons_complete() or\
+            globals.get_starwars_complete():
+            globals.set_continue_on(True)
+        else:
+            globals.set_gameover_on(True)
 
 
 def update_continue(labels : dict , events : list[pg.event.Event]):
@@ -370,7 +377,7 @@ def update_username(events : list[pg.event.Event]):
                     globals.set_warning(WARNING_USE_LETTERS)
 
 
-def update_sliders(bars : list[dict], sliders : list[dict], events : list[pg.event.Event]):
+def update_sliders(bars : list[dict], sliders : list[dict]):
     bar_x = bars[INT_0].get(X)
     bar_w = bars[INT_0].get(W)
 
@@ -420,54 +427,12 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
         id = button.get(ID)
         state = button.get(STATE)
 
-        if globals.get_settings_on():
+        if globals.get_settings_on() : draw_settings_buttons(screen, image, rect, id)
+        elif globals.get_difficulty_on() : draw_difficulty_buttons(screen, image, rect, id)
+        elif globals.get_stages_on() : draw_stages_buttons(screen, image, rect, id)
+        elif globals.get_game_on() : draw_games_buttons(screen, image, rect, id)
+        else : screen.blit(image, rect)
             
-            if id == ON_MUSIC_BUTTON:
-                if globals.get_music_on():
-                    screen.blit(image, rect)
-            
-            elif id == ON_EFFECTS_BUTTON:
-                if globals.get_effects_on():
-                    screen.blit(image, rect)
-            else:
-                screen.blit(image, rect)
-
-        elif globals.get_difficulty_on():
-            
-            if id == EASY_BUTTON:
-                if globals.get_easy_on():
-                    screen.blit(image, rect)
-            
-            elif id == MIDDLE_BUTTON:
-                if globals.get_middle_on():
-                    screen.blit(image, rect)
-
-            elif id == HARD_BUTTON:
-                if globals.get_hard_on():
-                    screen.blit(image, rect)
-            else:
-                screen.blit(image, rect)
-
-        elif globals.get_game_on():
-            
-            if id == PASS_BUTTON:
-                if globals.get_pass_on():
-                    screen.blit(image, rect)
-            
-            elif id == REPEAT_BUTTON:
-                if globals.get_repeat_on():
-                    screen.blit(image, rect)
-
-            elif id == BOMB_BUTTON:
-                if globals.get_bomb_on():
-                    screen.blit(image, rect)
-
-            elif id == REWARDX2_BUTTON:
-                if globals.get_rewardx2_on():
-                    screen.blit(image, rect)
-        else:
-            screen.blit(image, rect)
-
         if not state == ST_NORMAL and id not in NO_EFFECT_BUTTONS:
             surface_fill = pg.Surface((rect.width, rect.height), pg.SRCALPHA)
 
@@ -477,6 +442,66 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
                 surface_fill.fill(BRIGHT_CLICK, special_flags=pg.BLEND_RGBA_ADD)
 
             screen.blit(surface_fill, rect)
+
+
+def draw_settings_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):
+    if id == ON_MUSIC_BUTTON:
+        if globals.get_music_on():
+            screen.blit(image, rect)
+    
+    elif id == ON_EFFECTS_BUTTON:
+        if globals.get_effects_on():
+            screen.blit(image, rect)
+    else:
+        screen.blit(image, rect)
+
+
+def draw_difficulty_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):
+    if id == EASY_BUTTON:
+        if globals.get_easy_on():
+            screen.blit(image, rect)
+    
+    elif id == MIDDLE_BUTTON:
+        if globals.get_middle_on():
+            screen.blit(image, rect)
+
+    elif id == HARD_BUTTON:
+        if globals.get_hard_on():
+            screen.blit(image, rect)
+    else:
+        screen.blit(image, rect)
+
+
+def draw_stages_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):
+    if id == AVENGERS_BUTTON:
+        is_complete = globals.get_avengers_complete()
+        library.set_stage_buttons(screen, image, rect, is_complete)
+
+    if id == SIMPSONS_BUTTON:
+        is_complete = globals.get_avengers_complete()
+        library.set_stage_buttons(screen, image, rect, is_complete)
+
+    if id == STARWARS_BUTTON:
+        is_complete = globals.get_avengers_complete()
+        library.set_stage_buttons(screen, image, rect, is_complete)
+
+
+def draw_games_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):
+    if id == PASS_BUTTON:
+        if globals.get_pass_on():
+            screen.blit(image, rect)
+    
+    elif id == REPEAT_BUTTON:
+        if globals.get_repeat_on():
+            screen.blit(image, rect)
+
+    elif id == BOMB_BUTTON:
+        if globals.get_bomb_on():
+            screen.blit(image, rect)
+
+    elif id == REWARDX2_BUTTON:
+        if globals.get_rewardx2_on():
+            screen.blit(image, rect)
 
 
 def draw_question(screen : pg.surface.Surface, question : dict):

@@ -37,7 +37,7 @@ def run_settings(screen : pg.surface.Surface, events : list[pg.event.Event]):
         sound.play_music(music.get(GAME_MUSIC))
         methods.update_labels(settings_labels)
         methods.update_buttons(buttons=buttons.get(SETTINGS), events=events)
-        methods.update_sliders(bars, sliders, events)
+        methods.update_sliders(bars, sliders)
         methods.draw_background(screen, backgrounds.get(SETTINGS))
         methods.draw_buttons(screen, buttons.get(SETTINGS))
         methods.draw_bars(screen, bars)
@@ -76,16 +76,19 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_game_on():
 
         if globals.get_avengers_on():
+            id_questions = AVENGERS_QUESTIONS
             background = backgrounds.get(AVENGERS)
             current_questions = questions.get(AVENGERS_QUESTIONS)
             current_music = music.get(AVENGERS_MUSIC)
         
         elif globals.get_simpsons_on():
+            id_questions = SIMPSONS_QUESTIONS
             background = backgrounds.get(SIMPSONS)
             current_questions = questions.get(SIMPSONS_QUESTIONS)
             current_music = music.get(SIMPSONS_MUSIC)
         
         elif globals.get_starwars_on():
+            id_questions = STARWARS_QUESTIONS
             background = backgrounds.get(STARWARS)
             current_questions = questions.get(STARWARS_QUESTIONS)
             current_music = music.get(STARWARS_MUSIC)
@@ -96,7 +99,7 @@ def run_game(screen : pg.surface.Surface, events : list[pg.event.Event]):
         methods.draw_background(screen, background)
         methods.draw_buttons(screen, buttons.get(GAME))
         methods.draw_game(screen, current_questions, game_labels)
-        library.check_endgame(events)
+        library.check_endgame(id_questions, events)
 
 
 def run_youwin(screen : pg.surface.Surface, events : list[pg.event.Event]):

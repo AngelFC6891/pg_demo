@@ -344,6 +344,17 @@ def set_next_question( max_index : int):
     if globals.get_is_rewardx2() : globals.set_is_rewardx2(False)
 
 
+def set_stage_buttons\
+    (screen : pg.surface.Surface, image : pg.surface.Surface,rect : pg.rect.Rect, is_complete : bool):
+    if not is_complete():
+        screen.blit(image, rect)
+    else:
+        surface_fill = pg.Surface((rect.width, rect.height), pg.SRCALPHA)
+        surface_fill.fill(BRIGHT_CLICK, special_flags=pg.BLEND_RGBA_ADD)
+        screen.blit(image, rect)
+        screen.blit(surface_fill, rect)
+
+
 def reset_difficulty_game():
     globals.set_easy_on(False)
     globals.set_middle_on(False)
@@ -423,7 +434,7 @@ def check_bomb_question(is_lost : bool, user_answer : int):
     return lost_ok
 
 
-def check_endgame(events : list[pg.event.Event]):
+def check_endgame(id_questions : str, events : list[pg.event.Event]):
     lives = globals.get_lives()
     time = globals.get_gameover_delay()
 

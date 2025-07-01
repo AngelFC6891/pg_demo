@@ -8,6 +8,9 @@ stages_on = False
 avengers_on = False
 simpsons_on = False
 starwars_on = False
+avengers_complete = False
+simpsons_complete = False
+starwars_complete = False
 game_on = False
 youwin_on = False
 continue_on = False
@@ -91,6 +94,21 @@ def set_simpsons_on(value : bool) -> None:
 def set_starwars_on(value : bool) -> None:
     global starwars_on
     starwars_on = value
+
+
+def set_avengers_complete(value : bool) -> None:
+    global avengers_complete
+    avengers_complete = value
+
+
+def set_simpsons_complete(value : bool) -> None:
+    global simpsons_complete
+    simpsons_complete = value
+
+
+def set_starwars_complete(value : bool) -> None:
+    global starwars_complete
+    starwars_complete = value
 
 
 def set_stages_on(value : bool) -> None:
@@ -339,6 +357,18 @@ def get_simpsons_on() -> bool:
 
 def get_starwars_on() -> bool:
     return starwars_on
+
+
+def get_avengers_complete() -> bool:
+    return avengers_complete
+
+
+def get_simpsons_complete() -> bool:
+    return simpsons_complete
+
+
+def get_starwars_complete() -> bool:
+    return starwars_complete
 
 
 def get_game_on() -> bool:
