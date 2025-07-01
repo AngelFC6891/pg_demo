@@ -121,8 +121,7 @@ def update_continue_button(id : str, effect : dict):
 
 def update_username_buttons(id : str, effect : dict):
     if id in INSTANCES_BUTTONS.get(USERNAME):
-        globals.disable_instances()
-        
+
         if id == OKAY_BUTTON:
             if globals.get_username_ok():
                 username = globals.get_username()
@@ -130,9 +129,11 @@ def update_username_buttons(id : str, effect : dict):
                 user_data = library.get_user_data()
                 library.add_user_data(SCORES_JSON, user_data)
                 library.get_user_scores(SCORES_JSON)
+                globals.disable_instances()
                 globals.set_reset_on(True)
         
         elif id == CANCEL_BUTTON:
+            globals.disable_instances()
             globals.set_reset_on(True)
         
         sound.play_effect(effect)

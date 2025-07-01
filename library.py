@@ -474,6 +474,7 @@ def check_endgame(id_questions : str, events : list[pg.event.Event]):
 def check_username_ok(username : str):
     if len(username) - INT_1 < USERNAME_LEN_MIN:
         globals.set_warning(WARNING_MIN_MAX)
+        globals.set_username_ok(False)
     else:
         globals.set_warning(WARNING_NAME_OK)
         globals.set_username_ok(True)
