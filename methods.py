@@ -3,7 +3,6 @@ from constants import *
 import library
 import sound
 import globals
-# import pprint
 
 
 def update_buttons(questions : list[dict]=[], buttons : list[dict]=[], events : list[pg.event.Event]=[]) -> None:
