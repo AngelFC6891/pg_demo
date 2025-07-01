@@ -567,7 +567,6 @@ def draw_game_item(screen : pg.surface.Surface, item : dict, option_rect : pg.re
             elif item.get(ID) == WRONG : rect.centery = option_rect.centery
 
             screen.blit(image, rect)
-            # pg.display.update()
 
 
 def draw_labels(screen : pg.surface.Surface, labels : list[dict]):
