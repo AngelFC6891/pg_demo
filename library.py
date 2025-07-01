@@ -451,6 +451,10 @@ def check_endgame(id_questions : str, events : list[pg.event.Event]):
                 globals.set_gameover_on(True)
             else:
                 globals.set_youwin_on(True) # EL JUGADOR GANA SI TERMINÓ EL CUESTIONARIO Y AUN TIENE VIDAS
+                
+                if id_questions == AVENGERS_QUESTIONS : globals.set_avengers_complete(True)
+                elif id_questions == SIMPSONS_QUESTIONS : globals.set_simpsons_complete(True)
+                elif id_questions == STARWARS_QUESTIONS : globals.set_starwars_complete(True)
 
     if globals.get_gameover_on() or globals.get_youwin_on():
         sound.play_music(off=True)
