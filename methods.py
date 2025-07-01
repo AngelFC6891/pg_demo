@@ -121,20 +121,21 @@ def update_continue_button(id : str, effect : dict):
 
 
 def update_username_buttons(id : str, effect : dict):
-    if id == OKAY_BUTTON:
-        if globals.get_username_ok():
-            username = globals.get_username()
-            globals.set_username(username[:-1])
-            user_data = library.get_user_data()
-            library.add_user_data(SCORES_JSON, user_data)
-            library.get_user_scores(SCORES_JSON)
-            globals.disable_instances()
-            globals.set_reset_on(True)
-            sound.play_effect(effect)
-    
-    elif id == CANCEL_BUTTON:
+    if id in INSTANCES_BUTTONS.get(USERNAME):
         globals.disable_instances()
-        globals.set_reset_on(True)
+        
+        if id == OKAY_BUTTON:
+            if globals.get_username_ok():
+                username = globals.get_username()
+                globals.set_username(username[:-1])
+                user_data = library.get_user_data()
+                library.add_user_data(SCORES_JSON, user_data)
+                library.get_user_scores(SCORES_JSON)
+                globals.set_reset_on(True)
+        
+        elif id == CANCEL_BUTTON:
+            globals.set_reset_on(True)
+        
         sound.play_effect(effect)
 
 
@@ -286,7 +287,7 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
 
 def update_youwin(events : list[pg.event.Event]):
     time = globals.get_youwin_time()
-    print(time)
+    
     if time == globals.get_youwin_time():
         sound.play_effect(globals.get_effects().get(YOUWIN))
 
@@ -300,15 +301,16 @@ def update_youwin(events : list[pg.event.Event]):
         globals.set_continue_on(True)
 
 
-def update_continue(events : list[pg.event.Event]):
+def update_continue(labels : dict , events : list[pg.event.Event]):
     time = globals.get_continue_time()
+    update_labels(labels, events)
 
     for e in events:
         if e.type == EVENT_1000MS:
             time -= 1
             globals.set_continue_time(time)
 
-    if time == INT_0:
+    if time == -INT_1:
         globals.disable_instances()
         globals.set_gameover_on(True)
 
@@ -476,11 +478,6 @@ def draw_buttons(screen : pg.surface.Surface, buttons : list[dict]):
             screen.blit(surface_fill, rect)
 
 
-def draw_number_ques(screen : pg.surface.Surface):
-    number_quest = str(globals.get_current_question() + INT_1)
-
-
-
 def draw_question(screen : pg.surface.Surface, question : dict):
     question_render = question.get(QUESTION_RENDER)
     y = Y_INIT_QUEST
@@ -603,6 +600,15 @@ def draw_game(screen : pg.surface.Surface, questions : list[dict], labels : list
     draw_question(screen, question)
     draw_options(screen, question)
     draw_labels(screen, labels)
+
+
+def draw_continue(screen : pg.surface.Surface, labels : list[dict]):
+    for label in labels:
+        label_render = label.get(f'{label.get(ID)}{LOW_HYPHEN_STR}{RENDER}')
+        rect = label_render.get_rect()
+        rect.x = (screen.get_width() - label_render.get_width()) / 2
+        rect.y = (screen.get_height() - label_render.get_height()) / 2
+        screen.blit(label_render, rect)
 
 
 def draw_username(screen : pg.surface.Surface):

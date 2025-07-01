@@ -245,6 +245,9 @@ def get_font_color() -> tuple:
     elif globals.get_settings_on():
         font_color = CAKE
 
+    elif globals.get_continue_on():
+        font_color = YELLOW_CAKE
+
     return font_color
 
 
@@ -255,6 +258,8 @@ def get_font_sys() -> pg.font.Font:
         font_sys = pg.font.SysFont(FONT_MV_BOLI, FONT_SIZE_VOLUME, BOLD_ENABLE)
     elif globals.get_difficulty_on():
         font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_VOLUME, BOLD_ENABLE)
+    elif globals.get_continue_on():
+        font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_COUNTDOWN, BOLD_ENABLE)
 
     return font_sys
 

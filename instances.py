@@ -108,11 +108,10 @@ def run_youwin(screen : pg.surface.Surface, events : list[pg.event.Event]):
 def run_continue(screen : pg.surface.Surface, events : list[pg.event.Event]):
     if globals.get_continue_on():
         sound.play_music(music.get(GAME_MUSIC))
-        methods.update_continue(events)
-        methods.update_labels(continue_labels, events)
+        methods.update_continue(continue_labels, events)
         methods.update_buttons(buttons=buttons.get(CONTINUE), events=events)
         methods.draw_background(screen, backgrounds.get(CONTINUE))
-        methods.draw_labels(screen, continue_labels)
+        methods.draw_continue(screen, continue_labels)
         methods.draw_buttons(screen, buttons.get(CONTINUE))
 
 
