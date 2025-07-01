@@ -43,23 +43,22 @@ def update_home_buttons(id : str, effect : dict):
 
 def update_stages_buttons(id : str, effects : dict[dict]):
     if id in INSTANCES_BUTTONS.get(STAGES):
-        globals.disable_instances()
 
         if id == HOME_BUTTON:
             effect = effects.get(PASS)
+            globals.disable_instances()
             globals.set_home_on(True)
         else:
             effect = effects.get(CLICK)
-            sound.play_music(off=True)
-            globals.set_play_music(False)
-            globals.set_game_on(True)
 
-            if id == AVENGERS_BUTTON:
-                if not globals.get_avengers_complete() : globals.set_avengers_on(True)
-            elif id == SIMPSONS_BUTTON:
-                if not globals.get_simpsons_complete() : globals.set_simpsons_on(True)
-            elif id == STARWARS_BUTTON:
-                if not globals.get_starwars_complete() : globals.set_starwars_on(True)
+            if id == AVENGERS_BUTTON and not globals.get_avengers_complete():
+                library.apply_stage_buttons_set(id)
+
+            elif id == SIMPSONS_BUTTON and not globals.get_simpsons_complete():
+                library.apply_stage_buttons_set(id)
+
+            elif id == STARWARS_BUTTON and not globals.get_starwars_complete():
+                library.apply_stage_buttons_set(id)
             
         sound.play_effect(effect)
 
@@ -301,12 +300,12 @@ def update_youwin(events : list[pg.event.Event]):
     if time == 0:
         globals.disable_instances()
         
-        if globals.get_avengers_complete() or\
-            globals.get_simpsons_complete() or\
+        if globals.get_avengers_complete() and\
+            globals.get_simpsons_complete() and\
             globals.get_starwars_complete():
-            globals.set_continue_on(True)
-        else:
             globals.set_gameover_on(True)
+        else:
+            globals.set_continue_on(True)
 
 
 def update_continue(labels : dict , events : list[pg.event.Event]):
@@ -473,17 +472,20 @@ def draw_difficulty_buttons(screen : pg.surface.Surface, image : pg.surface.Surf
 
 
 def draw_stages_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):
-    if id == AVENGERS_BUTTON:
+    if id == HOME_BUTTON:
+        screen.blit(image, rect)
+    
+    elif id == AVENGERS_BUTTON:
         is_complete = globals.get_avengers_complete()
-        library.set_stage_buttons(screen, image, rect, is_complete)
+        library.apply_stage_buttons_shadow(screen, image, rect, is_complete)
 
-    if id == SIMPSONS_BUTTON:
-        is_complete = globals.get_avengers_complete()
-        library.set_stage_buttons(screen, image, rect, is_complete)
+    elif id == SIMPSONS_BUTTON:
+        is_complete = globals.get_simpsons_complete()
+        library.apply_stage_buttons_shadow(screen, image, rect, is_complete)
 
-    if id == STARWARS_BUTTON:
-        is_complete = globals.get_avengers_complete()
-        library.set_stage_buttons(screen, image, rect, is_complete)
+    elif id == STARWARS_BUTTON:
+        is_complete = globals.get_starwars_complete()
+        library.apply_stage_buttons_shadow(screen, image, rect, is_complete)
 
 
 def draw_games_buttons(screen : pg.surface.Surface, image : pg.surface.Surface, rect : pg.rect.Rect, id = str):

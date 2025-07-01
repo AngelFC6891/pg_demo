@@ -344,9 +344,19 @@ def set_next_question( max_index : int):
     if globals.get_is_rewardx2() : globals.set_is_rewardx2(False)
 
 
-def set_stage_buttons\
+def apply_stage_buttons_set(id : str):
+    globals.disable_instances()
+    if id == AVENGERS_BUTTON : globals.set_avengers_on(True)
+    elif id == SIMPSONS_BUTTON : globals.set_simpsons_on(True)
+    elif id == STARWARS_BUTTON : globals.set_starwars_on(True)
+    globals.set_game_on(True)
+    sound.play_music(off=True)
+    globals.set_play_music(False)
+
+
+def apply_stage_buttons_shadow\
     (screen : pg.surface.Surface, image : pg.surface.Surface,rect : pg.rect.Rect, is_complete : bool):
-    if not is_complete():
+    if not is_complete:
         screen.blit(image, rect)
     else:
         surface_fill = pg.Surface((rect.width, rect.height), pg.SRCALPHA)

@@ -136,7 +136,6 @@ def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
 
 def run_reset():
     if globals.get_reset_on():
-        library.shuffle_questions(questions)
         globals.set_current_question(QUEST_INIT)
         globals.set_youwin_time(YOUWIN_TIME)
         globals.set_continue_time(CONTINUE_TIME)
@@ -158,9 +157,13 @@ def run_reset():
             globals.set_stages_on(True)
             globals.set_is_continue(False)
         else:
+            library.shuffle_questions(questions)
             globals.set_score(SCORE_INIT)
             globals.set_username(VOID_STR)
             globals.set_username_ok(False)
+            globals.set_avengers_complete(False)
+            globals.set_simpsons_complete(False)
+            globals.set_starwars_complete(False)
             globals.set_home_on(True)
 
 
