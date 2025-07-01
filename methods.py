@@ -303,12 +303,12 @@ def update_youwin(events : list[pg.event.Event]):
 
 
 def update_continue(labels : dict , events : list[pg.event.Event]):
-    time = globals.get_continue_time()
     update_labels(labels, events)
+    time = globals.get_continue_time()
 
     for e in events:
         if e.type == EVENT_1000MS:
-            time -= 1
+            time -= INT_1
             globals.set_continue_time(time)
 
     if time == -INT_1:
