@@ -3,7 +3,6 @@ import library
 import sound
 import methods
 import globals
-# import pprint
 
 
 config = library.load_config(CONFIG, DATA)
