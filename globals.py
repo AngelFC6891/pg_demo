@@ -31,6 +31,7 @@ is_pass = False
 is_repeat = False
 is_rewardx2 = False
 is_bomb = False
+is_continue = False
 username_ok = False
 play_music = False
 wrong_answer = None
@@ -257,7 +258,7 @@ def set_gameover_time(value : int) -> None:
     gameover_time = value
 
 
-def set_endgame_delay(value : int) -> None:
+def set_gameover_delay(value : int) -> None:
     global gameover_delay
     gameover_delay = value
 
@@ -468,7 +469,7 @@ def get_gameover_time() -> int:
     return gameover_time
 
 
-def get_endgame_delay() -> int:
+def get_gameover_delay() -> int:
     return gameover_delay
 
 
@@ -533,6 +534,11 @@ def set_is_bomb(value : bool) -> None:
     global is_bomb
     is_bomb = value
 
+
+def set_is_continue(value : bool) -> None:
+    global is_continue
+    is_continue = value
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_is_click() -> bool:
@@ -553,6 +559,10 @@ def get_is_rewardx2() -> bool:
 
 def get_is_bomb() -> bool:
     return is_bomb
+
+
+def get_is_continue() -> bool:
+    return is_continue
 
 # ------------------------------------------------------------------------------------------- #
 

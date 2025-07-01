@@ -112,7 +112,8 @@ def update_continue_button(id : str, effect : dict):
         globals.disable_instances()
 
         if id == YES_BUTTON:
-            globals.set_stages_on(True)
+            globals.set_is_continue(True)
+            globals.set_reset_on(True)
 
         elif id == NO_BUTTON:
             globals.set_gameover_on(True)
@@ -288,7 +289,7 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
 def update_youwin(events : list[pg.event.Event]):
     time = globals.get_youwin_time()
     
-    if time == globals.get_youwin_time():
+    if time == YOUWIN_TIME:
         sound.play_effect(globals.get_effects().get(YOUWIN))
 
     for e in events:

@@ -295,8 +295,11 @@ def set_difficulty_game():
 
     globals.set_play_time_init(play_time)
     globals.set_play_time(play_time)
-    globals.set_lives_init(lives)
-    globals.set_lives(lives)
+    
+    if not globals.get_is_continue():
+        globals.set_lives_init(lives)
+        globals.set_lives(lives)
+    
     globals.set_penalty(penalty)
 
 
@@ -422,13 +425,13 @@ def check_bomb_question(is_lost : bool, user_answer : int):
 
 def check_endgame(events : list[pg.event.Event]):
     lives = globals.get_lives()
-    time = globals.get_endgame_delay()
+    time = globals.get_gameover_delay()
 
     if lives == INT_0 or globals.get_questover_on():
         for e in events:
             if e.type == EVENT_1000MS:
                 time -= INT_1
-                globals.set_endgame_delay(time)
+                globals.set_gameover_delay(time)
 
         if time == INT_0:
             globals.disable_instances()

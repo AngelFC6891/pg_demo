@@ -135,16 +135,13 @@ def run_reset():
     if globals.get_reset_on():
         library.shuffle_questions(questions)
         globals.set_current_question(QUEST_INIT)
-        globals.set_score(SCORE_INIT)
         globals.set_youwin_time(YOUWIN_TIME)
         globals.set_continue_time(CONTINUE_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
-        globals.set_username(VOID_STR)
+        globals.set_gameover_delay(GAMEOVER_DELAY)
         globals.disable_instances()
         globals.set_game_item(None)
         globals.set_item_on(False)
-        globals.set_username_ok(False)
-        globals.set_home_on(True)
         globals.set_pass_on(True)
         globals.set_repeat_on(True)
         globals.set_bomb_on(True)
@@ -153,6 +150,15 @@ def run_reset():
         globals.set_is_bomb(False)
         globals.set_is_rewardx2(False)
         library.set_difficulty_game()
+        
+        if globals.get_is_continue():
+            globals.set_stages_on(True)
+            globals.set_is_continue(False)
+        else:
+            globals.set_score(SCORE_INIT)
+            globals.set_username(VOID_STR)
+            globals.set_username_ok(False)
+            globals.set_home_on(True)
 
 
 def execute(screen : pg.surface.Surface, events : list[pg.event.Event]):
