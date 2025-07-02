@@ -124,8 +124,6 @@ def update_username_buttons(id : str, effect : dict):
 
         if id == OKAY_BUTTON:
             if globals.get_username_ok():
-                username = globals.get_username()
-                globals.set_username(username[:-1])
                 user_data = library.get_user_data()
                 library.add_user_data(SCORES_JSON, user_data)
                 library.get_user_scores(SCORES_JSON)
@@ -278,7 +276,7 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
         
         update_item(is_win, items, user_answer)
         library.set_question_lost(is_lost, effects.get(ERROR))
-        library.set_question_win(is_win, effects.get(WIN))
+        library.set_question_win(is_win, effects)
         library.pass_question(is_lost, len(questions), events)
         question = questions[globals.get_current_question()]
         update_question(question)
@@ -368,7 +366,7 @@ def update_username(events : list[pg.event.Event]):
                         globals.set_warning(WARNING_USE_LETTERS)
                     else:
                         if len(username) < USERNAME_LEN_MAX:
-                            username = username + e.unicode
+                            username += e.unicode
                             globals.set_username(username.upper())
                             library.check_username_ok(username)
                 else:

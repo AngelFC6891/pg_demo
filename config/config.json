@@ -71,6 +71,7 @@
         {"id": "click_effect", "file": "effects/click.wav", "loop": 0},
         {"id": "pass_effect", "file": "effects/pass.wav", "loop": 0},
         {"id": "win_effect", "file": "effects/win.wav", "loop": 0},
+        {"id": "live_up_effect", "file": "effects/live_up.wav", "loop": 0},
         {"id": "error_effect", "file": "effects/error.wav", "loop": 0},
         {"id": "youwin_effect", "file": "effects/youwin.mp3", "loop": 0}
         ],

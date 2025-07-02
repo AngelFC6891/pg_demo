@@ -309,7 +309,7 @@ def set_difficulty_game():
     globals.set_penalty(penalty)
 
 
-def set_question_win(is_win : bool, effect : dict):
+def set_question_win(is_win : bool, effects : dict[dict]):
     if is_win:
         score = globals.get_score()
         right_answers = globals.get_right_answers()
@@ -323,12 +323,13 @@ def set_question_win(is_win : bool, effect : dict):
         if right_answers == INT_5:
             lives = globals.get_lives()
             lives += INT_1
-            right_answers == INT_0
+            right_answers = INT_0
             globals.set_lives(lives)
+            sound.play_effect(effects.get(LIVE_UP))
         
         globals.set_score(score)
         globals.set_right_answers(right_answers)
-        sound.play_effect(effect)
+        sound.play_effect(effects.get(WIN))
 
 
 def set_question_lost(is_lost : bool, effect : dict):
