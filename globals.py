@@ -29,6 +29,7 @@ easy_on = False
 middle_on = True
 hard_on = False
 item_on = False
+pointer_on = False
 is_click = False
 is_pass = False
 is_repeat = False
@@ -209,6 +210,11 @@ def set_hard_on(value : bool) -> None:
 def set_item_on(value : bool) -> None:
     global item_on
     item_on = value
+
+
+def set_pointer_on(value : bool) -> None:
+    global pointer_on
+    pointer_on = value
 
 
 def set_current_question(value : int) -> None:
@@ -445,6 +451,10 @@ def get_hard_on() -> bool:
 
 def get_item_on() -> bool:
     return item_on
+
+
+def get_pointer_on() -> bool:
+    return pointer_on
 
 
 def get_current_question() -> int:

@@ -1,6 +1,7 @@
 import sys
 from constants import *
 import instances
+import library
 
 
 def run():
@@ -10,7 +11,6 @@ def run():
     pg.init()
     pg.font.init()
     clock = pg.time.Clock()
-    pg.time.set_timer(EVENT_1000MS, MS_1000)
 
     while True:
 

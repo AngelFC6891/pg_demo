@@ -20,6 +20,7 @@ music = library.get_music(config)
 library.get_effects(config)
 library.shuffle_questions(questions)
 library.get_user_scores(SCORES_JSON)
+library.set_timers()
 library.set_difficulty_game()
 
 
@@ -130,7 +131,7 @@ def run_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
         methods.update_username(events)
         methods.draw_background(screen, backgrounds.get(USERNAME))
         methods.draw_buttons(screen, buttons.get(USERNAME))
-        methods.draw_username(screen)
+        methods.draw_username(screen, events)
 
 
 def run_reset():

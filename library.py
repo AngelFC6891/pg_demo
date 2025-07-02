@@ -283,6 +283,12 @@ def get_user_answer(pos : tuple, question : dict, update_options : Callable) -> 
     return user_answer
 
 
+def set_timers():
+    pg.init()
+    pg.time.set_timer(EVENT_1000MS, MS_1000)
+    pg.time.set_timer(EVENT_500MS, MS_500)
+
+
 def set_difficulty_game():
     if globals.get_easy_on():
         play_time, lives, penalty = EASY
@@ -472,7 +478,7 @@ def check_endgame(id_questions : str, events : list[pg.event.Event]):
 
 
 def check_username_ok(username : str):
-    if len(username) - INT_1 < USERNAME_LEN_MIN:
+    if len(username) < USERNAME_LEN_MIN:
         globals.set_warning(WARNING_MIN_MAX)
         globals.set_username_ok(False)
     else:

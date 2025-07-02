@@ -353,14 +353,13 @@ def update_scores(scores : list[dict], top : int=1):
 def update_username(events : list[pg.event.Event]):
     username = globals.get_username()
     warning = globals.get_warning()
-    if username == VOID_STR : globals.set_username(LOW_HYPHEN_STR)
     if warning == VOID_STR : globals.set_warning(WARNING_MIN_MAX)
 
     for e in events:
         if e.type == pg.KEYDOWN:
             if e.key == pg.K_BACKSPACE:
-                if len(username) > 1:
-                    username = username[:-2] + LOW_HYPHEN_STR
+                if len(username) > 0:
+                    username = username[:-1]
                     globals.set_username(username)
                     library.check_username_ok(username)
             else:
@@ -368,8 +367,8 @@ def update_username(events : list[pg.event.Event]):
                     if not library.is_letter(e.unicode):
                         globals.set_warning(WARNING_USE_LETTERS)
                     else:
-                        if len(username) - INT_1 < USERNAME_LEN_MAX:
-                            username = username[:-1] + e.unicode + LOW_HYPHEN_STR
+                        if len(username) < USERNAME_LEN_MAX:
+                            username = username + e.unicode
                             globals.set_username(username.upper())
                             library.check_username_ok(username)
                 else:
@@ -638,13 +637,39 @@ def draw_continue(screen : pg.surface.Surface, labels : list[dict]):
         screen.blit(label_render, rect)
 
 
-def draw_username(screen : pg.surface.Surface):
-    draw_username_itself(screen, font_color=VIOLET)
+def draw_username(screen : pg.surface.Surface, events : list[pg.event.Event]):
+    draw_username_itself(screen, events, font_color=VIOLET)
     draw_username_score(screen, font_color=VIOLET)
     draw_warning(screen)
     
 
-def draw_username_itself(screen : pg.surface.Surface, font_color : tuple):
+def draw_username_itself(screen : pg.surface.Surface, events : list[pg.event.Event], font_color : tuple):
+    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_USERNAME, BOLD_ENABLE)
+    username = globals.get_username()
+    username_render = font_sys.render(username, True, font_color)
+    rect = username_render.get_rect()
+    rect.x = X_USERNAME
+    rect.y = Y_USERNAME
+    screen.blit(username_render, rect)
+    draw_blink_pointer(screen, events, font_sys, font_color, rect)
+
+
+def draw_blink_pointer(screen : pg.surface.Surface, events : list[pg.event.Event],\
+                       font_sys : pg.font.Font, font_color : tuple, rect : pg.rect.Rect):
+    for e in events:
+        if e.type == EVENT_500MS:
+            if not globals.get_pointer_on() : globals.set_pointer_on(True)
+            else : globals.set_pointer_on(False)
+
+    if globals.get_pointer_on():
+        cursor_render = font_sys.render(LOW_HYPHEN_STR, True, font_color)
+        cursor_rect = cursor_render.get_rect()
+        cursor_rect.x = rect.right
+        cursor_rect.y = rect.top
+        screen.blit(cursor_render, cursor_rect)
+
+
+def draw_username_score(screen : pg.surface.Surface, font_color : tuple):
     font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_SCORE, BOLD_ENABLE)
     score = globals.get_score()
     score_render = font_sys.render(str(score), True, font_color)
@@ -652,16 +677,6 @@ def draw_username_itself(screen : pg.surface.Surface, font_color : tuple):
     rect.x = (screen.get_width() - score_render.get_width()) / 2
     rect.y = Y_USERNAME_SCORE
     screen.blit(score_render, rect)
-
-
-def draw_username_score(screen : pg.surface.Surface, font_color : tuple):
-    font_sys = pg.font.SysFont(FONT_SEGOE, FONT_SIZE_USERNAME, BOLD_ENABLE)
-    username = globals.get_username()
-    username_render = font_sys.render(username, True, font_color)
-    rect = username_render.get_rect()
-    rect.x = (screen.get_width() - username_render.get_width()) / 2
-    rect.y = Y_USERNAME
-    screen.blit(username_render, rect)
 
 
 def draw_warning(screen : pg.surface.Surface):
