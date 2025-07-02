@@ -312,12 +312,22 @@ def set_difficulty_game():
 def set_question_win(is_win : bool, effect : dict):
     if is_win:
         score = globals.get_score()
+        right_answers = globals.get_right_answers()
         score += REWARD
+        right_answers += INT_1
+      
         if globals.get_is_rewardx2():
             score += REWARD
             globals.set_is_rewardx2(False)
+
+        if right_answers == INT_5:
+            lives = globals.get_lives()
+            lives += INT_1
+            right_answers == INT_0
+            globals.set_lives(lives)
+        
         globals.set_score(score)
-        # pass_question(max_index, events)
+        globals.set_right_answers(right_answers)
         sound.play_effect(effect)
 
 

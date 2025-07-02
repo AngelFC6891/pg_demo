@@ -45,6 +45,7 @@ play_time_init = None
 lives = None
 lives_init = None
 penalty = None
+right_answers = INT_0
 current_question = QUEST_INIT
 score = SCORE_INIT
 username = VOID_STR
@@ -245,6 +246,11 @@ def set_lives_init(value : int) -> None:
 def set_penalty(value : int) -> None:
     global penalty
     penalty = value
+
+
+def set_right_answers(value : int) -> None:
+    global right_answers
+    right_answers = value
 
 
 def set_score(value : int) -> None:
@@ -479,6 +485,10 @@ def get_lives_init() -> int:
 
 def get_penalty() -> int:
     return penalty
+
+
+def get_right_answers() -> int:
+    return right_answers
 
 
 def get_score() -> int:
