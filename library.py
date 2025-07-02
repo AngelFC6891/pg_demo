@@ -56,12 +56,8 @@ def get_user_data():
     {
         NAME: globals.get_username(),
         SCORE: str(globals.get_score()),
-        DATE: get_date()
+        DATE: str(date.today())
     }
-
-
-def get_date() -> str:
-    return str(date.today())
 
 
 def get_images(path : str) -> dict[str, pg.surface.Surface]:
