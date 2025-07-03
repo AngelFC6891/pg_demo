@@ -3,6 +3,7 @@ import json
 import random
 from datetime import date, datetime
 import copy
+import csv
 from typing import Callable
 from constants import *
 import globals
@@ -85,17 +86,87 @@ def get_questions() -> dict[str, list]:
                 data = line.split(COMMA_STR)
                 question = {}
                 question[QUESTION] = data[INT_0]
-                question[INT_1] = data[INT_1]
-                question[INT_2] = data[INT_2]
-                question[INT_3] = data[INT_3]
-                question[INT_4] = data[INT_4]
+                for i in OPTIONS : question[i] = data[i]
                 question[ANSWER] = int(data[INT_5])
+                
+                for i in range(len(STATS)):
+                    if not i == (len(STATS) - INT_1):
+                        question[STATS[i]] = int(data[INT_6 + i])
+                    else:
+                        question[STATS[i]] = float(data[INT_6 + i])
+                
                 questions_list.append(question)
 
         topic, _ = os.path.splitext(file_csv)
         questions[topic] = questions_list
     
-    return questions
+    globals.set_questions_init(questions)
+    return copy.deepcopy(questions)
+
+
+def add_stat_data(question : str, stat : str):
+    questions = globals.get_questions_init()
+    
+    if globals.get_avengers_on() : current_quest = AVENGERS_QUESTIONS
+    elif globals.get_simpsons_on() : current_quest = SIMPSONS_QUESTIONS
+    elif globals.get_starwars_on() : current_quest = STARWARS_QUESTIONS
+
+    for quest in questions.get(current_quest):
+        if quest.get(QUESTION) == question:
+            
+            if not stat == SUCCESS_PERCENT:
+                quest[stat] += INT_1
+            else:
+                success_percent =\
+                quest.get(SUCCESS_QTY) / quest.get(USED_QTY) if not quest.get(USED_QTY) == INT_0 else INT_0
+                quest[SUCCESS_PERCENT] = float(f'{success_percent:.2f}')
+            
+            break
+
+
+def write_questions_data():
+    questions = globals.get_questions_init()
+    formatted_questions = []
+
+    if globals.get_avengers_on() : current_quest = AVENGERS_QUESTIONS
+    elif globals.get_simpsons_on() : current_quest = SIMPSONS_QUESTIONS
+    elif globals.get_starwars_on() : current_quest = STARWARS_QUESTIONS
+
+    for question in questions.get(current_quest):
+        # PYTHON RECORRE LOS VALORES EN EL MISMO ORDEN EN QUE FUERON CREADAS SUS RESPECTIVAS CLAVES
+        formatted_questions.append([value for value in question.values()]) 
+
+    quest_csv = f'{QUESTIONS}{SLASH_STR}{current_quest}{DOT_STR}{CSV}'
+
+    with open(quest_csv, W, newline=VOID_STR, encoding=UTF) as file:
+        writer = csv.writer(file)
+        
+        for row in formatted_questions:
+            writer.writerow(row)
+
+
+def show_stat_data():
+    questions = get_questions()
+    stat_data = VOID_STR
+
+    for topic, list in questions.items():
+        stat_data += f'\n{topic.replace(LOW_HYPHEN_STR, SPACE_STR)}\n\n'
+
+        for question in list:
+            stat_data += get_dataquest_formatted(question)
+
+    print(stat_data)
+
+
+def get_dataquest_formatted(question : dict) -> str:
+    dataquest =\
+    f'{question.get(QUESTION)}, ' +\
+    f'{SUCCESSES}: {question.get(SUCCESS_QTY)}, ' +\
+    f'{FAILS}: {question.get(FAIL_QTY)}, ' +\
+    f'{USED}: {question.get(USED_QTY)}, ' +\
+    f'{SUCCESS_PERC}: {question.get(SUCCESS_PERCENT)}{PERCENT_STR}\n'
+    
+    return dataquest
 
 
 def get_buttons(config : dict) -> dict[str, list]:
@@ -305,12 +376,13 @@ def set_difficulty_game():
     globals.set_penalty(penalty)
 
 
-def set_question_win(is_win : bool, effects : dict[dict]):
+def set_question_win(is_win : bool, question : str, effects : dict[dict]):
     if is_win:
         score = globals.get_score()
         right_answers = globals.get_right_answers()
         score += REWARD
         right_answers += INT_1
+        add_stat_data(question, SUCCESS_QTY)
       
         if globals.get_is_rewardx2():
             score += REWARD
@@ -328,17 +400,17 @@ def set_question_win(is_win : bool, effects : dict[dict]):
         sound.play_effect(effects.get(WIN))
 
 
-def set_question_lost(is_lost : bool, effect : dict):
+def set_question_lost(is_lost : bool, question : str, effect : dict):
     if is_lost:
         lives = globals.get_lives()
         score = globals.get_score()
+        add_stat_data(question, FAIL_QTY)
 
         if not lives == INT_0:
             lives -= INT_1
             if not score == INT_0 : score -= globals.get_penalty()
             globals.set_lives(lives)
             globals.set_score(score)
-            # if not lives == INT_0 : pass_question(max_index, events)
             sound.play_effect(effect)
 
 
@@ -468,6 +540,7 @@ def check_endgame(id_questions : str, events : list[pg.event.Event]):
                 globals.set_gameover_delay(time)
 
         if time == INT_0:
+            write_questions_data()
             globals.disable_instances()
 
             if lives == INT_0:

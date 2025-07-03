@@ -1,7 +1,6 @@
 import sys
 from constants import *
 import instances
-import library
 
 
 def run():

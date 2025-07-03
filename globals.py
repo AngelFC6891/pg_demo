@@ -60,6 +60,7 @@ vol_effects = VOL_EFFECTS_INIT
 scores_list = []
 scores_copy = []
 wrong_answers = []
+questions_init = {}
 effects = {}
 
 
@@ -337,6 +338,11 @@ def set_wrong_answers(value : list) -> None:
     global wrong_answers
     wrong_answers = value
 
+
+def set_questions_init(value : dict[str, list]) -> None:
+    global questions_init
+    questions_init = value
+
 # ------------------------------------------------------------------------------------------- #
 
 def get_home_on() -> bool:
@@ -557,6 +563,10 @@ def get_game_item() -> dict:
 
 def get_wrong_answers() -> list:
     return wrong_answers
+
+
+def get_questions_init() -> dict[str, list]:
+    return questions_init
 
 # ------------------------------------------------------------------------------------------- #
 

@@ -10,6 +10,7 @@ DATA = 'data'
 CONFIG = 'config/config.json'
 SCORES_CSV = 'scores.csv'
 SCORES_JSON = 'scores.json'
+CSV = 'csv'
 SOUNDS = 'sounds'
 
 # INSTANCES
@@ -77,6 +78,7 @@ FORMAT = f'%d-%m-%y'
 AVENGERS_QUESTIONS = 'avengers_questions'
 SIMPSONS_QUESTIONS = 'simpsons_questions'
 STARWARS_QUESTIONS = 'starwars_questions'
+TOPIC_QUESTIONS = [AVENGERS_QUESTIONS,SIMPSONS_QUESTIONS,STARWARS_QUESTIONS]
 
 # INTEGERS
 INT_0 = 0
@@ -85,6 +87,10 @@ INT_2 = 2
 INT_3 = 3
 INT_4 = 4
 INT_5 = 5
+INT_6 = 6
+INT_7 = 7
+INT_8 = 8
+INT_9 = 9
 INT_10 = 10
 INT_45 = 45
 INT_48 = 48
@@ -138,6 +144,7 @@ COMMA_STR = ','
 ASTERISK_STR = '*'
 PERCENT_STR = '%'
 SLASH_STR = '/'
+DOT_STR = '.'
 
 # EVENTS
 EVENT_1000MS = pg.USEREVENT
@@ -264,3 +271,14 @@ LIVE_UP = 'live_up'
 EASY = (12,4,25)
 MIDDLE = (9,3,50)
 HARD = (6,2,75)
+
+# STATICS
+SUCCESS_PERCENT = 'success_percent'
+SUCCESS_PERC = 'success percent'
+SUCCESS_QTY = 'success_qty'
+SUCCESSES = 'successes'
+FAIL_QTY = 'fail_qty'
+FAILS = 'fails'
+USED_QTY = 'used_qty'
+USED = 'used'
+STATS = [SUCCESS_PERCENT,SUCCESS_QTY,FAIL_QTY,USED_QTY]

@@ -248,9 +248,10 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
     if not globals.get_questover_on():
         is_lost = False
         is_win = False
+        question = {}
         user_answer = None
         effects = globals.get_effects()
-
+        
         if not globals.get_item_on():
             question = questions[globals.get_current_question()]
             answer = question.get(ANSWER)
@@ -275,8 +276,14 @@ def update_game(questions : list[dict], labels : list[dict], items : dict[str, d
                 is_lost, is_win = library.check_user_answer(is_lost, is_win, answer, user_answer)
         
         update_item(is_win, items, user_answer)
-        library.set_question_lost(is_lost, effects.get(ERROR))
-        library.set_question_win(is_win, effects)
+        if question:
+            library.set_question_lost(is_lost, question.get(QUESTION), effects.get(ERROR))
+            library.set_question_win(is_win, question.get(QUESTION), effects)
+
+            if is_lost or is_win:
+                library.add_stat_data(question.get(QUESTION), USED_QTY)
+                library.add_stat_data(question.get(QUESTION), SUCCESS_PERCENT)
+        
         library.pass_question(is_lost, len(questions), events)
         question = questions[globals.get_current_question()]
         update_question(question)
@@ -322,6 +329,9 @@ def update_continue(labels : dict , events : list[pg.event.Event]):
 
 def update_gameover(events : list[pg.event.Event]):
     time = globals.get_gameover_time()
+
+    if time == globals.get_gameover_time():
+        library.show_stat_data()
 
     for e in events:
         if e.type == EVENT_1000MS:
