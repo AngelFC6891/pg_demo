@@ -379,8 +379,8 @@ def set_difficulty_game():
 def set_question_win(is_win : bool, question : str, effects : dict[dict]):
     if is_win:
         score = globals.get_score()
-        right_answers = globals.get_right_answers()
         score += REWARD
+        right_answers = globals.get_right_answers()
         right_answers += INT_1
         add_stat_data(question, SUCCESS_QTY)
       
@@ -404,6 +404,7 @@ def set_question_lost(is_lost : bool, question : str, effect : dict):
     if is_lost:
         lives = globals.get_lives()
         score = globals.get_score()
+        globals.set_right_answers(INT_0)
         add_stat_data(question, FAIL_QTY)
 
         if not lives == INT_0:
@@ -477,8 +478,10 @@ def pass_question(is_lost : bool, max_index : int, events : list[pg.event.Event]
                     globals.set_item_on(False)
                     set_next_question(max_index)
 
-            else: # SE TERMINÓ EL TIEMPO DE JUEGO Y EL JUGADOR NO RESPONDIÓ
-                if is_lost : set_next_question(max_index)
+            else: # EL JUGADOR NO RESPONDIÓ Y SE LE TERMINÓ EL TIEMPO DE JUEGO
+                if is_lost:
+                    globals.set_right_answers(INT_0)
+                    set_next_question(max_index)
 
 
 def repeat_question():

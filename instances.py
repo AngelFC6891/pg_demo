@@ -141,6 +141,7 @@ def run_reset():
         globals.set_continue_time(CONTINUE_TIME)
         globals.set_gameover_time(GAMEOVER_TIME)
         globals.set_gameover_delay(GAMEOVER_DELAY)
+        globals.set_right_answers(INT_0)
         globals.disable_instances()
         globals.set_game_item(None)
         globals.set_item_on(False)

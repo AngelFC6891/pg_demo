@@ -330,9 +330,6 @@ def update_continue(labels : dict , events : list[pg.event.Event]):
 def update_gameover(events : list[pg.event.Event]):
     time = globals.get_gameover_time()
 
-    if time == GAMEOVER_TIME:
-        library.show_stat_data()
-
     for e in events:
         if e.type == EVENT_1000MS:
             time -= 1
@@ -341,6 +338,7 @@ def update_gameover(events : list[pg.event.Event]):
     if time == 0:
         globals.disable_instances()
         globals.set_username_on(True)
+        library.show_stat_data()
 
 
 def update_scores(scores : list[dict], top : int=1):
