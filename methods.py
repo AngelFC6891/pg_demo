@@ -80,8 +80,8 @@ def update_game_buttons(id : str, questions : list[dict], effect : dict):
                     globals.set_pass_on(False)
                     
             elif id == REPEAT_BUTTON:
-                # SOLO FUNCIONA SI EL JUGADOR ELIGIÓ PREVIAMENTE UNA OPCION
-                
+                # SOLO FUNCIONA SI EL JUGADOR ERRÓ PREVIAMENTE LA PREGUNTA Y NO ACTIVÓ ACTUALMENTE LA BOMBA
+
                 if globals.get_repeat_on() and globals.get_wrong_answer() and not globals.get_is_bomb():
                     library.repeat_question()
                     globals.set_is_repeat(True)
