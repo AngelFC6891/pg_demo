@@ -119,8 +119,8 @@ def add_stat_data(question : str, stat : str):
             else:
                 success_percent =\
                 quest.get(SUCCESS_QTY) / quest.get(USED_QTY) if not quest.get(USED_QTY) == INT_0 else INT_0
+                success_percent *= INT_100
                 quest[SUCCESS_PERCENT] = float(f'{success_percent:.2f}')
-            
             break
 
 

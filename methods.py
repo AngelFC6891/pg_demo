@@ -330,7 +330,7 @@ def update_continue(labels : dict , events : list[pg.event.Event]):
 def update_gameover(events : list[pg.event.Event]):
     time = globals.get_gameover_time()
 
-    if time == globals.get_gameover_time():
+    if time == GAMEOVER_TIME:
         library.show_stat_data()
 
     for e in events:
