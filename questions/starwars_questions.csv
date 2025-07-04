@@ -1,30 +1,30 @@
-¿Quién es el padre de Luke Skywalker?,Obi-Wan Kenobi,Han Solo,Yoda,Anakin Skywalker,4,0,0,0,0.0
+¿Quién es el padre de Luke Skywalker?,Obi-Wan Kenobi,Han Solo,Yoda,Anakin Skywalker,4,1,0,1,100.0
 ¿Cuál es el nombre del planeta natal de Chewbacca?,Tatooine,Naboo,Endor,Kashyyyk,4,0,0,0,0.0
-¿Qué tipo de criatura es Jabba el Hutt?,Wookiee,Rodiano,Twi'lek,Hutt,4,0,0,0,0.0
+¿Qué tipo de criatura es Jabba el Hutt?,Wookiee,Rodiano,Twi'lek,Hutt,4,1,0,1,100.0
 ¿Quién mató al Emperador Palpatine en El Retorno del Jedi?,Yoda,Luke Skywalker,Darth Vader,Leia Organa,3,0,0,0,0.0
-¿Qué arma usa un Jedi?,Lanza,Sable de luz,Espada láser,Bláster,2,1,0,1,100.0
-¿Qué personaje dice 'Que la Fuerza te acompañe'?,Chewbacca,Darth Vader,C-3PO,Han Solo,4,0,0,0,0.0
+¿Qué arma usa un Jedi?,Lanza,Sable de luz,Espada láser,Bláster,2,2,0,2,100.0
+¿Qué personaje dice 'Que la Fuerza te acompañe'?,Chewbacca,Darth Vader,C-3PO,Han Solo,4,0,1,1,0.0
 ¿Quién entrenó a Luke Skywalker?,Rey,Mace Windu,Yoda,Qui-Gon Jinn,3,1,0,1,100.0
 ¿Qué planeta fue destruido por la Estrella de la Muerte?,Alderaan,Dagobah,Mustafar,Hoth,1,0,0,0,0.0
 ¿Qué droide acompaña a Luke y a R2-D2?,BB-8,K-2SO,IG-88,C-3PO,4,0,0,0,0.0
 ¿Cuál es el nombre del hijo de Han Solo y Leia?,Luke Solo,Anakin Solo,Ben Solo,Poe Dameron,3,0,0,0,0.0
-¿Qué actor interpreta a Han Solo en la trilogía original?,Ewan McGregor,Mark Hamill,Harrison Ford,Liam Neeson,3,0,0,0,0.0
-¿Cómo se llama el maestro de Obi-Wan Kenobi?,Mace Windu,Qui-Gon Jinn,Yoda,Count Dooku,2,0,0,0,0.0
+¿Qué actor interpreta a Han Solo en la trilogía original?,Ewan McGregor,Mark Hamill,Harrison Ford,Liam Neeson,3,1,0,1,100.0
+¿Cómo se llama el maestro de Obi-Wan Kenobi?,Mace Windu,Qui-Gon Jinn,Yoda,Count Dooku,2,1,1,2,50.0
 ¿Qué personaje dice 'Es una trampa'?,Almirante Ackbar,Lando Calrissian,Han Solo,Luke Skywalker,1,0,0,0,0.0
 ¿En qué planeta vive Luke al comienzo de la saga?,Tatooine,Endor,Hoth,Coruscant,1,0,0,0,0.0
 ¿Cuál es el nombre del cazador de recompensas que captura a Han Solo?,Greedo,Jango Fett,Boba Fett,Cad Bane,3,1,0,1,100.0
 ¿Quién fue el líder Supremo de la Primera Orden?,Palpatine,Darth Vader,Snoke,Tarkin,3,0,0,0,0.0
 ¿Quién es el piloto del Halcón Milenario?,Han Solo,Lando Calrissian,Luke Skywalker,Wedge Antilles,1,0,0,0,0.0
-¿Cómo se llama la madre de Luke y Leia?,Leia Organa,Shmi Skywalker,Padmé Amidala,Rey,3,0,0,0,0.0
+¿Cómo se llama la madre de Luke y Leia?,Leia Organa,Shmi Skywalker,Padmé Amidala,Rey,3,1,0,1,100.0
 ¿Quién construyó a C-3PO?,Anakin Skywalker,Luke Skywalker,Obi-Wan Kenobi,Yoda,1,0,0,0,0.0
 ¿Qué color es el sable de luz de Mace Windu?,Rojo,Púrpura,Azul,Verde,2,0,0,0,0.0
-¿Qué especie es Yoda?,Desconocida,Twi'lek,Rodiano,Mon Calamari,1,1,0,1,100.0
-¿Cómo se llama el planeta helado en El Imperio Contraataca?,Endor,Tatooine,Dagobah,Hoth,4,0,0,0,0.0
+¿Qué especie es Yoda?,Desconocida,Twi'lek,Rodiano,Mon Calamari,1,2,0,2,100.0
+¿Cómo se llama el planeta helado en El Imperio Contraataca?,Endor,Tatooine,Dagobah,Hoth,4,1,0,1,100.0
 ¿Qué personaje femenino lidera la Resistencia?,Ahsoka Tano,Padmé,Leia Organa,Rey,3,1,0,1,100.0
 ¿Cuál es el nombre real de Darth Vader?,Anakin Skywalker,Dooku,Ben Kenobi,Sheev Palpatine,1,0,0,0,0.0
 ¿Qué personaje aparece en todas las películas de la saga principal?,Yoda,Darth Maul,C-3PO,Han Solo,3,1,1,2,50.0
 ¿Qué planeta es sede del Senado Galáctico?,Coruscant,Alderaan,Bespin,Naboo,1,0,0,0,0.0
-¿Quién mató a Qui-Gon Jinn?,Darth Maul,Dooku,Darth Sidious,General Grievous,1,0,0,0,0.0
+¿Quién mató a Qui-Gon Jinn?,Darth Maul,Dooku,Darth Sidious,General Grievous,1,1,0,1,100.0
 ¿Qué Jedi sobrevive a la Orden 66?,Mace Windu,Obi-Wan Kenobi,Kit Fisto,Plo Koon,2,0,0,0,0.0
-¿Qué villano usa un sable doble?,Kylo Ren,Darth Maul,Dooku,Vader,2,0,0,0,0.0
+¿Qué villano usa un sable doble?,Kylo Ren,Darth Maul,Dooku,Vader,2,1,0,1,100.0
 ¿Quién es el líder de los droides separatistas?,Count Dooku,General Grievous,Jabba,Darth Vader,2,0,0,0,0.0
